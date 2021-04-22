@@ -29,6 +29,10 @@ class _SamplePageState extends State<SamplePage> {
     });
   }
 
+  void _qrNavigate() {
+    Navigator.of(context).pushNamed('/qrReader');
+  }
+
   @override
   Widget build(BuildContext context) {
     // Scaffoldは画面構成の基本Widget
@@ -40,14 +44,42 @@ class _SamplePageState extends State<SamplePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Container(
+              color: Colors.green,
+              margin: EdgeInsets.fromLTRB(10, 20, 30, 40),
+              transform: Matrix4.rotationZ(0.1),
+              child: Text('Stamp App',
+                style: TextStyle(
+                  fontSize: 32.0,
+                  fontStyle: FontStyle.normal,
+                  letterSpacing: 4.0,
+                ),
+              ),
+            ),
             Text(
               '右下のボタンのクリック回数:',
             ),
-            Text(
-              // Stateを呼び出している
-              '$_counter' + '回',
-              style: Theme.of(context).textTheme.headline4,
+            Container(
+              child: Text(
+                // Stateを呼び出している
+                '$_counter' + '回',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
             ),
+            RaisedButton(
+              child: Text('QRコードリーダーを起動'),
+              // color: Colors.white,
+              elevation: 16,
+              shape: Border(
+                top: BorderSide(color: Colors.red),
+                left: BorderSide(color: Colors.blue),
+                right: BorderSide(color: Colors.yellow),
+                bottom: BorderSide(color: Colors.green),
+              ),
+              splashColor: Colors.purpleAccent,
+              onPressed: _qrNavigate
+            )
           ],
         ),
       ),
