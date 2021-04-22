@@ -5,6 +5,7 @@
 */
 import 'package:flutter/material.dart';
 import 'View/sample.dart';
+import 'View/qrSample.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,15 +16,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Stampアプリのサンプルアプリ',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: ThemeData.light(), // ライト用テーマ
+      darkTheme: ThemeData.dark(), // ダーク用テーマ
+      themeMode: ThemeMode.system,
       // デフォルトルート
       initialRoute: '/',
       // 作成したページを呼び出す
-      routes: {
-        '/': (_) => SamplePage(title: 'スタンプアプリ'),
+      routes: <String, WidgetBuilder> {
+        '/': (BuildContext context) => SamplePage(title: 'スタンプアプリ'),
+        '/qrReader': (BuildContext context) => QRSamplePage(title: 'QR読み込み')
       },
     );
   }
