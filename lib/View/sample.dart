@@ -7,6 +7,7 @@
 * Propsとは親から子に値を受け渡すための値
 */
 import 'package:flutter/material.dart';
+import 'package:stamp_app/models/memo.dart';
 
 class SamplePage extends StatefulWidget {
   // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
@@ -33,6 +34,30 @@ class _SamplePageState extends State<SamplePage> {
     Navigator.of(context).pushNamed('/qrReader');
   }
 
+  void _demoCRUD() async {
+    var memo = Memo(
+      id: 0,
+      text: 'Flutterで遊ぶ',
+      priority: 1,
+    );
+    await Memo.insertMemo(memo);
+
+    print(await Memo.getMemos());
+
+    memo = Memo(
+      id: memo.id,
+      text: memo.text,
+      priority: memo.priority + 1,
+    );
+    await Memo.updateMemo(memo);
+
+    print(await Memo.getMemos());
+
+    await Memo.deleteMemo(memo.id);
+
+    print(await Memo.getMemos());
+  }
+
   @override
   Widget build(BuildContext context) {
     // Scaffoldは画面構成の基本Widget
@@ -48,7 +73,8 @@ class _SamplePageState extends State<SamplePage> {
               color: Colors.green,
               margin: EdgeInsets.fromLTRB(10, 20, 30, 40),
               transform: Matrix4.rotationZ(0.1),
-              child: Text('Stamp App',
+              child: Text(
+                'Stamp App',
                 style: TextStyle(
                   fontSize: 32.0,
                   fontStyle: FontStyle.normal,
@@ -68,17 +94,22 @@ class _SamplePageState extends State<SamplePage> {
               margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
             ),
             RaisedButton(
-              child: Text('QRコードリーダーを起動'),
-              // color: Colors.white,
-              elevation: 16,
-              shape: Border(
-                top: BorderSide(color: Colors.red),
-                left: BorderSide(color: Colors.blue),
-                right: BorderSide(color: Colors.yellow),
-                bottom: BorderSide(color: Colors.green),
-              ),
-              splashColor: Colors.purpleAccent,
-              onPressed: _qrNavigate
+                child: Text('QRコードリーダーを起動'),
+                // color: Colors.white,
+                elevation: 16,
+                shape: Border(
+                  top: BorderSide(color: Colors.red),
+                  left: BorderSide(color: Colors.blue),
+                  right: BorderSide(color: Colors.yellow),
+                  bottom: BorderSide(color: Colors.green),
+                ),
+                splashColor: Colors.purpleAccent,
+                onPressed: _qrNavigate),
+            RaisedButton(
+              child: const Text('DB操作'),
+              color: Colors.red,
+              shape: const StadiumBorder(),
+              onPressed: _demoCRUD,
             )
           ],
         ),
