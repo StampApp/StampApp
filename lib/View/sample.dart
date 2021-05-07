@@ -7,6 +7,7 @@
 * Propsとは親から子に値を受け渡すための値
 */
 import 'package:flutter/material.dart';
+import 'package:stamp_app/models/memo.dart';
 
 class SamplePage extends StatefulWidget {
   // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
@@ -28,9 +29,32 @@ class _SamplePageState extends State<SamplePage> {
       _counter++;
     });
   }
-
   void _qrNavigate() {
     Navigator.of(context).pushNamed('/qrReader');
+  }
+  
+  void _demoCRUD() async {
+    var memo = Memo(
+    id: 0,
+    text: 'Flutterで遊ぶ',
+    priority: 1,
+  );
+    await Memo.insertMemo(memo);
+
+    print(await Memo.getMemos());
+
+    memo = Memo(
+      id: memo.id,
+      text: memo.text,
+      priority: memo.priority + 1,
+    );
+    await Memo.updateMemo(memo);
+
+    print(await Memo.getMemos());
+
+    await Memo.deleteMemo(memo.id);
+
+    print(await Memo.getMemos());
   }
 
   @override
@@ -79,6 +103,12 @@ class _SamplePageState extends State<SamplePage> {
               ),
               splashColor: Colors.purpleAccent,
               onPressed: _qrNavigate
+            ),
+            RaisedButton(
+              child: const Text('DB操作'),
+              color: Colors.red,
+              shape: const StadiumBorder(),
+              onPressed: _demoCRUD,
             )
           ],
         ),
@@ -89,7 +119,7 @@ class _SamplePageState extends State<SamplePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ),
+      )
     );
   }
 }
