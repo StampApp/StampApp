@@ -9,6 +9,8 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/models/memo.dart';
 
+import '../Widget/SettingButton.dart';
+
 class SamplePage extends StatefulWidget {
   // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
   SamplePage({Key key, this.title}) : super(key: key);
@@ -105,12 +107,7 @@ class _SamplePageState extends State<SamplePage> {
                 ),
                 splashColor: Colors.purpleAccent,
                 onPressed: _qrNavigate),
-            RaisedButton(
-              child: const Text('DB操作'),
-              color: Colors.red,
-              shape: const StadiumBorder(),
-              onPressed: _demoCRUD,
-            )
+            SettingButton(),
           ],
         ),
       ),
