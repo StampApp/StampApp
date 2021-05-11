@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CustomButton extends StatelessWidget {
-  const CustomButton({
+class CameraButton extends StatelessWidget {
+  const CameraButton({
     this.onTap,
     Key key,
   }) : super(key: key);

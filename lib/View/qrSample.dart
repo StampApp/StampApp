@@ -85,7 +85,7 @@ class _QRSamplePageState extends State<QRSamplePage> {
           ],
         ),
       ),
-      floatingActionButton: CustomButton(onTap: () {
+      floatingActionButton: CameraButton(onTap: () {
         _scan();
       }),
     );
