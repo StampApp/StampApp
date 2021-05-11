@@ -8,6 +8,8 @@
 */
 import 'package:flutter/material.dart';
 
+import '../Widget/SettingButton.dart';
+
 class SamplePage extends StatefulWidget {
   // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
   SamplePage({Key key, this.title}) : super(key: key);
@@ -48,7 +50,8 @@ class _SamplePageState extends State<SamplePage> {
               color: Colors.green,
               margin: EdgeInsets.fromLTRB(10, 20, 30, 40),
               transform: Matrix4.rotationZ(0.1),
-              child: Text('Stamp App',
+              child: Text(
+                'Stamp App',
                 style: TextStyle(
                   fontSize: 32.0,
                   fontStyle: FontStyle.normal,
@@ -68,18 +71,18 @@ class _SamplePageState extends State<SamplePage> {
               margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
             ),
             RaisedButton(
-              child: Text('QRコードリーダーを起動'),
-              // color: Colors.white,
-              elevation: 16,
-              shape: Border(
-                top: BorderSide(color: Colors.red),
-                left: BorderSide(color: Colors.blue),
-                right: BorderSide(color: Colors.yellow),
-                bottom: BorderSide(color: Colors.green),
-              ),
-              splashColor: Colors.purpleAccent,
-              onPressed: _qrNavigate
-            )
+                child: Text('QRコードリーダーを起動'),
+                // color: Colors.white,
+                elevation: 16,
+                shape: Border(
+                  top: BorderSide(color: Colors.red),
+                  left: BorderSide(color: Colors.blue),
+                  right: BorderSide(color: Colors.yellow),
+                  bottom: BorderSide(color: Colors.green),
+                ),
+                splashColor: Colors.purpleAccent,
+                onPressed: _qrNavigate),
+            SettingButton(),
           ],
         ),
       ),
