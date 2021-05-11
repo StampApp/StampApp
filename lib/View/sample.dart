@@ -7,6 +7,7 @@
 * Propsとは親から子に値を受け渡すための値
 */
 import 'package:flutter/material.dart';
+import 'package:stamp_app/models/memo.dart';
 
 import '../Widget/SettingButton.dart';
 
@@ -33,6 +34,30 @@ class _SamplePageState extends State<SamplePage> {
 
   void _qrNavigate() {
     Navigator.of(context).pushNamed('/qrReader');
+  }
+
+  void _demoCRUD() async {
+    var memo = Memo(
+      id: 0,
+      text: 'Flutterで遊ぶ',
+      priority: 1,
+    );
+    await Memo.insertMemo(memo);
+
+    print(await Memo.getMemos());
+
+    memo = Memo(
+      id: memo.id,
+      text: memo.text,
+      priority: memo.priority + 1,
+    );
+    await Memo.updateMemo(memo);
+
+    print(await Memo.getMemos());
+
+    await Memo.deleteMemo(memo.id);
+
+    print(await Memo.getMemos());
   }
 
   @override
