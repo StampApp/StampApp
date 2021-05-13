@@ -8,7 +8,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:stamp_app/models/memo.dart';
-
+import 'package:stamp_app/dbInterface.dart';
 import '../Widget/SettingButton.dart';
 
 class SamplePage extends StatefulWidget {
@@ -38,6 +38,9 @@ class _SamplePageState extends State<SamplePage> {
 
   void _termsNavigate() {
     Navigator.of(context).pushNamed('/terms');
+
+  void _settingNavigate() {
+    Navigator.of(context).pushNamed('/Setting');
   }
 
   void _demoCRUD() async {
@@ -46,22 +49,24 @@ class _SamplePageState extends State<SamplePage> {
       text: 'Flutterで遊ぶ',
       priority: 1,
     );
-    await Memo.insertMemo(memo);
 
-    print(await Memo.getMemos());
+    await DbInterface.insert('memo', Memo.database, memo);
+
+    print(await DbInterface.select('memo', Memo.database, memo.id));
 
     memo = Memo(
       id: memo.id,
       text: memo.text,
       priority: memo.priority + 1,
     );
-    await Memo.updateMemo(memo);
 
-    print(await Memo.getMemos());
+    await DbInterface.update('memo', Memo.database, memo);
 
-    await Memo.deleteMemo(memo.id);
+    print(await DbInterface.select('memo', Memo.database, memo.id));
 
-    print(await Memo.getMemos());
+    await DbInterface.delete('memo', Memo.database, memo.id);
+
+    print(await DbInterface.select('memo', Memo.database, memo.id));
   }
 
   @override
@@ -99,31 +104,16 @@ class _SamplePageState extends State<SamplePage> {
               ),
               margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
             ),
-            RaisedButton(
+            ElevatedButton(
                 child: Text('QRコードリーダーを起動'),
-                // color: Colors.white,
-                elevation: 16,
-                shape: Border(
-                  top: BorderSide(color: Colors.red),
-                  left: BorderSide(color: Colors.blue),
-                  right: BorderSide(color: Colors.yellow),
-                  bottom: BorderSide(color: Colors.green),
-                ),
-                splashColor: Colors.purpleAccent,
                 onPressed: _qrNavigate),
-            RaisedButton(
-                child: Text('利用規約に遷移'),
-                // color: Colors.white,
-                elevation: 16,
-                shape: Border(
-                  top: BorderSide(color: Colors.red),
-                  left: BorderSide(color: Colors.blue),
-                  right: BorderSide(color: Colors.yellow),
-                  bottom: BorderSide(color: Colors.green),
-                ),
-                splashColor: Colors.purpleAccent,
-                onPressed: _termsNavigate),
-            SettingButton(),
+            SettingButton(
+              onNavigate: _settingNavigate
+            ),
+            ElevatedButton(
+              child: Text('DBサンプル'),
+              onPressed: _demoCRUD
+            )
           ],
         ),
       ),
