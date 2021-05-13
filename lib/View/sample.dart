@@ -36,6 +36,10 @@ class _SamplePageState extends State<SamplePage> {
     Navigator.of(context).pushNamed('/qrReader');
   }
 
+  void _termsNavigate() {
+    Navigator.of(context).pushNamed('/terms');
+  }
+
   void _demoCRUD() async {
     var memo = Memo(
       id: 0,
@@ -107,6 +111,18 @@ class _SamplePageState extends State<SamplePage> {
                 ),
                 splashColor: Colors.purpleAccent,
                 onPressed: _qrNavigate),
+            RaisedButton(
+                child: Text('利用規約に遷移'),
+                // color: Colors.white,
+                elevation: 16,
+                shape: Border(
+                  top: BorderSide(color: Colors.red),
+                  left: BorderSide(color: Colors.blue),
+                  right: BorderSide(color: Colors.yellow),
+                  bottom: BorderSide(color: Colors.green),
+                ),
+                splashColor: Colors.purpleAccent,
+                onPressed: _termsNavigate),
             SettingButton(),
           ],
         ),
