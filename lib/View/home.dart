@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/models/memo.dart';
+import 'package:stamp_app/dbInterface.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
@@ -23,7 +25,37 @@ class HexColor extends Color {
 
 class _HomeSamplePageState extends State<HomeSamplePage> {
    void _qrNavigate() {
-    Navigator.of(context).pushNamed('/homeTest/qrReader');
+    Navigator.of(context).pushNamed('/qrReader');
+  }
+
+  void _settingNavigate() {
+    Navigator.of(context).pushNamed('/Setting');
+  }
+
+  void _demoCRUD() async {
+    var memo = Memo(
+      id: 0,
+      text: 'Flutterで遊ぶ',
+      priority: 1,
+    );
+
+    await DbInterface.insert('memo', Memo.database, memo);
+
+    print(await DbInterface.select('memo', Memo.database, memo.id));
+
+    memo = Memo(
+      id: memo.id,
+      text: memo.text,
+      priority: memo.priority + 1,
+    );
+
+    await DbInterface.update('memo', Memo.database, memo);
+
+    print(await DbInterface.select('memo', Memo.database, memo.id));
+
+    await DbInterface.delete('memo', Memo.database, memo.id);
+
+    print(await DbInterface.select('memo', Memo.database, memo.id));
   }
 
   @override
@@ -36,9 +68,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
             //設定ボタン
             IconButton(
               icon: Icon(Icons.settings, color: Colors.white, size: 38),
-              onPressed: () {
-                // Pressed Action
-              },
+              onPressed: _settingNavigate,
             ),
         ],
         backgroundColor: HexColor('00C2FF'),
@@ -61,7 +91,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            SizedBox(height: 60,),
+            SizedBox(height: 30,),
             Text(
               '獲得スタンプ',
               style: TextStyle(
@@ -70,81 +100,153 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                   letterSpacing: 4.0,
                 ),
             ),
-           SizedBox(height: 60,),
-          //丸作成
-          Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(5.0),
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(
-                      color: HexColor('00C2FF'),
-                      width: 3
+            SizedBox(height: 40,),
+            //丸作成
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.all(5.0),
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(
+                        color: HexColor('00C2FF'),
+                        width: 3
+                      ),
+                  ),
+                  child: const Text(
+                    '１',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 4.0,
+                    ),
+                    textAlign: TextAlign.center,
                     ),
                 ),
-                child: const Text(
-                  '１',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 4.0,
+                Container(
+                  padding: const EdgeInsets.all(5.0),
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(
+                        color: HexColor('00C2FF'),
+                        width: 3
+                      ),
                   ),
-                  textAlign: TextAlign.center,
-                  ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(5.0),
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(
-                      color: HexColor('00C2FF'),
-                      width: 3
+                  child: const Text(
+                    '２',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 4.0,
+                    ),
+                    textAlign: TextAlign.center,
                     ),
                 ),
-                child: const Text(
-                  '２',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 4.0,
+                Container(
+                  padding: const EdgeInsets.all(5.0),
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(
+                        color: HexColor('00C2FF'),
+                        width: 3
+                      ),
                   ),
-                  textAlign: TextAlign.center,
-                  ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(5.0),
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(
-                      color: HexColor('00C2FF'),
-                      width: 3
+                  child: const Text(
+                    '３',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 4.0,
                     ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                child: const Text(
-                  '３',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 4.0,
-                  ),
-                  textAlign: TextAlign.center,
-                  ),
-              ),
-            ],
-          ),
-          SizedBox(height: 60,),
-          Row(
+              ],
+            ),
+            SizedBox(height: 60,),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.all(5.0),
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          border: Border.all(
+                            color: HexColor('00C2FF'),
+                            width: 3
+                          ),
+                      ),
+                      child: const Text(
+                        '４',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: 4.0,
+                        ),
+                        textAlign: TextAlign.center,
+                        ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(5.0),
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          border: Border.all(
+                            color: HexColor('00C2FF'),
+                            width: 3
+                          ),
+                      ),
+                      child: const Text(
+                        '５',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: 4.0,
+                        ),
+                        textAlign: TextAlign.center,
+                        ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(5.0),
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          border: Border.all(
+                            color: HexColor('00C2FF'),
+                            width: 3
+                          ),
+                      ),
+                      child: const Text(
+                        '６',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: 4.0,
+                        ),
+                        textAlign: TextAlign.center,
+                        ),
+                    ),
+                  ],
+            ),
+            SizedBox(height: 60,),
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Container(
@@ -160,7 +262,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                         ),
                     ),
                     child: const Text(
-                      '４',
+                      '７',
                       style: TextStyle(
                         fontSize: 24.0,
                         fontStyle: FontStyle.normal,
@@ -182,7 +284,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                         ),
                     ),
                     child: const Text(
-                      '５',
+                      '８',
                       style: TextStyle(
                         fontSize: 24.0,
                         fontStyle: FontStyle.normal,
@@ -204,89 +306,22 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                         ),
                     ),
                     child: const Text(
-                      '６',
+                      '９',
                       style: TextStyle(
                         fontSize: 24.0,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 4.0,
                       ),
                       textAlign: TextAlign.center,
-                      ),
+                    ),
                   ),
                 ],
-          ),
-          SizedBox(height: 60,),
-          Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(5.0),
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(
-                      color: HexColor('00C2FF'),
-                      width: 3
-                    ),
-                ),
-                child: const Text(
-                  '７',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 4.0,
-                  ),
-                  textAlign: TextAlign.center,
-                  ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(5.0),
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(
-                      color: HexColor('00C2FF'),
-                      width: 3
-                    ),
-                ),
-                child: const Text(
-                  '８',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 4.0,
-                  ),
-                  textAlign: TextAlign.center,
-                  ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(5.0),
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(
-                      color: HexColor('00C2FF'),
-                      width: 3
-                    ),
-                ),
-                child: const Text(
-                  '９',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 4.0,
-                  ),
-                  textAlign: TextAlign.center,
-                  ),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 60,),
+            ElevatedButton(
+              child: Text('DBサンプル'),
+              onPressed: _demoCRUD
+            )
           ],
         ),
       ),

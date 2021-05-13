@@ -9,7 +9,6 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
-import '../Widget/SettingButton.dart';
 
 class SamplePage extends StatefulWidget {
   // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
@@ -36,11 +35,7 @@ class _SamplePageState extends State<SamplePage> {
     Navigator.of(context).pushNamed('/qrReader');
   }*/
   void _homeNavigate() {
-    Navigator.of(context).pushNamed('/homeTest');
-  }
-
-  void _settingNavigate() {
-    Navigator.of(context).pushNamed('/Setting');
+    Navigator.of(context).pushNamed('/home');
   }
 
   void _demoCRUD() async {
@@ -107,9 +102,6 @@ class _SamplePageState extends State<SamplePage> {
             ElevatedButton(
                 child: Text('ホーム画面へ'),
                 onPressed: _homeNavigate
-            ),
-            SettingButton(
-              onNavigate: _settingNavigate
             ),
             ElevatedButton(
               child: Text('DBサンプル'),
