@@ -12,7 +12,7 @@ class SettingButton extends StatelessWidget {
       color: Colors.blue,
       iconSize: 60,
       onPressed: () {
-        Navigator.of(context).pushNamed('/qrReader');
+        Navigator.of(context).pushNamed('/Setting');
       },
     );
   }
