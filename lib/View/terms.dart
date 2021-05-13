@@ -16,8 +16,10 @@ class _TermsPageState extends State<TermsPage> {
           title: Text(widget.title),
         ),
         body: ListView(
+          padding: const EdgeInsets.only(left: 20, right: 20),
           children: <Widget>[
             SizedBox(height: 25),
+
             Text(
                 '本規約は■（以下、総称して「当社」といいます）が提供する、デジタルスタンプサービス（以下「本サービス」といいます）の利用に関する条件について、お客様と当社との間で定めるものです。必ずお読みになり、本規約の内容にご同意の上、ご利用ください。'),
             Divider(
