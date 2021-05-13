@@ -32,8 +32,11 @@ class _SamplePageState extends State<SamplePage> {
     });
   }
 
-  void _qrNavigate() {
+  /*void _qrNavigate() {
     Navigator.of(context).pushNamed('/qrReader');
+  }*/
+  void _homeNavigate() {
+    Navigator.of(context).pushNamed('/homeTest');
   }
 
   void _settingNavigate() {
@@ -102,8 +105,9 @@ class _SamplePageState extends State<SamplePage> {
               margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
             ),
             ElevatedButton(
-                child: Text('QRコードリーダーを起動'),
-                onPressed: _qrNavigate),
+                child: Text('ホーム画面へ'),
+                onPressed: _homeNavigate
+            ),
             SettingButton(
               onNavigate: _settingNavigate
             ),
