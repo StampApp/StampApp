@@ -36,6 +36,9 @@ class _SamplePageState extends State<SamplePage> {
     Navigator.of(context).pushNamed('/qrReader');
   }
 
+  void _termsNavigate() {
+    Navigator.of(context).pushNamed('/terms');
+
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
   }
@@ -110,7 +113,7 @@ class _SamplePageState extends State<SamplePage> {
             ElevatedButton(
               child: Text('DBサンプル'),
               onPressed: _demoCRUD
-            )            
+            )
           ],
         ),
       ),
