@@ -59,8 +59,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       ),
       body: Container(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
+            SizedBox(height: 60,),
             Text(
               '獲得スタンプ',
               style: TextStyle(
@@ -69,177 +70,224 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                   letterSpacing: 4.0,
                 ),
             ),
-                //丸作成
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(5.0),
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                color: HexColor('00C2FF'),
-                                width: 3
-                              ),
-                          ),
-                          child: const Text(
-                            '',
-                            textAlign: TextAlign.center,
-                            ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(5.0),
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                color: HexColor('00C2FF'),
-                                width: 3
-                              ),
-                          ),
-                          child: const Text(
-                            '',
-                            textAlign: TextAlign.center,
-                            ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(5.0),
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                color: HexColor('00C2FF'),
-                                width: 3
-                              ),
-                          ),
-                          child: const Text(
-                            '',
-                            textAlign: TextAlign.center,
-                            ),
-                        ),
-                      ],
+           SizedBox(height: 60,),
+          //丸作成
+          Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(5.0),
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: HexColor('00C2FF'),
+                      width: 3
+                    ),
                 ),
-                //_circlePlus(),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(5.0),
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                color: HexColor('00C2FF'),
-                                width: 3
-                              ),
-                          ),
-                          child: const Text(
-                            '',
-                            textAlign: TextAlign.center,
-                            ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(5.0),
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                color: HexColor('00C2FF'),
-                                width: 3
-                              ),
-                          ),
-                          child: const Text(
-                            '',
-                            textAlign: TextAlign.center,
-                            ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(5.0),
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                color: HexColor('00C2FF'),
-                                width: 3
-                              ),
-                          ),
-                          child: const Text(
-                            '',
-                            textAlign: TextAlign.center,
-                            ),
-                        ),
-                      ],
+                child: const Text(
+                  '１',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 4.0,
+                  ),
+                  textAlign: TextAlign.center,
+                  ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(5.0),
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: HexColor('00C2FF'),
+                      width: 3
+                    ),
                 ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(5.0),
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                color: HexColor('00C2FF'),
-                                width: 3
-                              ),
-                          ),
-                          child: const Text(
-                            '',
-                            textAlign: TextAlign.center,
-                            ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(5.0),
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                color: HexColor('00C2FF'),
-                                width: 3
-                              ),
-                          ),
-                          child: const Text(
-                            '',
-                            textAlign: TextAlign.center,
-                            ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(5.0),
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                color: HexColor('00C2FF'),
-                                width: 3
-                              ),
-                          ),
-                          child: const Text(
-                            '',
-                            textAlign: TextAlign.center,
-                            ),
-                        ),
-                      ],
+                child: const Text(
+                  '２',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 4.0,
+                  ),
+                  textAlign: TextAlign.center,
+                  ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(5.0),
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: HexColor('00C2FF'),
+                      width: 3
+                    ),
                 ),
-               ],
+                child: const Text(
+                  '３',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 4.0,
+                  ),
+                  textAlign: TextAlign.center,
+                  ),
+              ),
+            ],
+          ),
+          SizedBox(height: 60,),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(5.0),
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                          color: HexColor('00C2FF'),
+                          width: 3
+                        ),
+                    ),
+                    child: const Text(
+                      '４',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 4.0,
+                      ),
+                      textAlign: TextAlign.center,
+                      ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(5.0),
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                          color: HexColor('00C2FF'),
+                          width: 3
+                        ),
+                    ),
+                    child: const Text(
+                      '５',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 4.0,
+                      ),
+                      textAlign: TextAlign.center,
+                      ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(5.0),
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        border: Border.all(
+                          color: HexColor('00C2FF'),
+                          width: 3
+                        ),
+                    ),
+                    child: const Text(
+                      '６',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 4.0,
+                      ),
+                      textAlign: TextAlign.center,
+                      ),
+                  ),
+                ],
+          ),
+          SizedBox(height: 60,),
+          Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(5.0),
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: HexColor('00C2FF'),
+                      width: 3
+                    ),
+                ),
+                child: const Text(
+                  '７',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 4.0,
+                  ),
+                  textAlign: TextAlign.center,
+                  ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(5.0),
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: HexColor('00C2FF'),
+                      width: 3
+                    ),
+                ),
+                child: const Text(
+                  '８',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 4.0,
+                  ),
+                  textAlign: TextAlign.center,
+                  ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(5.0),
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                      color: HexColor('00C2FF'),
+                      width: 3
+                    ),
+                ),
+                child: const Text(
+                  '９',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 4.0,
+                  ),
+                  textAlign: TextAlign.center,
+                  ),
+              ),
+            ],
+          ),
+          ],
         ),
       ),
     );
