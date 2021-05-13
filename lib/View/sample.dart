@@ -8,7 +8,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:stamp_app/models/memo.dart';
-
+import 'package:stamp_app/dbInterface.dart';
 import '../Widget/SettingButton.dart';
 
 class SamplePage extends StatefulWidget {
@@ -42,22 +42,24 @@ class _SamplePageState extends State<SamplePage> {
       text: 'Flutterで遊ぶ',
       priority: 1,
     );
-    await Memo.insertMemo(memo);
 
-    print(await Memo.getMemos());
+    await DbInterface.insert('memo', Memo.database, memo);
+
+    print(await DbInterface.select('memo', Memo.database, memo.id));
 
     memo = Memo(
       id: memo.id,
       text: memo.text,
       priority: memo.priority + 1,
     );
-    await Memo.updateMemo(memo);
 
-    print(await Memo.getMemos());
+    await DbInterface.update('memo', Memo.database, memo);
 
-    await Memo.deleteMemo(memo.id);
+    print(await DbInterface.select('memo', Memo.database, memo.id));
 
-    print(await Memo.getMemos());
+    await DbInterface.delete('memo', Memo.database, memo.id);
+
+    print(await DbInterface.select('memo', Memo.database, memo.id));
   }
 
   @override
@@ -108,6 +110,10 @@ class _SamplePageState extends State<SamplePage> {
                 splashColor: Colors.purpleAccent,
                 onPressed: _qrNavigate),
             SettingButton(),
+            RaisedButton(
+              child: Text('DBサンプル'),
+              onPressed: _demoCRUD
+            )            
           ],
         ),
       ),
