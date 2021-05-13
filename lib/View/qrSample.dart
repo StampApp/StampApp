@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
+import '../Widget/CameraButton.dart';
 
 // 状態が動的に変化するウィジェット（通信・データによって）
 class QRSamplePage extends StatefulWidget {
@@ -84,10 +85,8 @@ class _QRSamplePageState extends State<QRSamplePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _scan,
-        tooltip: 'Scan',
-        child: Icon(Icons.camera),
+      floatingActionButton: CameraButton(
+        onNavigate: _scan,
       ),
     );
   }
