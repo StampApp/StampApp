@@ -36,6 +36,10 @@ class _SamplePageState extends State<SamplePage> {
     Navigator.of(context).pushNamed('/qrReader');
   }
 
+  void _settingNavigate() {
+    Navigator.of(context).pushNamed('/Setting');
+  }
+
   void _demoCRUD() async {
     var memo = Memo(
       id: 0,
@@ -97,20 +101,13 @@ class _SamplePageState extends State<SamplePage> {
               ),
               margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
             ),
-            RaisedButton(
+            ElevatedButton(
                 child: Text('QRコードリーダーを起動'),
-                // color: Colors.white,
-                elevation: 16,
-                shape: Border(
-                  top: BorderSide(color: Colors.red),
-                  left: BorderSide(color: Colors.blue),
-                  right: BorderSide(color: Colors.yellow),
-                  bottom: BorderSide(color: Colors.green),
-                ),
-                splashColor: Colors.purpleAccent,
                 onPressed: _qrNavigate),
-            SettingButton(),
-            RaisedButton(
+            SettingButton(
+              onNavigate: _settingNavigate
+            ),
+            ElevatedButton(
               child: Text('DBサンプル'),
               onPressed: _demoCRUD
             )            
