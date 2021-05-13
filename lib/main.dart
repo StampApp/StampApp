@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'View/sample.dart';
 import 'View/qrSample.dart';
-import 'View/hometest.dart';
+import 'View/home.dart';
 
 void main() {
   runApp(MyApp());

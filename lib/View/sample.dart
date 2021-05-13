@@ -32,8 +32,11 @@ class _SamplePageState extends State<SamplePage> {
     });
   }
 
-  void _qrNavigate() {
+  /*void _qrNavigate() {
     Navigator.of(context).pushNamed('/qrReader');
+  }*/
+  void _homeNavigate() {
+    Navigator.of(context).pushNamed('/homeTest');
   }
 
   void _demoCRUD() async {
@@ -106,7 +109,7 @@ class _SamplePageState extends State<SamplePage> {
                   bottom: BorderSide(color: Colors.green),
                 ),
                 splashColor: Colors.purpleAccent,
-                onPressed: _qrNavigate),
+                onPressed: _homeNavigate),
             SettingButton(),
           ],
         ),
