@@ -4,9 +4,11 @@
 * ページを追加する場合はimportしてroutesの中でルーティングパスとWidgetを定義する
 */
 import 'package:flutter/material.dart';
-import 'View/sample.dart';
 import 'View/qrSample.dart';
 import 'View/home.dart';
+import 'View/sample.dart';
+import 'View/terms.dart';
+import 'View/Setting.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,10 +25,13 @@ class MyApp extends StatelessWidget {
       // デフォルトルート
       initialRoute: '/',
       // 作成したページを呼び出す
-      routes: <String, WidgetBuilder> {
+      routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => SamplePage(title: 'スタンプアプリ'),
-        '/homeTest': (BuildContext context) => HomeSamplePage(title: 'ホーム'),
-        '/homeTest/qrReader': (BuildContext context) => QRSamplePage(title: 'QR読み込み')
+        '/home': (BuildContext context) => HomeSamplePage(title: 'ホーム'),
+        '/home/qrReader': (BuildContext context) => QRSamplePage(title: 'QR読み込み')
+        '/qrReader': (BuildContext context) => QRSamplePage(title: 'QR読み込み'),
+        '/Setting': (BuildContext context) => SettingPage(title: '設定'),
+        '/terms': (BuildContext context) => TermsPage(title: '利用規約'),
       },
     );
   }
