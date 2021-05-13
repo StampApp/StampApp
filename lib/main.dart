@@ -6,7 +6,6 @@
 import 'package:flutter/material.dart';
 import 'View/qrSample.dart';
 import 'View/sample.dart';
-import 'View/qrSample.dart';
 import 'View/terms.dart';
 import 'View/Setting.dart';
 
@@ -28,8 +27,8 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => SamplePage(title: 'スタンプアプリ'),
         '/qrReader': (BuildContext context) => QRSamplePage(title: 'QR読み込み'),
-        '/terms': (BuildContext context) => TermsPage(title: '利用規約')
-        '/Setting': (BuildContext context) => SettingPage(title: '設定')
+        '/Setting': (BuildContext context) => SettingPage(title: '設定'),
+        '/terms': (BuildContext context) => TermsPage(title: '利用規約'),
       },
     );
   }
