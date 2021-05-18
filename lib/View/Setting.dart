@@ -28,17 +28,24 @@ class _SettingPageState extends State<SettingPage> {
         ),
 
         body: ListView(children: [
-          _menuItem("利用履歴", Icon(Icons.update)),
+          _menuItem(
+            "利用履歴",
+            Icon(Icons.update),
+          ),
           _menuItem("使い方", Icon(Icons.phone_android)),
-          _menuItem("バージョン", Icon(Icons.phonelink_setup_rounded)),
-          _menuItem("利用規約", Icon(Icons.perm_device_info)),
-          _menuItem("プライバシーポリシー", Icon(Icons.visibility)),
+          _menuItem("利用規約", Icon(Icons.phonelink_setup_rounded)),
+          _menuItem("プライバシーポリシー", Icon(Icons.perm_device_info)),
+          _menuItem(
+              "Version                                               ver 0.1.0",
+              Icon(Icons.visibility),
+              flag: false),
         ]),
       ),
     );
   }
 
-  Widget _menuItem(String title, Icon icon) {
+//Flag　1行だけ色変更するために使用
+  Widget _menuItem(String title, Icon icon, {bool flag = true}) {
     return GestureDetector(
       child: Container(
           padding: EdgeInsets.all(8.0),
@@ -53,7 +60,8 @@ class _SettingPageState extends State<SettingPage> {
               ),
               Text(
                 title,
-                style: TextStyle(color: Colors.black, fontSize: 18.0),
+                style: TextStyle(
+                    color: flag ? Colors.black : Colors.grey, fontSize: 18.0),
               ),
             ],
           )),
