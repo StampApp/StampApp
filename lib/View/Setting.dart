@@ -9,9 +9,12 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   void _termsNavigate() {
     Navigator.of(context).pushNamed('/terms');
+  }
+
+  void _privacyPolicyNavigate() {
+    Navigator.of(context).pushNamed('/privacyPolicy');
   }
 
   @override
@@ -29,7 +32,10 @@ class _SettingPageState extends State<SettingPage> {
         //デバック用ボタン配置
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.bug_report),
-          backgroundColor: HexColor('00C2FF'), onPressed: () { print("debug!"); },
+          backgroundColor: HexColor('00C2FF'),
+          onPressed: () {
+            print("debug!");
+          },
         ),
 
         body: ListView(children: [
@@ -37,7 +43,8 @@ class _SettingPageState extends State<SettingPage> {
           _menuItem("使い方", Icon(Icons.phone_android)),
           _menuItem("バージョン", Icon(Icons.phonelink_setup_rounded)),
           _menuItem("利用規約", Icon(Icons.perm_device_info)),
-          _menuItem("プライバシーポリシー", Icon(Icons.visibility)),
+          _menuItem(
+              "プライバシーポリシー", Icon(Icons.visibility), _privacyPolicyNavigate),
         ]),
       ),
     );
