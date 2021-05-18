@@ -187,8 +187,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
             endIndent: 16,
           ),
           //第7条
-          Text('第7条（プライバシーポリシーの変更）',
-              style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('第7条（個人情報の取扱い）', style: TextStyle(fontWeight: FontWeight.bold)),
           Divider(
             height: 40,
             thickness: 1,
