@@ -28,24 +28,17 @@ class _SettingPageState extends State<SettingPage> {
         ),
 
         body: ListView(children: [
-          _menuItem(
-            "利用履歴",
-            Icon(Icons.update),
-          ),
+          _menuItem("利用履歴", Icon(Icons.update)),
           _menuItem("使い方", Icon(Icons.phone_android)),
           _menuItem("利用規約", Icon(Icons.phonelink_setup_rounded)),
           _menuItem("プライバシーポリシー", Icon(Icons.perm_device_info)),
-          _menuItem(
-              "Version                                               ver 0.1.0",
-              Icon(Icons.visibility),
-              flag: false),
+          _menuItem("Version", Icon(Icons.visibility)),
         ]),
       ),
     );
   }
 
-//Flag　1行だけ色変更するために使用
-  Widget _menuItem(String title, Icon icon, {bool flag = true}) {
+  Widget _menuItem(String title, Icon icon) {
     return GestureDetector(
       child: Container(
           padding: EdgeInsets.all(8.0),
@@ -58,11 +51,30 @@ class _SettingPageState extends State<SettingPage> {
                 margin: EdgeInsets.all(10.0),
                 child: icon,
               ),
-              Text(
-                title,
-                style: TextStyle(
-                    color: flag ? Colors.black : Colors.grey, fontSize: 18.0),
-              ),
+              //varsionかどうかの判定
+              (title == "Version")
+                  //version時
+                  ? RichText(
+                      text: TextSpan(
+                          text: 'Version',
+                          style: TextStyle(color: Colors.black, fontSize: 18.0),
+                          children: [
+                            //右寄せさせるために空白追加
+                            TextSpan(
+                                text: '　　　                                   '),
+                            TextSpan(
+                                text: 'ver 0.1.0',
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  color: Colors.grey,
+                                )),
+                          ]),
+                    )
+                  //versionじゃないときの文字表示
+                  : Text(
+                      title,
+                      style: TextStyle(color: Colors.black, fontSize: 18.0),
+                    ),
             ],
           )),
       //リストクリック時実行部分
