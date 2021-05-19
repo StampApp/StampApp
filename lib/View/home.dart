@@ -45,6 +45,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         new Stamp(uuid.v1(), "stamp4", 4, now.toUtc().toIso8601String()),
         new Stamp(uuid.v1(), "stamp5", 5, now.toUtc().toIso8601String()),
         new Stamp(uuid.v1(), "stamp6", 6, now.toUtc().toIso8601String()),
+        new Stamp(uuid.v1(), "stamp7", 7, now.toUtc().toIso8601String()),
+        new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
+        new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
     ];
 
    void _qrNavigate() {
@@ -123,10 +126,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                   letterSpacing: 4.0,
                 ),
             ),
-            SizedBox(height: 40,),
             GridView.count(
                   shrinkWrap: true,
                   crossAxisCount: 3,
+                   padding: const EdgeInsets.all(10),
                   // スタンプをListの数だけ生成する
                   children: stampList.map((Stamp stamp) =>
                     Row(
