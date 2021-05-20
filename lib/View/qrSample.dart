@@ -18,6 +18,10 @@ class _QRSamplePageState extends State<QRSamplePage> {
   Future _scan() async {
     try {
       var result = await BarcodeScanner.scan();
+      if (result.format.name == "qr") {
+        // 読み込んだのがQRコードだった場合
+        print(result.rawContent);
+      }
       setState(() => scanResult = result);
     } on PlatformException catch (e) {
       var result = ScanResult(
