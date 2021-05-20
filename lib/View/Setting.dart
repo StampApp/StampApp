@@ -28,16 +28,22 @@ class _SettingPageState extends State<SettingPage> {
         ),
         //デバック用ボタン配置
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.bug_report),
-          backgroundColor: HexColor('00C2FF'), onPressed: () { print("debug!"); },
+          child: Icon(
+            Icons.bug_report,
+            size: 30,
+          ),
+          backgroundColor: HexColor('00C2FF'), 
+          onPressed: () { print("debug!"); },
+          mini: false,
+          clipBehavior: Clip.antiAlias,
         ),
 
         body: ListView(children: [
           _menuItem("利用履歴", Icon(Icons.update), _termsNavigate),
           _menuItem("使い方", Icon(Icons.phone_android)),
-          _menuItem("バージョン", Icon(Icons.phonelink_setup_rounded)),
-          _menuItem("利用規約", Icon(Icons.perm_device_info)),
-          _menuItem("プライバシーポリシー", Icon(Icons.visibility)),
+          _menuItem("利用規約", Icon(Icons.phonelink_setup_rounded)),
+          _menuItem("プライバシーポリシー", Icon(Icons.perm_device_info)),
+          _menuItem("Version", Icon(Icons.visibility)),
         ]),
       ),
     );
@@ -51,15 +57,26 @@ class _SettingPageState extends State<SettingPage> {
               border: new Border(
                   bottom: BorderSide(width: 1.0, color: Colors.grey))),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.all(10.0),
-                child: icon,
-              ),
-              Text(
-                title,
-                style: TextStyle(color: Colors.black, fontSize: 18.0),
-              ),
+                  margin: EdgeInsets.all(10.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(child: icon),
+                        Container(
+                            margin: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              title,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                              ),
+                            ))
+                      ])),
+              //Versionか否か
+              (title == "Version") ? _version() : Text("")
             ],
           )),
       //リストクリック時実行部分
@@ -70,6 +87,19 @@ class _SettingPageState extends State<SettingPage> {
       },
     );
   }
+}
+
+//version指定のwidget
+Widget _version() {
+  return GestureDetector(
+    child: Text(
+      "0.1.0",
+      style: TextStyle(
+        color: Colors.grey,
+        fontSize: 18.0,
+      ),
+    ),
+  );
 }
 
 //色をカラーコードで指定するためのクラス
