@@ -23,8 +23,13 @@ class _SettingPageState extends State<SettingPage> {
         ),
         //デバック用ボタン配置
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.bug_report),
+          child: Icon(
+            Icons.bug_report,
+            size: 30,
+          ),
           backgroundColor: HexColor('00C2FF'),
+          mini: false,
+          clipBehavior: Clip.antiAlias,
         ),
 
         body: ListView(children: [
@@ -46,35 +51,26 @@ class _SettingPageState extends State<SettingPage> {
               border: new Border(
                   bottom: BorderSide(width: 1.0, color: Colors.grey))),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.all(10.0),
-                child: icon,
-              ),
-              //varsionかどうかの判定
-              (title == "Version")
-                  //version時
-                  ? RichText(
-                      text: TextSpan(
-                          text: 'Version',
-                          style: TextStyle(color: Colors.black, fontSize: 18.0),
-                          children: [
-                            //右寄せさせるために空白追加
-                            TextSpan(
-                                text: '　　　                                   '),
-                            TextSpan(
-                                text: 'ver 0.1.0',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  color: Colors.grey,
-                                )),
-                          ]),
-                    )
-                  //versionじゃないときの文字表示
-                  : Text(
-                      title,
-                      style: TextStyle(color: Colors.black, fontSize: 18.0),
-                    ),
+                  margin: EdgeInsets.all(10.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(child: icon),
+                        Container(
+                            margin: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              title,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                              ),
+                            ))
+                      ])),
+              //Versionか否か
+              (title == "Version") ? _version() : Text("")
             ],
           )),
       //リストクリック時実行部分
@@ -83,6 +79,19 @@ class _SettingPageState extends State<SettingPage> {
       },
     );
   }
+}
+
+//version指定のwidget
+Widget _version() {
+  return GestureDetector(
+    child: Text(
+      "0.1.0",
+      style: TextStyle(
+        color: Colors.grey,
+        fontSize: 18.0,
+      ),
+    ),
+  );
 }
 
 //色をカラーコードで指定するためのクラス
