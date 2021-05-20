@@ -9,7 +9,6 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   void _termsNavigate() {
     Navigator.of(context).pushNamed('/terms');
   }
@@ -32,16 +31,19 @@ class _SettingPageState extends State<SettingPage> {
             Icons.bug_report,
             size: 30,
           ),
-          backgroundColor: HexColor('00C2FF'), 
-          onPressed: () { print("debug!"); },
+          backgroundColor: HexColor('00C2FF'),
+          onPressed: () {
+            print("debug!");
+          },
           mini: false,
           clipBehavior: Clip.antiAlias,
         ),
 
         body: ListView(children: [
-          _menuItem("利用履歴", Icon(Icons.update), _termsNavigate),
+          _menuItem("利用履歴", Icon(Icons.update)),
           _menuItem("使い方", Icon(Icons.phone_android)),
-          _menuItem("利用規約", Icon(Icons.phonelink_setup_rounded)),
+          _menuItem(
+              "利用規約", Icon(Icons.phonelink_setup_rounded), _termsNavigate),
           _menuItem("プライバシーポリシー", Icon(Icons.perm_device_info)),
           _menuItem("Version", Icon(Icons.visibility)),
         ]),
