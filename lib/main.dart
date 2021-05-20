@@ -9,6 +9,7 @@ import 'View/home.dart';
 import 'View/terms.dart';
 import 'View/Setting.dart';
 import 'View/privacyPolicy.dart';
+import 'View/history.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/': (BuildContext context) => HomeSamplePage(title: 'スタンプアプリ'),
         '/qrReader': (BuildContext context) => QRSamplePage(title: 'QR読み込み'),
         '/Setting': (BuildContext context) => SettingPage(title: '設定'),
+        '/history': (BuildContext context) => HistoryPage(title: '利用履歴'),
         '/terms': (BuildContext context) => TermsPage(title: '利用規約'),
         '/privacyPolicy': (BuildContext context) =>
             PrivacyPolicyPage(title: 'プライバシーポリシー'),

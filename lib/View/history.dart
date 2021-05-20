@@ -1,24 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SettingPage extends StatefulWidget {
-  SettingPage({Key key, this.title}) : super(key: key);
+class HistoryPage extends StatefulWidget {
+  HistoryPage({Key key, this.title}) : super(key: key);
   final String title;
 
-  @override
-  _SettingPageState createState() => _SettingPageState();
+  _HistoryPageState createState() => _HistoryPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
-  void _termsNavigate() {
-    Navigator.of(context).pushNamed('/terms');
-  }
-
-  void _privacyPolicyNavigate() {
-    Navigator.of(context).pushNamed('/privacyPolicy');
-  }
-    void _historyNavigate() {
-    Navigator.of(context).pushNamed('/history');
-  }
+class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -32,24 +21,10 @@ class _SettingPageState extends State<SettingPage> {
           ),
           backgroundColor: HexColor('00C2FF'),
         ),
-        //デバック用ボタン配置
-        floatingActionButton: FloatingActionButton(
-          child: Icon(
-            Icons.bug_report,
-            size: 30,
-          ),
-          backgroundColor: HexColor('00C2FF'), 
-          onPressed: () { print("debug!"); },
-          mini: false,
-          clipBehavior: Clip.antiAlias,
-        ),
 
         body: ListView(children: [
-          _menuItem("利用履歴", Icon(Icons.update),_historyNavigate),
-          _menuItem("使い方", Icon(Icons.phone_android)),
-          _menuItem("利用規約", Icon(Icons.phonelink_setup_rounded), _termsNavigate),
-          _menuItem("プライバシーポリシー", Icon(Icons.visibility), _privacyPolicyNavigate),
-          _menuItem("Version", Icon(Icons.visibility)),
+          _menuItem("スタンプ取得", Icon(Icons.update)),
+          _menuItem("交換", Icon(Icons.phone_android)),
         ]),
       ),
     );
