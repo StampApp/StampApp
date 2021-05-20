@@ -8,8 +8,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:stamp_app/models/memo.dart';
-
-import '../Widget/SettingButton.dart';
+import 'package:stamp_app/dbInterface.dart';
 
 class SamplePage extends StatefulWidget {
   // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
@@ -32,8 +31,11 @@ class _SamplePageState extends State<SamplePage> {
     });
   }
 
-  void _qrNavigate() {
+  /*void _qrNavigate() {
     Navigator.of(context).pushNamed('/qrReader');
+  }*/
+  void _homeNavigate() {
+    Navigator.of(context).pushNamed('/home');
   }
 
   void _demoCRUD() async {
@@ -42,22 +44,24 @@ class _SamplePageState extends State<SamplePage> {
       text: 'Flutterで遊ぶ',
       priority: 1,
     );
-    await Memo.insertMemo(memo);
 
-    print(await Memo.getMemos());
+    await DbInterface.insert('memo', Memo.database, memo);
+
+    print(await DbInterface.select('memo', Memo.database, memo.id));
 
     memo = Memo(
       id: memo.id,
       text: memo.text,
       priority: memo.priority + 1,
     );
-    await Memo.updateMemo(memo);
 
-    print(await Memo.getMemos());
+    await DbInterface.update('memo', Memo.database, memo);
 
-    await Memo.deleteMemo(memo.id);
+    print(await DbInterface.select('memo', Memo.database, memo.id));
 
-    print(await Memo.getMemos());
+    await DbInterface.delete('memo', Memo.database, memo.id);
+
+    print(await DbInterface.select('memo', Memo.database, memo.id));
   }
 
   @override
@@ -95,19 +99,14 @@ class _SamplePageState extends State<SamplePage> {
               ),
               margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
             ),
-            RaisedButton(
-                child: Text('QRコードリーダーを起動'),
-                // color: Colors.white,
-                elevation: 16,
-                shape: Border(
-                  top: BorderSide(color: Colors.red),
-                  left: BorderSide(color: Colors.blue),
-                  right: BorderSide(color: Colors.yellow),
-                  bottom: BorderSide(color: Colors.green),
-                ),
-                splashColor: Colors.purpleAccent,
-                onPressed: _qrNavigate),
-            SettingButton(),
+            ElevatedButton(
+                child: Text('ホーム画面へ'),
+                onPressed: _homeNavigate
+            ),
+            ElevatedButton(
+              child: Text('DBサンプル'),
+              onPressed: _demoCRUD
+            )
           ],
         ),
       ),

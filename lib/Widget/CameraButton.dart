@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SettingButton extends StatelessWidget {
-  const SettingButton({
+class CameraButton extends StatelessWidget {
+  const CameraButton({
     this.onNavigate,
     Key key,
   }) : super(key: key);
@@ -10,10 +11,9 @@ class SettingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: IconButton(
-        icon: Icon(Icons.settings),
-        color: Colors.blue,
-        iconSize: 60,
+      child: FloatingActionButton(
+        tooltip: 'Scan',
+        child: Icon(Icons.camera),
         onPressed: onNavigate,
       ),
     );

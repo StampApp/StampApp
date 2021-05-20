@@ -9,6 +9,11 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+
+  void _termsNavigate() {
+    Navigator.of(context).pushNamed('/terms');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,13 +32,14 @@ class _SettingPageState extends State<SettingPage> {
             Icons.bug_report,
             size: 30,
           ),
-          backgroundColor: HexColor('00C2FF'),
+          backgroundColor: HexColor('00C2FF'), 
+          onPressed: () { print("debug!"); },
           mini: false,
           clipBehavior: Clip.antiAlias,
         ),
 
         body: ListView(children: [
-          _menuItem("利用履歴", Icon(Icons.update)),
+          _menuItem("利用履歴", Icon(Icons.update), _termsNavigate),
           _menuItem("使い方", Icon(Icons.phone_android)),
           _menuItem("利用規約", Icon(Icons.phonelink_setup_rounded)),
           _menuItem("プライバシーポリシー", Icon(Icons.perm_device_info)),
@@ -43,7 +49,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget _menuItem(String title, Icon icon) {
+  Widget _menuItem(String title, Icon icon, [VoidCallback tap]) {
     return GestureDetector(
       child: Container(
           padding: EdgeInsets.all(8.0),
@@ -75,7 +81,9 @@ class _SettingPageState extends State<SettingPage> {
           )),
       //リストクリック時実行部分
       onTap: () {
-        print("onTap called.");
+        if (tap != null) {
+          tap();
+        }
       },
     );
   }

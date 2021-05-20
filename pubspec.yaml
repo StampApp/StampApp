@@ -32,6 +32,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   barcode_scan: any
   flutter_native_splash: ^1.1.8+4
+  uuid: ^3.0.4
 
 #スプラッシュスクリーンの実装
 flutter_native_splash:
