@@ -154,6 +154,8 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
             indent: 16,
             endIndent: 16,
           ),
+          Text('（附則）', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('2021年5月20日　制定・施行')
         ],
       ),
     );
