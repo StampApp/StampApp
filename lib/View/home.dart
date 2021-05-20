@@ -12,17 +12,16 @@ class HomeSamplePage extends StatefulWidget {
 
 // カラーコードをHexColorでできるように
 class HexColor extends Color {
- static int _getColorFromHex(String hexColor) {
-   hexColor = hexColor.toUpperCase().replaceAll('#', '');
-   if (hexColor.length == 6) {
-     hexColor = 'FF' + hexColor;
-   }
-   return int.parse(hexColor, radix: 16);
- }
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll('#', '');
+    if (hexColor.length == 6) {
+      hexColor = 'FF' + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
 
- HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
-
 
 class Stamp {
   String id;
@@ -33,24 +32,23 @@ class Stamp {
 }
 
 class _HomeSamplePageState extends State<HomeSamplePage> {
-
   static final DateTime now = DateTime.now();
   static final uuid = Uuid();
-  
+
   // 画面に表示するリストを定義
   final List<Stamp> stampList = [
-        new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
-        new Stamp(uuid.v1(), "stamp2", 2, now.toUtc().toIso8601String()),
-        new Stamp(uuid.v1(), "stamp3", 3, now.toUtc().toIso8601String()),
-        new Stamp(uuid.v1(), "stamp4", 4, now.toUtc().toIso8601String()),
-        new Stamp(uuid.v1(), "stamp5", 5, now.toUtc().toIso8601String()),
-        new Stamp(uuid.v1(), "stamp6", 6, now.toUtc().toIso8601String()),
-        new Stamp(uuid.v1(), "stamp7", 7, now.toUtc().toIso8601String()),
-        new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
-        new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
-    ];
+    new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp2", 2, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp3", 3, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp4", 4, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp5", 5, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp6", 6, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp7", 7, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
+  ];
 
-   void _qrNavigate() {
+  void _qrNavigate() {
     Navigator.of(context).pushNamed('/qrReader');
   }
 
@@ -70,18 +68,18 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     print(await DbInterface.select('memo', Memo.database, memo.id));
 
     memo = Memo(
-      id: memo.id,
+      id: memo.id + 1,
       text: memo.text,
       priority: memo.priority + 1,
     );
 
-    await DbInterface.update('memo', Memo.database, memo);
+    await DbInterface.insert('memo', Memo.database, memo);
 
     print(await DbInterface.select('memo', Memo.database, memo.id));
 
     await DbInterface.delete('memo', Memo.database, memo.id);
 
-    print(await DbInterface.select('memo', Memo.database, memo.id));
+    print(await DbInterface.allSelect('memo', Memo.database));
   }
 
   @override
@@ -91,11 +89,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
-            // 設定ボタン
-            IconButton(
-              icon: Icon(Icons.settings, color: Colors.white, size: 38),
-              onPressed: _settingNavigate,
-            ),
+          // 設定ボタン
+          IconButton(
+            icon: Icon(Icons.settings, color: Colors.white, size: 38),
+            onPressed: _settingNavigate,
+          ),
         ],
         backgroundColor: HexColor('00C2FF'),
       ),
@@ -104,11 +102,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         label: Text(
           'QR',
           style: TextStyle(
-                  fontSize: 24.0,
-                  fontStyle: FontStyle.normal,
-                  letterSpacing: 4.0,
-                ),
-                ),
+            fontSize: 24.0,
+            fontStyle: FontStyle.normal,
+            letterSpacing: 4.0,
+          ),
+        ),
         icon: Icon(Icons.qr_code),
         onPressed: _qrNavigate,
         backgroundColor: HexColor('00C2FF'),
@@ -117,22 +115,25 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             Text(
               '獲得スタンプ',
               style: TextStyle(
-                  fontSize: 32.0,
-                  fontStyle: FontStyle.normal,
-                  letterSpacing: 4.0,
-                ),
+                fontSize: 32.0,
+                fontStyle: FontStyle.normal,
+                letterSpacing: 4.0,
+              ),
             ),
             GridView.count(
-                  shrinkWrap: true,
-                  crossAxisCount: 3,
-                   padding: const EdgeInsets.all(10),
-                  // スタンプをListの数だけ生成する
-                  children: stampList.map((Stamp stamp) =>
-                    Row(
+              shrinkWrap: true,
+              crossAxisCount: 3,
+              padding: const EdgeInsets.all(10),
+              // スタンプをListの数だけ生成する
+              children: stampList
+                  .map(
+                    (Stamp stamp) => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Container(
@@ -141,12 +142,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                           height: 60,
                           // 円を生成
                           decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                color: HexColor('00C2FF'),
-                                width: 3
-                              ),
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                            border:
+                                Border.all(color: HexColor('00C2FF'), width: 3),
                           ),
                           child: Text(
                             stamp.stampNum.toString(),
@@ -156,16 +155,14 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                               letterSpacing: 4.0,
                             ),
                             textAlign: TextAlign.center,
-                            ),
+                          ),
                         ),
                       ],
                     ),
-                  ).toList(),
-                ),
-            ElevatedButton(
-              child: Text('DBサンプル'),
-              onPressed: _demoCRUD
-            )
+                  )
+                  .toList(),
+            ),
+            ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD)
           ],
         ),
       ),
