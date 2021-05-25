@@ -46,7 +46,7 @@ class _SettingPageState extends State<SettingPage> {
         body: ListView(children: [
           _menuItem("利用履歴", Icon(Icons.update)),
           _menuItem("使い方", Icon(Icons.phone_android)),
-          _menuItem("利用規約", Icon(Icons.phonelink_setup_rounded)_termsNavigate),
+          _menuItem("利用規約", Icon(Icons.phonelink_setup_rounded), _termsNavigate),
           _menuItem("プライバシーポリシー", Icon(Icons.visibility), _privacyPolicyNavigate),
           _menuItem("Version", Icon(Icons.visibility)),
         ]),
