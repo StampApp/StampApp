@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:uuid/uuid.dart';
+import '../Widget/stampDialog.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
@@ -136,25 +137,28 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                     (Stamp stamp) => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(11.0),
-                          width: 60,
-                          height: 60,
-                          // 円を生成
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                            border:
-                                Border.all(color: HexColor('00C2FF'), width: 3),
-                          ),
-                          child: Text(
-                            stamp.stampNum.toString(),
-                            style: TextStyle(
-                              fontSize: 25.0,
-                              fontStyle: FontStyle.normal,
-                              letterSpacing: 4.0,
+                        GestureDetector(
+                          onTap: () => stampDialog(context, stamp),
+                          child: Container(
+                            padding: const EdgeInsets.all(11.0),
+                            width: 60,
+                            height: 60,
+                            // 円を生成
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              border: Border.all(
+                                  color: HexColor('00C2FF'), width: 3),
                             ),
-                            textAlign: TextAlign.center,
+                            child: Text(
+                              stamp.stampNum.toString(),
+                              style: TextStyle(
+                                fontSize: 25.0,
+                                fontStyle: FontStyle.normal,
+                                letterSpacing: 4.0,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                       ],
