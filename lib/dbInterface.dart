@@ -10,13 +10,8 @@ class DbInterface {
   // idを指定して取得
   static Future<List> select(String _tableName, var database, int id) async {
     final Database db = await database;
-    final List<Map<String, dynamic>> maps =
-        await db.query(
-          '$_tableName', 
-          where: 'id = ?',
-          orderBy: 'id asc',
-          whereArgs: [id]
-        );
+    final List<Map<String, dynamic>> maps = await db.query('$_tableName',
+        where: 'id = ?', orderBy: 'id asc', whereArgs: [id]);
     return maps;
   }
 
@@ -26,7 +21,8 @@ class DbInterface {
   @param values     テーブルの型を持った更新内容   
   */
   // 追加
-  static Future<void> insert(String _tableName, var database, var values) async {
+  static Future<void> insert(
+      String _tableName, var database, var values) async {
     final Database db = await database;
     await db.insert(
       '$_tableName',
@@ -41,7 +37,8 @@ class DbInterface {
   @param values     テーブルの型を持った更新内容   
   */
   // 更新
-  static Future<void> update(String _tableName, var database, var values) async {
+  static Future<void> update(
+      String _tableName, var database, var values) async {
     // Get a reference to the database.
     final db = await database;
     await db.update(
@@ -67,5 +64,4 @@ class DbInterface {
       whereArgs: [id],
     );
   }
-
 }
