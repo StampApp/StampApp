@@ -36,7 +36,7 @@ dependencies:
 
 #スプラッシュスクリーンの実装
 flutter_native_splash:
-  image: "image/tuki.png" 
+  image: "image/logo_transparent.png"
   color: "4DD0E1"
 
 dev_dependencies:
