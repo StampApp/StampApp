@@ -24,40 +24,12 @@ class _InstructionsPageState extends State<InstructionsPage> {
           ),
           backgroundColor: HexColor('00C2FF'),
         ),
-
         body: Introduction(),
-        ),
-      );
-
-  }
-
-  Widget _menuItem(String title, Icon icon, [VoidCallback tap]) {
-    return GestureDetector(
-      child: Container(
-          padding: EdgeInsets.all(8.0),
-          decoration: new BoxDecoration(
-              border: new Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey))),
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(10.0),
-                child: icon,
-              ),
-              Text(
-                title,
-                style: TextStyle(color: Colors.black, fontSize: 18.0),
-              ),
-            ],
-          )),
-      //リストクリック時実行部分
-      onTap: () {
-        if (tap != null) {
-          tap();
-        }
-      },
+      ),
     );
   }
+
+
 }
 
 class Introduction extends StatefulWidget {
@@ -74,13 +46,13 @@ class _IntroductionState extends State<Introduction> {
   // ページインデックス
   final _currentPageNotifier = ValueNotifier<int>(0);
 
-  // データ
+  // 表示する画像
   List<String> _imageList = [
     "image/home.png",
     "image/setting.png",
     "image/history.png",
   ];
-
+  // 表示するテキスト
   List<String> _textList = [
     "ホーム画面の説明",
     "設定画面の説明",
@@ -104,9 +76,9 @@ class _IntroductionState extends State<Introduction> {
     });
   }
 
-  /*
-   * アニメーションカード生成
-   */
+
+   // アニメーションカード生成
+
   AnimatedContainer _createCardAnimate(String imagePath, bool active) {
 
     // アクティブと非アクティブのアニメーション設定値
@@ -133,9 +105,9 @@ class _IntroductionState extends State<Introduction> {
       child: Column(
         children: <Widget>[
 
-          /*
-           * ページ
-           */
+
+           // ページ
+
           Expanded(
             child: PageView.builder(
               controller: controller,
@@ -145,7 +117,7 @@ class _IntroductionState extends State<Introduction> {
                 // アクティブ値
                 bool active = currentIndex == _currentPageNotifier.value;
 
-                // カードの生成して返す
+                // _imageListに入れた画像の表示
                 return _createCardAnimate(
                   _imageList[currentIndex],
                   active,
@@ -154,9 +126,8 @@ class _IntroductionState extends State<Introduction> {
             ),
           ),
 
-          /*
-           * ページインジケータ
-           */
+
+           // ページインジケータ
           Container(
             height: 5.0,
             child: CirclePageIndicator(
@@ -165,9 +136,9 @@ class _IntroductionState extends State<Introduction> {
             ),
           ),
 
-          /*
-           * 説明エリア
-           */
+
+           // 説明エリア
+
           Container(
             height: 60.0,
             padding: EdgeInsets.all(7.0),
@@ -207,6 +178,5 @@ class HexColor extends Color {
     }
     return int.parse(hexColor, radix: 16);
   }
-
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
