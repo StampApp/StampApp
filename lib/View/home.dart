@@ -1,4 +1,6 @@
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Widget/qrScan.dart';
 import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:uuid/uuid.dart';
@@ -49,10 +51,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
   ];
 
-  void _qrNavigate() {
-    Navigator.of(context).pushNamed('/qrReader');
-  }
-
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
   }
@@ -83,6 +81,17 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     print(await DbInterface.allSelect('memo', Memo.database));
   }
 
+  Future<void> _qrScan() async {
+    ScanResult result = await qrScan();
+    if (result.format.name == "qr") {
+      Stamp newStamp = new Stamp(uuid.v1(), result.rawContent,
+          stampList.length + 1, now.toUtc().toIso8601String());
+      setState(() {
+        stampList.add(newStamp);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Scaffoldは画面構成の基本Widget
@@ -109,7 +118,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           ),
         ),
         icon: Icon(Icons.qr_code),
-        onPressed: _qrNavigate,
+        onPressed: _qrScan,
         backgroundColor: HexColor('00C2FF'),
       ),
       body: Container(
