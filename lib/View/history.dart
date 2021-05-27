@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 class HistoryPage extends StatefulWidget {
   HistoryPage({Key key, this.title}) : super(key: key);
@@ -10,10 +11,10 @@ class HistoryPage extends StatefulWidget {
 //スタンプクラス
 class Stamp {
   int id;
-  String data;
+  String date;
   String time;
   int flag;
-  Stamp(this.id, this.data, this.time, this.flag);
+  Stamp(this.id, this.date, this.time, this.flag);
 }
 
 class _HistoryPageState extends State<HistoryPage> {
@@ -27,6 +28,22 @@ class _HistoryPageState extends State<HistoryPage> {
     new Stamp(3, "2021/5/30", "14時50分", 1),
     new Stamp(4, "2021/5/30", "11時00分", 0),
   ];
+
+  final List<String> dateList = [
+    "2021/5/25",
+    "2021/5/25",
+    "2021/5/30",
+    "2021/5/30",
+  ];
+
+//動かん
+  List<String> getDateList(List<Stamp> list) {
+    List<String> ret = [];
+    list.forEach((Stamp st) {
+      ret.add(st.date);
+    });
+    return ret;
+  }
 
   @override
   void initState() {
@@ -43,35 +60,35 @@ class _HistoryPageState extends State<HistoryPage> {
           '利用時期',
           style: TextStyle(fontSize: 20.0),
         ),
-        value: 1,
+        value: 0,
       ))
       ..add(DropdownMenuItem(
         child: Text(
           '過去３ヶ月',
           style: TextStyle(fontSize: 20.0),
         ),
-        value: 2,
+        value: 1,
       ))
       ..add(DropdownMenuItem(
         child: Text(
           '過去６ヶ月',
           style: TextStyle(fontSize: 20.0),
         ),
-        value: 3,
+        value: 2,
       ))
       ..add(DropdownMenuItem(
         child: Text(
           '過去9ヶ月',
           style: TextStyle(fontSize: 20.0),
         ),
-        value: 4,
+        value: 3,
       ))
       ..add(DropdownMenuItem(
         child: Text(
           '過去12ヶ月',
           style: TextStyle(fontSize: 20.0),
         ),
-        value: 5,
+        value: 4,
       ));
   }
 
@@ -107,23 +124,22 @@ class _HistoryPageState extends State<HistoryPage> {
                   ),
                 )
               ]),
-              for (int i = 0; i < stampList.length; i++)
-                _test(stampList, stampList[i].data, i)
+              _test(stampList)
             ])));
   }
 }
 
-Widget _test(List<Stamp> stampList, String date, int j) {
+Widget _test(List<Stamp> stampList) {
   return GestureDetector(
       child: Column(
     children: <Widget>[
-      _delimiter(stampList[j].data),
+      //一番最初の日付を表示
+      _delimiter(stampList[0].date),
       ListView(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            for (int i = 0; stampList[i].data == stampList[j].data; i++)
-              _row(stampList[i])
+            for (int i = 0; i < stampList.length; i++) _row(stampList[i])
           ]),
     ],
   ));
