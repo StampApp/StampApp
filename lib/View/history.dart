@@ -90,15 +90,22 @@ class _HistoryPageState extends State<HistoryPage> {
             body: ListView(children: <Widget>[
               Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
                 //ドロップダウンメニュー
-                DropdownButton(
-                  items: _items,
-                  value: _selectItem,
-                  onChanged: (value) => {
-                    setState(() {
-                      _selectItem = value;
-                    }),
-                  },
-                ),
+                Container(
+                  decoration: BoxDecoration(
+                    //枠線を丸くするかどうか
+                    //borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(color: HexColor('00C2FF'), width: 1),
+                  ),
+                  child: DropdownButton(
+                    items: _items,
+                    value: _selectItem,
+                    onChanged: (value) => {
+                      setState(() {
+                        _selectItem = value;
+                      }),
+                    },
+                  ),
+                )
               ]),
               for (int i = 0; i < stampList.length; i++)
                 _test(stampList, stampList[i].data, i)
