@@ -39,39 +39,39 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   }
 
   void _crudSample() async {
-    DateTime datetime = DateTime.now();
-    DateTime getdate = datetime;
-    DateTime gettime = datetime;
-    DateTime deleteat = datetime;
-    DateTime deletetime = datetime;
+    DateTime dateTime = DateTime.now();
+    DateTime getDate = dateTime;
+    DateTime getTime = dateTime;
+    DateTime deleteAt = dateTime;
+    DateTime deleteTime = dateTime;
     //挿入データ
     var stamp = Stamp(
         id: '0',
-        stampinfo: '6D',
-        getdate: getdate,
-        gettime: gettime,
-        invalidflg: true,
-        deleteat: deleteat,
-        deletetime: deletetime,
-        stampnum: 1);
+        stampInfo: '6D',
+        getDate: getDate,
+        getTime: getTime,
+        invalidFlg: true,
+        deleteAt: deleteAt,
+        deleteTime: deleteTime,
+        stampNum: 1);
     var stamp2 = Stamp(
         id: '1',
-        stampinfo: '5D',
-        getdate: getdate,
-        gettime: gettime,
-        invalidflg: true,
-        deleteat: deleteat,
-        deletetime: deletetime,
-        stampnum: 2);
+        stampInfo: '5D',
+        getDate: getDate,
+        getTime: getTime,
+        invalidFlg: true,
+        deleteAt: deleteAt,
+        deleteTime: deleteTime,
+        stampNum: 2);
     var stamp3 = Stamp(
         id: '1',
-        stampinfo: '3F',
-        getdate: getdate,
-        gettime: gettime,
-        invalidflg: true,
-        deleteat: deleteat,
-        deletetime: deletetime,
-        stampnum: 2);
+        stampInfo: '3F',
+        getDate: getDate,
+        getTime: getTime,
+        invalidFlg: true,
+        deleteAt: deleteAt,
+        deleteTime: deleteTime,
+        stampNum: 2);
 
     await DbInterface.insert('Stamp', Stamp.database, stamp);
 

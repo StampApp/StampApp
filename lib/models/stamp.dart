@@ -8,35 +8,35 @@ class Stamp {
 
   // モデル定義
   final String id;
-  final String stampinfo; //スタンプ情報
-  final DateTime getdate; //取得日
-  final DateTime gettime; //取得時間
-  final bool invalidflg; //無効フラグ
-  final DateTime deleteat; //削除日
-  final DateTime deletetime; //削除時間
-  final num stampnum; //スタンプの数
+  final String stampInfo; //スタンプ情報
+  final DateTime getDate; //取得日
+  final DateTime getTime; //取得時間
+  final bool invalidFlg; //無効フラグ
+  final DateTime deleteAt; //削除日
+  final DateTime deleteTime; //削除時間
+  final num stampNum; //スタンプの数
   Stamp(
       {this.id,
-      this.stampinfo,
-      this.getdate,
-      this.gettime,
-      this.invalidflg,
-      this.deleteat,
-      this.deletetime,
-      this.stampnum});
+      this.stampInfo,
+      this.getDate,
+      this.getTime,
+      this.invalidFlg,
+      this.deleteAt,
+      this.deleteTime,
+      this.stampNum});
 
   //StampからMap型に変換
   //カラム名に対応する必要あり
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'stampinfo': stampinfo,
-      'getdate': _timeConvert(getdate, "date"),
-      'gettime': _timeConvert(gettime, "time"),
-      'invalidflg': _isInt(invalidflg),
-      'deleteat': _timeConvert(deleteat, "date"),
-      'deletetime': _timeConvert(deletetime, "time"),
-      'stampnum': stampnum
+      'stampinfo': stampInfo,
+      'getdate': _timeConvert(getDate, "date"),
+      'gettime': _timeConvert(getTime, "time"),
+      'invalidflg': _isInt(invalidFlg),
+      'deleteat': _timeConvert(deleteAt, "date"),
+      'deletetime': _timeConvert(deleteTime, "time"),
+      'stampnum': stampNum
     };
   }
 
@@ -51,11 +51,11 @@ class Stamp {
   }
 
 //DateTimeをStringに変換
-  String _timeConvert(DateTime dt, String datetype) {
+  String _timeConvert(DateTime dt, String dateType) {
     String sdt;
-    if (datetype == "date") {
+    if (dateType == "date") {
       sdt = DateFormat('MM/dd/yyyy').format(dt);
-    } else if (datetype == "time") {
+    } else if (dateType == "time") {
       sdt = DateFormat('HH:mm:ss').format(dt);
     }
     return sdt;
@@ -63,7 +63,7 @@ class Stamp {
 
   @override
   String toString() {
-    return 'Stamp{id: $id, stampinfo: $stampinfo, getdate:$getdate,gettime: $gettime,invalidflg:$invalidflg,deleteat:$deleteat,deletetime:$deletetime,stampnum:$stampnum}';
+    return 'Stamp{id: $id, stampinfo: $stampInfo, getdate:$getDate,gettime: $getTime,invalidflg:$invalidFlg,deleteat:$deleteAt,deletetime:$deleteTime,stampnum:$stampNum}';
   }
 
   // テーブル作成
