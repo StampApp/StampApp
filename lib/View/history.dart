@@ -31,8 +31,6 @@ class _HistoryPageState extends State<HistoryPage> {
 
   final List<String> dateList = [
     "2021/5/25",
-    "2021/5/25",
-    "2021/5/30",
     "2021/5/30",
   ];
 
@@ -124,22 +122,29 @@ class _HistoryPageState extends State<HistoryPage> {
                   ),
                 )
               ]),
-              _test(stampList)
-            ])));
+              for(int i = 0; i < dateList.length; i++)
+                _test(dateList[i], stampList)
+            ]
+          )
+        )
+      );
   }
 }
 
-Widget _test(List<Stamp> stampList) {
+Widget _test(String targetDate, List<Stamp> stampList) {
   return GestureDetector(
       child: Column(
     children: <Widget>[
-      //一番最初の日付を表示
-      _delimiter(stampList[0].date),
+      // 日付表示
+      _delimiter(targetDate),
       ListView(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            for (int i = 0; i < stampList.length; i++) _row(stampList[i])
+            
+            for (int i = 0; i < stampList.length; i++)
+              if(stampList[i].date == targetDate)
+                _row(stampList[i])
           ]),
     ],
   ));
