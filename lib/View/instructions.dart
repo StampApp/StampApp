@@ -64,9 +64,7 @@ class _IntroductionState extends State<Introduction> {
   }
    // アニメーションカード生成
   AnimatedContainer _createCardAnimate(String imagePath, bool active) {
-    // アクティブと非アクティブのアニメーション設定値
-    final double top = active ? 0 : 400;
-    final double side = active ? 0 : 40;
+    // アニメーション設定
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
       curve: Curves.easeOutQuint,
