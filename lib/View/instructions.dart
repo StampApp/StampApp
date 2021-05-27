@@ -4,14 +4,11 @@ import 'package:page_view_indicators/circle_page_indicator.dart';
 class InstructionsPage extends StatefulWidget {
   InstructionsPage({Key key, this.title}) : super(key: key);
   final String title;
-
   @override
   _InstructionsPageState createState() => _InstructionsPageState();
 }
 
 class _InstructionsPageState extends State<InstructionsPage> {
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,8 +25,6 @@ class _InstructionsPageState extends State<InstructionsPage> {
       ),
     );
   }
-
-
 }
 
 class Introduction extends StatefulWidget {
@@ -37,15 +32,11 @@ class Introduction extends StatefulWidget {
   _IntroductionState createState() => _IntroductionState();
 }
 
-
 class _IntroductionState extends State<Introduction> {
-
   // ページコントローラ
   final PageController controller = PageController(viewportFraction: 0.8);
-
   // ページインデックス
   final _currentPageNotifier = ValueNotifier<int>(0);
-
   // 表示する画像
   List<String> _imageList = [
     "image/home.png",
@@ -58,33 +49,24 @@ class _IntroductionState extends State<Introduction> {
     "設定画面の説明",
     "利用履歴の説明",
   ];
-
   @override
   void initState() {
-
     super.initState();
-
     // ページコントローラのページ遷移を監視しページ数を丸める
     controller.addListener(() {
       int next = controller.page.round();
       if (_currentPageNotifier.value != next) {
-
         setState(() {
           _currentPageNotifier.value = next;
         });
       }
     });
   }
-
-
    // アニメーションカード生成
-
   AnimatedContainer _createCardAnimate(String imagePath, bool active) {
-
     // アクティブと非アクティブのアニメーション設定値
     final double top = active ? 0 : 400;
     final double side = active ? 0 : 40;
-
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
       curve: Curves.easeOutQuint,
@@ -100,23 +82,17 @@ class _IntroductionState extends State<Introduction> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Column(
         children: <Widget>[
-
-
            // ページ
-
           Expanded(
             child: PageView.builder(
               controller: controller,
               itemCount: _imageList.length,
               itemBuilder: (context, int currentIndex) {
-
                 // アクティブ値
                 bool active = currentIndex == _currentPageNotifier.value;
-
                 // _imageListに入れた画像の表示
                 return _createCardAnimate(
                   _imageList[currentIndex],
@@ -125,8 +101,6 @@ class _IntroductionState extends State<Introduction> {
               },
             ),
           ),
-
-
            // ページインジケータ
           Container(
             height: 5.0,
@@ -135,10 +109,7 @@ class _IntroductionState extends State<Introduction> {
               currentPageNotifier: _currentPageNotifier,
             ),
           ),
-
-
            // 説明エリア
-
           Container(
             height: 60.0,
             padding: EdgeInsets.all(7.0),
