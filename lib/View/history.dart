@@ -47,7 +47,6 @@ class _HistoryPageState extends State<HistoryPage> {
         j++;
       }
     }
-    print(dateList);
   }
 
   @override
@@ -146,9 +145,16 @@ Widget _line(String targetDate, List<Stamp> stampList) {
       ListView(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
+
           children: <Widget>[
-            for (int i = 0; i < stampList.length; i++)
-              if (stampList[i].date == targetDate) _row(stampList[i])
+            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+            children: stampList.map((Stamp stamp) =>
+                    Column(
+                      children: <Widget>[
+                         if (stamp.date == targetDate) _row(stamp)
+                      ])).toList()
+              )
           ]),
     ],
   ));
