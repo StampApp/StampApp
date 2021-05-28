@@ -114,6 +114,8 @@ class _HistoryPageState extends State<HistoryPage> {
               Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
                 //ドロップダウンメニュー
                 Container(
+                  padding: EdgeInsets.only(left: 15),
+                  margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
                   decoration: BoxDecoration(
                     //枠線を丸くするかどうか
                     //borderRadius: BorderRadius.circular(10.0),
@@ -145,16 +147,14 @@ Widget _line(String targetDate, List<Stamp> stampList) {
       ListView(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-
           children: <Widget>[
-            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-            children: stampList.map((Stamp stamp) =>
-                    Column(
-                      children: <Widget>[
-                         if (stamp.date == targetDate) _row(stamp)
-                      ])).toList()
-              )
+            Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: stampList
+                    .map((Stamp stamp) => Column(children: <Widget>[
+                          if (stamp.date == targetDate) _row(stamp)
+                        ]))
+                    .toList())
           ]),
     ],
   ));
