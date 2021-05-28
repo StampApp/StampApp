@@ -42,36 +42,39 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     DateTime dateTime = DateTime.now();
     DateTime getDate = dateTime;
     DateTime getTime = dateTime;
-    DateTime deleteAt = dateTime;
-    DateTime deleteTime = dateTime;
-    //挿入データ
+    DateTime createdAt = dateTime;
+    DateTime deletedAt = dateTime;
+    // 挿入データ
     var stamp = Stamp(
-        id: '0',
-        stampInfo: '6D',
-        getDate: getDate,
-        getTime: getTime,
-        invalidFlg: true,
-        deleteAt: deleteAt,
-        deleteTime: deleteTime,
-        stampNum: 1);
+      id: '0',
+      stampInfo: '6D',
+      getDate: getDate,
+      getTime: getTime,
+      stampNum: '1',
+      deletedFlg: true,
+      createdAt: createdAt,
+      deletedAt: deletedAt,
+    );
     var stamp2 = Stamp(
-        id: '1',
-        stampInfo: '5D',
-        getDate: getDate,
-        getTime: getTime,
-        invalidFlg: true,
-        deleteAt: deleteAt,
-        deleteTime: deleteTime,
-        stampNum: 2);
+      id: '1',
+      stampInfo: '5D',
+      getDate: getDate,
+      getTime: getTime,
+      stampNum: '2',
+      deletedFlg: true,
+      createdAt: createdAt,
+      deletedAt: deletedAt,
+    );
     var stamp3 = Stamp(
-        id: '1',
-        stampInfo: '3F',
-        getDate: getDate,
-        getTime: getTime,
-        invalidFlg: true,
-        deleteAt: deleteAt,
-        deleteTime: deleteTime,
-        stampNum: 2);
+      id: '1',
+      stampInfo: '3F',
+      getDate: getDate,
+      getTime: getTime,
+      stampNum: '2',
+      deletedFlg: true,
+      createdAt: createdAt,
+      deletedAt: deletedAt,
+    );
 
     await DbInterface.insert('Stamp', Stamp.database, stamp);
 
