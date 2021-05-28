@@ -27,20 +27,27 @@ class _HistoryPageState extends State<HistoryPage> {
     new Stamp(2, "2021/5/25", "12時20分", 1),
     new Stamp(3, "2021/5/30", "14時50分", 1),
     new Stamp(4, "2021/5/30", "11時00分", 0),
+    new Stamp(4, "2021/5/30", "11時00分", 1),
+    new Stamp(4, "2021/5/31", "14時00分", 0),
+    new Stamp(4, "2021/5/31", "17時00分", 1),
+    new Stamp(4, "2021/5/31", "17時00分", 1),
   ];
 
-  final List<String> dateList = [
-    "2021/5/25",
-    "2021/5/30",
-  ];
+  //DateList初期化
+  List<String> dateList = [];
 
-//動かん
-  List<String> getDateList(List<Stamp> list) {
-    List<String> ret = [];
-    list.forEach((Stamp st) {
-      ret.add(st.date);
-    });
-    return ret;
+  //重複しないDateをsatmpListから取得する
+  void getDateList(List<Stamp> list) {
+    int j = 0;
+    for (int i = 0; i < list.length; i++) {
+      if (i == 0) {
+        dateList.add(list[i].date);
+      } else if (list[i].date != dateList[j]) {
+        dateList.add(stampList[i].date);
+        j++;
+      }
+    }
+    print(dateList);
   }
 
   @override
@@ -92,6 +99,8 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    //Dateリスト作成
+    getDateList(stampList);
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -122,16 +131,13 @@ class _HistoryPageState extends State<HistoryPage> {
                   ),
                 )
               ]),
-              for(int i = 0; i < dateList.length; i++)
-                _test(dateList[i], stampList)
-            ]
-          )
-        )
-      );
+              for (int i = 0; i < dateList.length; i++)
+                _line(dateList[i], stampList)
+            ])));
   }
 }
 
-Widget _test(String targetDate, List<Stamp> stampList) {
+Widget _line(String targetDate, List<Stamp> stampList) {
   return GestureDetector(
       child: Column(
     children: <Widget>[
@@ -141,10 +147,8 @@ Widget _test(String targetDate, List<Stamp> stampList) {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            
             for (int i = 0; i < stampList.length; i++)
-              if(stampList[i].date == targetDate)
-                _row(stampList[i])
+              if (stampList[i].date == targetDate) _row(stampList[i])
           ]),
     ],
   ));
