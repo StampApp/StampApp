@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:intl/intl.dart';
 import 'package:stamp_app/Util/timeConvert.dart';
 import 'package:stamp_app/Util/isInt.dart';
 
@@ -31,14 +30,14 @@ class Stamp {
   Map<String, dynamic> toMap() {
     TimeConvert convertGetDate = new TimeConvert(getDate, "date");
     TimeConvert convertGetTime = new TimeConvert(getTime, "time");
-    IsInt convertIsint = new IsInt(deletedFlg);
+    IsInt convertIsInt = new IsInt(deletedFlg);
     return {
       'id': id,
       'stampinfo': stampInfo,
       'getdate': convertGetDate.sdt,
       'gettime': convertGetTime.sdt,
       'stampnum': stampNum,
-      'deletedflg': convertIsint.ib,
+      'deletedflg': convertIsInt.ib,
       'createdat': createdAt.toString(),
       'deletedat': deletedAt.toString()
     };

@@ -1,14 +1,20 @@
 import 'package:intl/intl.dart';
 
 class TimeConvert {
-  DateTime dt; // 日付データ
-  String dateType; // 日付データ型
-  String sdt; // 日付データの返り値
-  TimeConvert(this.dt, this.dateType) {
+  DateTime _dt; // 日付データ
+  String _dateType; // 日付データ型
+  String _sdt; // 日付データの返り値
+  TimeConvert(DateTime dt, String dateType) {
+    this._dt = dt;
+    this._dateType = dateType;
     if (dateType == "date") {
-      this.sdt = DateFormat('MM/dd/yyyy').format(dt);
+      this._sdt = DateFormat('MM/dd/yyyy').format(dt);
     } else if (dateType == "time") {
-      this.sdt = DateFormat('HH:mm:ss').format(dt);
+      this._sdt = DateFormat('HH:mm:ss').format(dt);
     }
   }
+  // Getter
+  DateTime get dt => _dt;
+  String get dateType => _dateType;
+  String get sdt => _sdt;
 }
