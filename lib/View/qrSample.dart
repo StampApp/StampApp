@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
 import '../Widget/CameraButton.dart';
+import '../Widget/qrDialog.dart';
 
 // 状態が動的に変化するウィジェット（通信・データによって）
 class QRSamplePage extends StatefulWidget {
@@ -18,6 +19,10 @@ class _QRSamplePageState extends State<QRSamplePage> {
   Future _scan() async {
     try {
       var result = await BarcodeScanner.scan();
+      if (result.format.name == "qr") {
+        // 読み込んだのがQRコードだった場合
+        print(result.rawContent);
+      }
       setState(() => scanResult = result);
     } on PlatformException catch (e) {
       var result = ScanResult(
@@ -39,31 +44,10 @@ class _QRSamplePageState extends State<QRSamplePage> {
 
   @override
   Widget build(BuildContext context) {
-    var contentList = <Widget>[
-      if (scanResult != null)
-        Card(
-          child: Column(
-            children: <Widget>[
-              ListTile(
-                title: Text("Result Type"),
-                subtitle: Text(scanResult.type?.toString() ?? ""),
-              ),
-              ListTile(
-                title: Text("RawContent"),
-                subtitle: Text(scanResult.rawContent ?? ""),
-              ),
-              ListTile(
-                title: Text("Format"),
-                subtitle: Text(scanResult.format?.toString() ?? ""),
-              ),
-              ListTile(
-                title: Text("Format note"),
-                subtitle: Text(scanResult.formatNote ?? ""),
-              ),
-            ],
-          ),
-        ),
-    ];
+    if (scanResult != null)
+    // ダイアログを表示する
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => (qrDialog(context, scanResult)));
 
     return Scaffold(
       appBar: AppBar(
@@ -76,11 +60,6 @@ class _QRSamplePageState extends State<QRSamplePage> {
             Text(
               '右下のボタンをおしてね',
               style: Theme.of(context).textTheme.headline4,
-            ),
-            ListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              children: contentList,
             ),
           ],
         ),

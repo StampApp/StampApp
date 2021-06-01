@@ -23,8 +23,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  dependencies:
+  page_view_indicators: ^2.0.0
   sqflite:
   path:
+
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -36,7 +41,7 @@ dependencies:
 
 #スプラッシュスクリーンの実装
 flutter_native_splash:
-  image: "image/tuki.png" 
+  image: "image/logo_transparent.png"
   color: "4DD0E1"
 
 dev_dependencies:
@@ -53,6 +58,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - image/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
