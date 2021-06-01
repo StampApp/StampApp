@@ -1,0 +1,1 @@
+enum enumDateType { date, time }

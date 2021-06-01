@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/toInt.dart';
+import 'package:stamp_app/Util/enumDateType.dart';
 
 class Stamp {
   static final _tableName = 'Stamp'; // テーブル名
@@ -28,8 +29,8 @@ class Stamp {
   // StampからMap型に変換
   // カラム名に対応する必要あり
   Map<String, dynamic> toMap() {
-    String toDate = toDateOrTime(getDate, "date");
-    String toTime = toDateOrTime(getTime, "time");
+    String toDate = toDateOrTime(getDate, enumDateType.date.toString());
+    String toTime = toDateOrTime(getTime, enumDateType.time.toString());
     int deleted = toInt(deletedFlg);
     return {
       'id': id,
