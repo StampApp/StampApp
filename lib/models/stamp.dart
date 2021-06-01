@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:stamp_app/Util/timeConvert.dart';
-import 'package:stamp_app/Util/isInt.dart';
+import 'package:stamp_app/Util/toDateOrTime.dart';
+import 'package:stamp_app/Util/toInt.dart';
 
 class Stamp {
   static final _tableName = 'Stamp'; // テーブル名
@@ -28,16 +28,16 @@ class Stamp {
   // StampからMap型に変換
   // カラム名に対応する必要あり
   Map<String, dynamic> toMap() {
-    TimeConvert convertGetDate = new TimeConvert(getDate, "date");
-    TimeConvert convertGetTime = new TimeConvert(getTime, "time");
-    IsInt convertIsInt = new IsInt(deletedFlg);
+    String toDate = toDateOrTime(getDate, "date");
+    String toTime = toDateOrTime(getTime, "time");
+    int deleted = toInt(deletedFlg);
     return {
       'id': id,
       'stampinfo': stampInfo,
-      'getdate': convertGetDate.sdt,
-      'gettime': convertGetTime.sdt,
+      'getdate': toDate,
+      'gettime': toTime,
       'stampnum': stampNum,
-      'deletedflg': convertIsInt.ib,
+      'deletedflg': deleted,
       'createdat': createdAt.toString(),
       'deletedat': deletedAt.toString()
     };
