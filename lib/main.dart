@@ -10,6 +10,7 @@ import 'View/terms.dart';
 import 'View/Setting.dart';
 import 'View/privacyPolicy.dart';
 import 'View/history.dart';
+import 'View/instructions.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         '/Setting': (BuildContext context) => SettingPage(title: '設定'),
         '/history': (BuildContext context) => HistoryPage(title: '利用履歴'),
         '/terms': (BuildContext context) => TermsPage(title: '利用規約'),
+        '/instructions': (BuildContext context) => InstructionsPage(title: '使い方'),
         '/privacyPolicy': (BuildContext context) =>
             PrivacyPolicyPage(title: 'プライバシーポリシー'),
       },
