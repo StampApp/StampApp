@@ -56,6 +56,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     new Stamp(uuid.v1(), "ok", 2, now.toUtc().toIso8601String()),
     new Stamp(uuid.v1(), "ok", 3, now.toUtc().toIso8601String()),
     new Stamp(uuid.v1(), "ok", 4, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "ok", 5, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "ok", 6, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "ok", 7, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "ok", 8, now.toUtc().toIso8601String()),
   ];
 
   void _settingNavigate() {
@@ -91,30 +95,36 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Future<void> _qrScan() async {
     ScanResult result = await qrScan();
     if (result.format.name == "qr") {
-      Stamp newStamp = new Stamp(uuid.v1(), result.rawContent,
-          stampList.length + 1, now.toUtc().toIso8601String());
+      int stampListLen = stampList.length;
+      int crossAxisCount = 3;
+      int okLen = stampList.where((element) => element.data == "ok").length;
+      if (stampListLen == okLen + 1) {
+        for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
+          Stamp newStamp =
+              new Stamp(uuid.v1(), "", i + 1, now.toUtc().toIso8601String());
+          stampList.add(newStamp);
+        }
+      }
+      Stamp newStamp = new Stamp(
+          uuid.v1(), "ok", okLen + 1, DateTime.now().toUtc().toIso8601String());
       setState(() {
-        stampList.add(newStamp);
+        stampList[okLen] = newStamp;
       });
     }
   }
 
   @override
   void initState() {
-    print("start");
     //アプリ起動時に一度だけ実行される、がここのコードは未完成
     int stampListLen = stampList.length;
     //GridViewのcrossAxisCountの値
     int crossAxisCount = 3;
-    if (stampListLen <= crossAxisCount * 3) {
-      //スタンプリストの個数がcrossAxisCount * 3より小さい場合、不要なデータでcrossAxisCount * 3と同じ数になるまで埋める
-      for (int i = stampListLen; i < stampListLen; i++) {
-        Stamp newStamp =
-            new Stamp(uuid.v1(), "", i, now.toUtc().toIso8601String());
-        setState(() {
-          stampList.add(newStamp);
-        });
-      }
+    int listRow = stampListLen ~/ crossAxisCount + 1;
+    crossAxisCount < listRow ? null : listRow = 3;
+    for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
+      Stamp newStamp =
+          new Stamp(uuid.v1(), "", i, now.toUtc().toIso8601String());
+      stampList.add(newStamp);
     }
   }
 
@@ -162,60 +172,66 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                 letterSpacing: 4.0,
               ),
             ),
-            GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 3,
-              padding: const EdgeInsets.all(10),
-              // スタンプをListの数だけ生成する
-              children: stampList
-                  .map(
-                    (Stamp stamp) => Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () => stamp.data == "ok"
-                                ? stampDialog(context, stamp)
-                                : (context),
-                            child: Container(
-                              padding: const EdgeInsets.all(11.0),
-                              width: MediaQuery.of(context).size.width / 3 -
-                                  11 * 2,
-                              height: MediaQuery.of(context).size.width / 3 -
-                                  11 * 2,
-                              // 円を生成
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: stamp.data == "ok"
-                                        ? AssetImage(
-                                            'assets/images/flower-4.png')
-                                        : AssetImage('assets/images/none.png')),
-                                // border: Border.all(
-                                //     color: HexColor('00C2FF'), width: 3),
-                              ),
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Text(
-                                  stamp.stampNum.toString(),
-                                  style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontStyle: FontStyle.normal,
-                                    letterSpacing: 4.0,
+            SizedBox(
+              height: MediaQuery.of(context).size.width,
+              child: GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 3,
+                physics: ClampingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                padding: const EdgeInsets.all(10),
+                // スタンプをListの数だけ生成する
+                children: stampList
+                    .map(
+                      (Stamp stamp) => Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () => stamp.data == "ok"
+                                  ? stampDialog(context, stamp)
+                                  : (context),
+                              child: Container(
+                                padding: const EdgeInsets.all(11.0),
+                                width: MediaQuery.of(context).size.width / 3 -
+                                    11 * 2,
+                                height: MediaQuery.of(context).size.width / 3 -
+                                    11 * 2,
+                                // 円を生成
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: stamp.data == "ok"
+                                          ? AssetImage(
+                                              'assets/images/flower-4.png')
+                                          : AssetImage(
+                                              'assets/images/none.png')),
+                                  // border: Border.all(
+                                  //     color: HexColor('00C2FF'), width: 3),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text(
+                                    stamp.stampNum.toString(),
+                                    style: TextStyle(
+                                      fontSize: 25.0,
+                                      fontStyle: FontStyle.normal,
+                                      letterSpacing: 4.0,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
+                    )
+                    .toList(),
+              ),
             ),
             ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD)
           ],
