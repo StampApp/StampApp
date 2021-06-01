@@ -71,14 +71,14 @@ class _HistoryPageState extends State<HistoryPage> {
       ))
       ..add(DropdownMenuItem(
         child: Text(
-          '過去３ヶ月',
+          '過去3ヶ月',
           style: TextStyle(fontSize: 20.0),
         ),
         value: 1,
       ))
       ..add(DropdownMenuItem(
         child: Text(
-          '過去６ヶ月',
+          '過去6ヶ月',
           style: TextStyle(fontSize: 20.0),
         ),
         value: 2,
