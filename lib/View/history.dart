@@ -188,7 +188,7 @@ Widget _usestamp() {
     Container(
         margin: const EdgeInsets.only(left: 10),
         child: Text(
-          "消費",
+          "利用",
           style: TextStyle(
             color: Colors.black,
             fontSize: 18.0,
