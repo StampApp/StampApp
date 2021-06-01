@@ -17,7 +17,8 @@ class Stamp {
   Stamp(this.id, this.date, this.time, this.flag);
 }
 
-enum StampFlag { Flase, True }
+//スタンプ使用か判断するために使用
+final int UseFlag = 1;
 
 class _HistoryPageState extends State<HistoryPage> {
   List<DropdownMenuItem<int>> _items = List();
@@ -173,10 +174,8 @@ Widget _row(Stamp stamplist) {
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                //flagが1ならスタンプ使用、1以外ならスタンプゲットwidget呼び出し
-                (stamplist.flag == StampFlag.True.index)
-                    ? _usestamp()
-                    : _getstamp(),
+                //flagがUseFlagならスタンプ使用、それ以外ならスタンプゲットwidget呼び出し
+                (stamplist.flag == UseFlag) ? _usestamp() : _getstamp(),
                 Container(child: Text(stamplist.time))
               ])));
 }
