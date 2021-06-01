@@ -1,22 +1,24 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:stamp_app/models/stamp.dart';
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:stamp_app/Widget/qrScan.dart';
 import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
+import 'package:uuid/uuid.dart';
+import '../Widget/stampDialog.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
   final String title;
-
   @override
   _HomeSamplePageState createState() => _HomeSamplePageState();
 }
 
-//カラーコードをHexColorでできるように
+// カラーコードをHexColorでできるように
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll('#', '');
@@ -29,10 +31,30 @@ class HexColor extends Color {
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
 
+class Stamp {
+  String id;
+  String data;
+  num stampNum;
+  String createAt;
+  Stamp(this.id, this.data, this.stampNum, this.createAt);
+}
+
 class _HomeSamplePageState extends State<HomeSamplePage> {
-  void _qrNavigate() {
-    Navigator.of(context).pushNamed('/qrReader');
-  }
+  static final DateTime now = DateTime.now();
+  static final uuid = Uuid();
+
+  // 画面に表示するリストを定義
+  final List<Stamp> stampList = [
+    new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp2", 2, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp3", 3, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp4", 4, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp5", 5, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp6", 6, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp7", 7, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
+  ];
 
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
@@ -101,18 +123,29 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     print(await DbInterface.select('memo', Memo.database, memo.id));
 
     memo = Memo(
-      id: memo.id,
+      id: memo.id + 1,
       text: memo.text,
       priority: memo.priority + 1,
     );
 
-    await DbInterface.update('memo', Memo.database, memo);
+    await DbInterface.insert('memo', Memo.database, memo);
 
     print(await DbInterface.select('memo', Memo.database, memo.id));
 
     await DbInterface.delete('memo', Memo.database, memo.id);
 
-    print(await DbInterface.select('memo', Memo.database, memo.id));
+    print(await DbInterface.allSelect('memo', Memo.database));
+  }
+
+  Future<void> _qrScan() async {
+    ScanResult result = await qrScan();
+    if (result.format.name == "qr") {
+      Stamp newStamp = new Stamp(uuid.v1(), result.rawContent,
+          stampList.length + 1, now.toUtc().toIso8601String());
+      setState(() {
+        stampList.add(newStamp);
+      });
+    }
   }
 
   @override
@@ -122,7 +155,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
-          //設定ボタン
+          // 設定ボタン
           IconButton(
             icon: Icon(Icons.settings, color: Colors.white, size: 38),
             onPressed: _settingNavigate,
@@ -130,7 +163,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         ],
         backgroundColor: HexColor('00C2FF'),
       ),
-      //QRへ遷移
+      // QRへ遷移
       floatingActionButton: FloatingActionButton.extended(
         label: Text(
           'QR',
@@ -141,7 +174,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           ),
         ),
         icon: Icon(Icons.qr_code),
-        onPressed: _qrNavigate,
+        onPressed: _qrScan,
         backgroundColor: HexColor('00C2FF'),
       ),
       body: Container(
@@ -159,204 +192,44 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                 letterSpacing: 4.0,
               ),
             ),
-            SizedBox(
-              height: 40,
-            ),
-            //丸作成
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: HexColor('00C2FF'), width: 3),
-                  ),
-                  child: const Text(
-                    '１',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 4.0,
+            GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 3,
+              padding: const EdgeInsets.all(10),
+              // スタンプをListの数だけ生成する
+              children: stampList
+                  .map(
+                    (Stamp stamp) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () => stampDialog(context, stamp),
+                          child: Container(
+                            padding: const EdgeInsets.all(11.0),
+                            width: 60,
+                            height: 60,
+                            // 円を生成
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              border: Border.all(
+                                  color: HexColor('00C2FF'), width: 3),
+                            ),
+                            child: Text(
+                              stamp.stampNum.toString(),
+                              style: TextStyle(
+                                fontSize: 25.0,
+                                fontStyle: FontStyle.normal,
+                                letterSpacing: 4.0,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: HexColor('00C2FF'), width: 3),
-                  ),
-                  child: const Text(
-                    '２',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 4.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: HexColor('00C2FF'), width: 3),
-                  ),
-                  child: const Text(
-                    '３',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 4.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 60,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: HexColor('00C2FF'), width: 3),
-                  ),
-                  child: const Text(
-                    '４',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 4.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: HexColor('00C2FF'), width: 3),
-                  ),
-                  child: const Text(
-                    '５',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 4.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: HexColor('00C2FF'), width: 3),
-                  ),
-                  child: const Text(
-                    '６',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 4.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 60,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: HexColor('00C2FF'), width: 3),
-                  ),
-                  child: const Text(
-                    '７',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 4.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: HexColor('00C2FF'), width: 3),
-                  ),
-                  child: const Text(
-                    '８',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 4.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    border: Border.all(color: HexColor('00C2FF'), width: 3),
-                  ),
-                  child: const Text(
-                    '９',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 4.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 60,
+                  )
+                  .toList(),
             ),
             ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD),
             ElevatedButton(child: Text('CRUDサンプル'), onPressed: _crudSample)
