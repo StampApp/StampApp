@@ -39,16 +39,23 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   static final uuid = Uuid();
 
   // 画面に表示するリストを定義
+  // final List<Stamp> stampList = [
+  //   new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp2", 2, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp3", 3, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp4", 4, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp5", 5, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp6", 6, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp7", 7, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
+  // ];
+
   final List<Stamp> stampList = [
-    new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp2", 2, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp3", 3, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp4", 4, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp5", 5, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp6", 6, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp7", 7, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "ok", 1, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "ok", 2, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "ok", 3, now.toUtc().toIso8601String()),
+    new Stamp(uuid.v1(), "ok", 4, now.toUtc().toIso8601String()),
   ];
 
   void _settingNavigate() {
@@ -89,6 +96,25 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       setState(() {
         stampList.add(newStamp);
       });
+    }
+  }
+
+  @override
+  void initState() {
+    print("start");
+    //アプリ起動時に一度だけ実行される、がここのコードは未完成
+    int stampListLen = stampList.length;
+    //GridViewのcrossAxisCountの値
+    int crossAxisCount = 3;
+    if (stampListLen <= crossAxisCount * 3) {
+      //スタンプリストの個数がcrossAxisCount * 3より小さい場合、不要なデータでcrossAxisCount * 3と同じ数になるまで埋める
+      for (int i = stampListLen; i < stampListLen; i++) {
+        Stamp newStamp =
+            new Stamp(uuid.v1(), "", i, now.toUtc().toIso8601String());
+        setState(() {
+          stampList.add(newStamp);
+        });
+      }
     }
   }
 
@@ -143,34 +169,50 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               // スタンプをListの数だけ生成する
               children: stampList
                   .map(
-                    (Stamp stamp) => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () => stampDialog(context, stamp),
-                          child: Container(
-                            padding: const EdgeInsets.all(11.0),
-                            width: 60,
-                            height: 60,
-                            // 円を生成
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                  color: HexColor('00C2FF'), width: 3),
-                            ),
-                            child: Text(
-                              stamp.stampNum.toString(),
-                              style: TextStyle(
-                                fontSize: 25.0,
-                                fontStyle: FontStyle.normal,
-                                letterSpacing: 4.0,
+                    (Stamp stamp) => Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () => stamp.data == "ok"
+                                ? stampDialog(context, stamp)
+                                : (context),
+                            child: Container(
+                              padding: const EdgeInsets.all(11.0),
+                              width: MediaQuery.of(context).size.width / 3 -
+                                  11 * 2,
+                              height: MediaQuery.of(context).size.width / 3 -
+                                  11 * 2,
+                              // 円を生成
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: stamp.data == "ok"
+                                        ? AssetImage(
+                                            'assets/images/flower-4.png')
+                                        : AssetImage('assets/images/none.png')),
+                                // border: Border.all(
+                                //     color: HexColor('00C2FF'), width: 3),
                               ),
-                              textAlign: TextAlign.center,
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Text(
+                                  stamp.stampNum.toString(),
+                                  style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontStyle: FontStyle.normal,
+                                    letterSpacing: 4.0,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   )
                   .toList(),
