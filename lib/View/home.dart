@@ -53,7 +53,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   final List<Stamp> stampList = [
     new Stamp(
         id: uuid.v1(),
-        stampInfo: "stamp1",
+        data: "stamp1",
         getDate: dateTime,
         getTime: dateTime,
         stampNum: '1',
@@ -62,7 +62,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         deletedAt: dateTime),
     new Stamp(
         id: uuid.v1(),
-        stampInfo: "stamp2",
+        data: "stamp2",
         getDate: dateTime,
         getTime: dateTime,
         stampNum: '2',
@@ -71,7 +71,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         deletedAt: dateTime),
     new Stamp(
         id: uuid.v1(),
-        stampInfo: "stamp3",
+        data: "stamp3",
         getDate: dateTime,
         getTime: dateTime,
         stampNum: '3',
@@ -80,7 +80,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         deletedAt: dateTime),
     new Stamp(
         id: uuid.v1(),
-        stampInfo: "stamp4",
+        data: "stamp4",
         getDate: dateTime,
         getTime: dateTime,
         stampNum: '4',
@@ -89,7 +89,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         deletedAt: dateTime),
     new Stamp(
         id: uuid.v1(),
-        stampInfo: "stamp5",
+        data: "stamp5",
         getDate: dateTime,
         getTime: dateTime,
         stampNum: '5',
@@ -98,7 +98,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         deletedAt: dateTime),
     new Stamp(
         id: uuid.v1(),
-        stampInfo: "stamp6",
+        data: "stamp6",
         getDate: dateTime,
         getTime: dateTime,
         stampNum: '6',
@@ -107,7 +107,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         deletedAt: dateTime),
     new Stamp(
         id: uuid.v1(),
-        stampInfo: "stamp7",
+        data: "stamp7",
         getDate: dateTime,
         getTime: dateTime,
         stampNum: '7',
@@ -116,7 +116,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         deletedAt: dateTime),
     new Stamp(
         id: uuid.v1(),
-        stampInfo: "stamp8",
+        data: "stamp8",
         getDate: dateTime,
         getTime: dateTime,
         stampNum: '8',
@@ -125,7 +125,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         deletedAt: dateTime),
     new Stamp(
         id: uuid.v1(),
-        stampInfo: "stamp9",
+        data: "stamp9",
         getDate: dateTime,
         getTime: dateTime,
         stampNum: '9',
@@ -158,7 +158,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     
     var stamp = Stamp(
       id: '0',
-      stampInfo: '6D',
+      data: '6D',
       getDate: getDate,
       getTime: getTime,
       stampNum: '1',
@@ -168,7 +168,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     );
     var stamp2 = Stamp(
       id: '1',
-      stampInfo: '5D',
+      data: '5D',
       getDate: getDate,
       getTime: getTime,
       stampNum: '2',
@@ -178,7 +178,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     );
     var stamp3 = Stamp(
       id: '1',
-      stampInfo: '3F',
+      data: '3F',
       getDate: getDate,
       getTime: getTime,
       stampNum: '2',
@@ -194,7 +194,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     DateTime deletedAt = dateTime;
     final update = new Stamp(
         id: '4eef4900-c340-11eb-80aa-4babbebbda13',
-        stampInfo: "stamp10",
+        data: "stamp10",
         getDate: getDate,
         getTime: getTime,
         stampNum: '10',
@@ -249,7 +249,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       String stringStampNum = stampList.length.toString();
       Stamp newStamp = new Stamp(
           id: uuid.v1(),
-          stampInfo: result.rawContent,
+          data: result.rawContent,
           getDate: dateTime,
           getTime: dateTime,
           stampNum: stringStampNum,

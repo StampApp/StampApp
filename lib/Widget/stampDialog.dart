@@ -18,7 +18,7 @@ void stampDialog(BuildContext context, Stamp stamp) {
               ),
               ListTile(
                 title: Text("data"),
-                subtitle: Text(stamp.stampInfo),
+                subtitle: Text(stamp.data),
               ),
               ListTile(
                 title: Text("createAt"),

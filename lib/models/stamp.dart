@@ -10,7 +10,7 @@ class Stamp {
 
   // モデル定義
   final String id;
-  final String stampInfo; // スタンプ情報
+  final String data; // スタンプ情報
   final DateTime getDate; // 取得日
   final DateTime getTime; // 取得時間
   final String stampNum; // スタンプの数
@@ -19,7 +19,7 @@ class Stamp {
   final DateTime deletedAt; // 削除日時
   Stamp(
       {this.id,
-      this.stampInfo,
+      this.data,
       this.getDate,
       this.getTime,
       this.stampNum,
@@ -34,7 +34,7 @@ class Stamp {
     int deleted = toInt(deletedFlg);
     return {
       'id': id,
-      'stampinfo': stampInfo,
+      'data': data,
       'getdate': toDate,
       'gettime': toTime,
       'stampnum': stampNum,
@@ -46,7 +46,7 @@ class Stamp {
 
   @override
   String toString() {
-    return 'Stamp{id: $id, stampinfo: $stampInfo, getdate:$getDate,gettime: $getTime,,stampnum:$stampNum,deletedflg:$deletedFlg,,createdat:$createdAt,deletedat:$deletedAt}';
+    return 'Stamp{id: $id, data: $data, getdate:$getDate,gettime: $getTime,,stampnum:$stampNum,deletedflg:$deletedFlg,,createdat:$createdAt,deletedat:$deletedAt}';
   }
 
   // テーブル作成
@@ -57,7 +57,7 @@ class Stamp {
       onCreate: (db, version) {
         return db.execute("CREATE TABLE $_tableName ("
             "id TEXT PRIMARY KEY,"
-            "stampinfo TEXT,"
+            "data TEXT,"
             "getdate TEXT,"
             "gettime TEXT,"
             "stampnum TEXT,"
