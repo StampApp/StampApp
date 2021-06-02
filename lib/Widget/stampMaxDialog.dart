@@ -7,23 +7,17 @@ void stampMaxDialogAlert(BuildContext context, int maxStamp) {
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('警告'),
+        title: Text('スタンプが貯まりました'),
         content: Container(
-          height: 320,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              ListTile(
-                title: Text("注意"),
-                subtitle: Text("スタンプが$maxStamp個貯まりました。\n交換してください。"),
-              ),
+              Text(
+                  "スタンプが$maxStamp個貯まりました。\n交換してください。\n\n注:これ以上スタンプを読み込んでも増えません。"),
             ],
           ),
         ),
         actions: <Widget>[
-          TextButton(
-            child: Text('Cancel'),
-            onPressed: () => Navigator.of(context).pop(0),
-          ),
           TextButton(
             child: Text('OK'),
             onPressed: () => Navigator.of(context).pop(1),
