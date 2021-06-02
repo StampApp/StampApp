@@ -5,6 +5,7 @@ import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
+import '../Widget/stampMaxDialog.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
@@ -92,24 +93,49 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     print(await DbInterface.allSelect('memo', Memo.database));
   }
 
+  bool checkIsMaxStamps(int okLen, int maxStamp) {
+    //上限無しの場合0を指定
+    if (maxStamp == 0) return false;
+    if (okLen + 1 >= maxStamp) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<void> _qrScan() async {
     ScanResult result = await qrScan();
     if (result.format.name == "qr") {
+      int maxStamp = 9; //上限無しの場合0を指定
       int stampListLen = stampList.length;
       int crossAxisCount = 3;
       int okLen = stampList.where((element) => element.data == "ok").length;
-      if (stampListLen == okLen + 1) {
-        for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
-          Stamp newStamp =
-              new Stamp(uuid.v1(), "", i + 1, now.toUtc().toIso8601String());
-          stampList.add(newStamp);
+
+      if (checkIsMaxStamps(okLen, maxStamp)) {
+        if (okLen >= maxStamp) {
+          stampMaxDialogAlert(context, maxStamp);
+        } else {
+          Stamp newStamp = new Stamp(uuid.v1(), "ok", okLen + 1,
+              DateTime.now().toUtc().toIso8601String());
+          setState(() {
+            stampList[okLen] = newStamp;
+          });
+          stampMaxDialogAlert(context, maxStamp);
         }
+      } else {
+        if (stampListLen == okLen + 1) {
+          for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
+            Stamp newStamp =
+                new Stamp(uuid.v1(), "", i + 1, now.toUtc().toIso8601String());
+            stampList.add(newStamp);
+          }
+        }
+        Stamp newStamp = new Stamp(uuid.v1(), "ok", okLen + 1,
+            DateTime.now().toUtc().toIso8601String());
+        setState(() {
+          stampList[okLen] = newStamp;
+        });
       }
-      Stamp newStamp = new Stamp(
-          uuid.v1(), "ok", okLen + 1, DateTime.now().toUtc().toIso8601String());
-      setState(() {
-        stampList[okLen] = newStamp;
-      });
     }
   }
 
