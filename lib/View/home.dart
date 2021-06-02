@@ -30,7 +30,7 @@ class HexColor extends Color {
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
-
+/*
 class Stamp {
   String id;
   String data;
@@ -38,12 +38,103 @@ class Stamp {
   String createAt;
   Stamp(this.id, this.data, this.stampNum, this.createAt);
 }
+*/
 
 class _HomeSamplePageState extends State<HomeSamplePage> {
-  static final DateTime now = DateTime.now();
   static final uuid = Uuid();
-
+  static final DateTime dateTime = DateTime.now();
+  /*
+  static DateTime getDate = dateTime;
+  static DateTime getTime = dateTime;
+  static DateTime createdAt = dateTime;
+  static DateTime deletedAt = dateTime;
+*/
   // 画面に表示するリストを定義
+  final List<Stamp> stampList = [
+    new Stamp(
+        id: uuid.v1(),
+        stampInfo: "stamp1",
+        getDate: dateTime,
+        getTime: dateTime,
+        stampNum: '1',
+        deletedFlg: true,
+        createdAt: dateTime,
+        deletedAt: dateTime),
+    new Stamp(
+        id: uuid.v1(),
+        stampInfo: "stamp2",
+        getDate: dateTime,
+        getTime: dateTime,
+        stampNum: '2',
+        deletedFlg: true,
+        createdAt: dateTime,
+        deletedAt: dateTime),
+    new Stamp(
+        id: uuid.v1(),
+        stampInfo: "stamp3",
+        getDate: dateTime,
+        getTime: dateTime,
+        stampNum: '3',
+        deletedFlg: true,
+        createdAt: dateTime,
+        deletedAt: dateTime),
+    new Stamp(
+        id: uuid.v1(),
+        stampInfo: "stamp4",
+        getDate: dateTime,
+        getTime: dateTime,
+        stampNum: '4',
+        deletedFlg: true,
+        createdAt: dateTime,
+        deletedAt: dateTime),
+    new Stamp(
+        id: uuid.v1(),
+        stampInfo: "stamp5",
+        getDate: dateTime,
+        getTime: dateTime,
+        stampNum: '5',
+        deletedFlg: true,
+        createdAt: dateTime,
+        deletedAt: dateTime),
+    new Stamp(
+        id: uuid.v1(),
+        stampInfo: "stamp6",
+        getDate: dateTime,
+        getTime: dateTime,
+        stampNum: '6',
+        deletedFlg: true,
+        createdAt: dateTime,
+        deletedAt: dateTime),
+    new Stamp(
+        id: uuid.v1(),
+        stampInfo: "stamp7",
+        getDate: dateTime,
+        getTime: dateTime,
+        stampNum: '7',
+        deletedFlg: true,
+        createdAt: dateTime,
+        deletedAt: dateTime),
+    new Stamp(
+        id: uuid.v1(),
+        stampInfo: "stamp8",
+        getDate: dateTime,
+        getTime: dateTime,
+        stampNum: '8',
+        deletedFlg: true,
+        createdAt: dateTime,
+        deletedAt: dateTime),
+    new Stamp(
+        id: uuid.v1(),
+        stampInfo: "stamp9",
+        getDate: dateTime,
+        getTime: dateTime,
+        stampNum: '9',
+        deletedFlg: true,
+        createdAt: dateTime,
+        deletedAt: dateTime),
+  ];
+
+  /*
   final List<Stamp> stampList = [
     new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
     new Stamp(uuid.v1(), "stamp2", 2, now.toUtc().toIso8601String()),
@@ -55,18 +146,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
     new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
   ];
+  */
 
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
   }
 
   void _crudSample() async {
-    DateTime dateTime = DateTime.now();
-    DateTime getDate = dateTime;
-    DateTime getTime = dateTime;
-    DateTime createdAt = dateTime;
-    DateTime deletedAt = dateTime;
     // 挿入データ
+    /*
+    
     var stamp = Stamp(
       id: '0',
       stampInfo: '6D',
@@ -97,23 +186,40 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       createdAt: createdAt,
       deletedAt: deletedAt,
     );
+    */
+    DateTime dateTime = DateTime.now();
+    DateTime getDate = dateTime;
+    DateTime getTime = dateTime;
+    DateTime createdAt = dateTime;
+    DateTime deletedAt = dateTime;
+    final update = new Stamp(
+        id: '4eef4900-c340-11eb-80aa-4babbebbda13',
+        stampInfo: "stamp10",
+        getDate: getDate,
+        getTime: getTime,
+        stampNum: '10',
+        deletedFlg: true,
+        createdAt: createdAt,
+        deletedAt: deletedAt);
 
-    await DbInterface.insert('Stamp', Stamp.database, stamp);
+    /*
+    await DbInterface.insert('Stamp', Stamp.database, stampList[0]);
 
     print(await DbInterface.select('Stamp', Stamp.database, 0));
 
-    await DbInterface.insert('Stamp', Stamp.database, stamp2);
+    await DbInterface.insert('Stamp', Stamp.database, stampList[1]);
+*/
+    await DbInterface.update('Stamp', Stamp.database, update);
 
-    await DbInterface.update('Stamp', Stamp.database, stamp3);
-
-    print(await DbInterface.select('Stamp', Stamp.database, 1));
-
+    print(await DbInterface.allSelect('Stamp', Stamp.database));
+/*
     await DbInterface.delete('Stamp', Stamp.database, 0);
+    */
   }
 
   void _demoCRUD() async {
     var memo = Memo(
-      id: 0,
+      id: uuid.v1(),
       text: 'Flutterで遊ぶ',
       priority: 1,
     );
@@ -123,7 +229,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     print(await DbInterface.select('memo', Memo.database, memo.id));
 
     memo = Memo(
-      id: memo.id + 1,
+      id: uuid.v1(),
       text: memo.text,
       priority: memo.priority + 1,
     );
@@ -140,8 +246,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Future<void> _qrScan() async {
     ScanResult result = await qrScan();
     if (result.format.name == "qr") {
-      Stamp newStamp = new Stamp(uuid.v1(), result.rawContent,
-          stampList.length + 1, now.toUtc().toIso8601String());
+      String stringStampNum = stampList.length.toString();
+      Stamp newStamp = new Stamp(
+          id: uuid.v1(),
+          stampInfo: result.rawContent,
+          getDate: dateTime,
+          getTime: dateTime,
+          stampNum: stringStampNum,
+          deletedFlg: true,
+          createdAt: dateTime,
+          deletedAt: dateTime);
       setState(() {
         stampList.add(newStamp);
       });

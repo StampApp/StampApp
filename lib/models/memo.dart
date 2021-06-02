@@ -6,7 +6,7 @@ class Memo {
   static final _tableName = 'memo';
 
   // モデル定義
-  final int id;
+  final String id;
   final String text;
   final int priority;
 
