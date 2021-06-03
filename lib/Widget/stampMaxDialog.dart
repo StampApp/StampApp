@@ -19,7 +19,7 @@ void stampMaxDialogAlert(BuildContext context, int maxStamp) {
         ),
         actions: <Widget>[
           TextButton(
-            child: Text('OK'),
+            child: Text('はい'),
             onPressed: () => Navigator.of(context).pop(1),
           ),
         ],

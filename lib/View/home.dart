@@ -6,6 +6,7 @@ import 'package:stamp_app/dbInterface.dart';
 import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
+import '../checkIsMaxStamps.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
@@ -63,6 +64,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     new Stamp(uuid.v1(), "ok", 8, now.toUtc().toIso8601String()),
   ];
 
+  static final String stampCheckString = "ok";
+
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
   }
@@ -93,47 +96,38 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     print(await DbInterface.allSelect('memo', Memo.database));
   }
 
-  bool checkIsMaxStamps(int okLen, int maxStamp) {
-    //上限無しの場合0を指定
-    if (maxStamp == 0) return false;
-    if (okLen + 1 >= maxStamp) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   Future<void> _qrScan() async {
     ScanResult result = await qrScan();
     if (result.format.name == "qr") {
       int maxStamp = 9; //上限無しの場合0を指定
       int stampListLen = stampList.length;
       int crossAxisCount = 3;
-      int okLen = stampList.where((element) => element.data == "ok").length;
+      int successStampLen =
+          stampList.where((element) => element.data == stampCheckString).length;
 
-      if (checkIsMaxStamps(okLen, maxStamp)) {
-        if (okLen >= maxStamp) {
+      if (checkIsMaxStamps(successStampLen, maxStamp)) {
+        if (successStampLen >= maxStamp) {
           stampMaxDialogAlert(context, maxStamp);
         } else {
-          Stamp newStamp = new Stamp(uuid.v1(), "ok", okLen + 1,
+          Stamp newStamp = new Stamp(uuid.v1(), "ok", successStampLen + 1,
               DateTime.now().toUtc().toIso8601String());
           setState(() {
-            stampList[okLen] = newStamp;
+            stampList[successStampLen] = newStamp;
           });
           stampMaxDialogAlert(context, maxStamp);
         }
       } else {
-        if (stampListLen == okLen + 1) {
+        if (stampListLen == successStampLen + 1) {
           for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
             Stamp newStamp =
                 new Stamp(uuid.v1(), "", i + 1, now.toUtc().toIso8601String());
             stampList.add(newStamp);
           }
         }
-        Stamp newStamp = new Stamp(uuid.v1(), "ok", okLen + 1,
+        Stamp newStamp = new Stamp(uuid.v1(), "ok", successStampLen + 1,
             DateTime.now().toUtc().toIso8601String());
         setState(() {
-          stampList[okLen] = newStamp;
+          stampList[successStampLen] = newStamp;
         });
       }
     }
@@ -141,7 +135,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   @override
   void initState() {
-    //アプリ起動時に一度だけ実行される、がここのコードは未完成
+    //アプリ起動時に一度だけ実行、スタンプテーブルの個数を3の倍数にする
     int stampListLen = stampList.length;
     //GridViewのcrossAxisCountの値
     int crossAxisCount = 3;
@@ -216,7 +210,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             GestureDetector(
-                              onTap: () => stamp.data == "ok"
+                              onTap: () => stamp.data == stampCheckString
                                   ? stampDialog(context, stamp)
                                   : (context),
                               child: Container(
@@ -230,7 +224,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                       fit: BoxFit.fill,
-                                      image: stamp.data == "ok"
+                                      image: stamp.data == stampCheckString
                                           ? AssetImage(
                                               'assets/images/flower-4.png')
                                           : AssetImage(
