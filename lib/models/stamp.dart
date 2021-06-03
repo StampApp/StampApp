@@ -46,7 +46,7 @@ class Stamp {
 
   @override
   String toString() {
-    return 'Stamp{id: $id, data: $data, getdate:$getDate,gettime: $getTime,,stampnum:$stampNum,deletedflg:$deletedFlg,,createdat:$createdAt,deletedat:$deletedAt}';
+    return 'Stamp{id: $id, data: $data, getdate: $getDate, gettime: $getTime, stampnum: $stampNum, deletedflg: $deletedFlg, createdat: $createdAt, deletedat: $deletedAt}';
   }
 
   // テーブル作成

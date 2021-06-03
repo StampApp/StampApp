@@ -43,164 +43,121 @@ class Stamp {
 class _HomeSamplePageState extends State<HomeSamplePage> {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
-  /*
-  static DateTime getDate = dateTime;
-  static DateTime getTime = dateTime;
-  static DateTime createdAt = dateTime;
-  static DateTime deletedAt = dateTime;
-*/
+
   // 画面に表示するリストを定義
   final List<Stamp> stampList = [
     new Stamp(
-        id: uuid.v1(),
-        data: "stamp1",
-        getDate: dateTime,
-        getTime: dateTime,
-        stampNum: '1',
-        deletedFlg: true,
-        createdAt: dateTime,
-        deletedAt: dateTime),
+      id: uuid.v1(),
+      data: "stamp1",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '1',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
     new Stamp(
-        id: uuid.v1(),
-        data: "stamp2",
-        getDate: dateTime,
-        getTime: dateTime,
-        stampNum: '2',
-        deletedFlg: true,
-        createdAt: dateTime,
-        deletedAt: dateTime),
+      id: uuid.v1(),
+      data: "stamp2",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '2',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
     new Stamp(
-        id: uuid.v1(),
-        data: "stamp3",
-        getDate: dateTime,
-        getTime: dateTime,
-        stampNum: '3',
-        deletedFlg: true,
-        createdAt: dateTime,
-        deletedAt: dateTime),
+      id: uuid.v1(),
+      data: "stamp3",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '3',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
     new Stamp(
-        id: uuid.v1(),
-        data: "stamp4",
-        getDate: dateTime,
-        getTime: dateTime,
-        stampNum: '4',
-        deletedFlg: true,
-        createdAt: dateTime,
-        deletedAt: dateTime),
+      id: uuid.v1(),
+      data: "stamp4",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '4',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
     new Stamp(
-        id: uuid.v1(),
-        data: "stamp5",
-        getDate: dateTime,
-        getTime: dateTime,
-        stampNum: '5',
-        deletedFlg: true,
-        createdAt: dateTime,
-        deletedAt: dateTime),
+      id: uuid.v1(),
+      data: "stamp5",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '5',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
     new Stamp(
-        id: uuid.v1(),
-        data: "stamp6",
-        getDate: dateTime,
-        getTime: dateTime,
-        stampNum: '6',
-        deletedFlg: true,
-        createdAt: dateTime,
-        deletedAt: dateTime),
+      id: uuid.v1(),
+      data: "stamp6",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '6',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
     new Stamp(
-        id: uuid.v1(),
-        data: "stamp7",
-        getDate: dateTime,
-        getTime: dateTime,
-        stampNum: '7',
-        deletedFlg: true,
-        createdAt: dateTime,
-        deletedAt: dateTime),
+      id: uuid.v1(),
+      data: "stamp7",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '7',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
     new Stamp(
-        id: uuid.v1(),
-        data: "stamp8",
-        getDate: dateTime,
-        getTime: dateTime,
-        stampNum: '8',
-        deletedFlg: true,
-        createdAt: dateTime,
-        deletedAt: dateTime),
+      id: uuid.v1(),
+      data: "stamp8",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '8',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
     new Stamp(
-        id: uuid.v1(),
-        data: "stamp9",
-        getDate: dateTime,
-        getTime: dateTime,
-        stampNum: '9',
-        deletedFlg: true,
-        createdAt: dateTime,
-        deletedAt: dateTime),
+      id: uuid.v1(),
+      data: "stamp9",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '9',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
   ];
-
-  /*
-  final List<Stamp> stampList = [
-    new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp2", 2, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp3", 3, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp4", 4, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp5", 5, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp6", 6, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp7", 7, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
-  ];
-  */
 
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
   }
 
   void _crudSample() async {
-    // 挿入データ
-    /*
-    
-    var stamp = Stamp(
-      id: '0',
-      data: '6D',
-      getDate: getDate,
-      getTime: getTime,
-      stampNum: '1',
-      deletedFlg: true,
-      createdAt: createdAt,
-      deletedAt: deletedAt,
-    );
-    var stamp2 = Stamp(
-      id: '1',
-      data: '5D',
-      getDate: getDate,
-      getTime: getTime,
-      stampNum: '2',
-      deletedFlg: true,
-      createdAt: createdAt,
-      deletedAt: deletedAt,
-    );
-    var stamp3 = Stamp(
-      id: '1',
-      data: '3F',
-      getDate: getDate,
-      getTime: getTime,
-      stampNum: '2',
-      deletedFlg: true,
-      createdAt: createdAt,
-      deletedAt: deletedAt,
-    );
-    */
     DateTime dateTime = DateTime.now();
     DateTime getDate = dateTime;
     DateTime getTime = dateTime;
     DateTime createdAt = dateTime;
     DateTime deletedAt = dateTime;
     final update = new Stamp(
-        id: '4eef4900-c340-11eb-80aa-4babbebbda13',
-        data: "stamp10",
-        getDate: getDate,
-        getTime: getTime,
-        stampNum: '10',
-        deletedFlg: true,
-        createdAt: createdAt,
-        deletedAt: deletedAt);
+      id: '4eef4900-c340-11eb-80aa-4babbebbda13',
+      data: "stamp10",
+      getDate: getDate,
+      getTime: getTime,
+      stampNum: '10',
+      deletedFlg: true,
+      createdAt: createdAt,
+      deletedAt: deletedAt,
+    );
 
     /*
     await DbInterface.insert('Stamp', Stamp.database, stampList[0]);
