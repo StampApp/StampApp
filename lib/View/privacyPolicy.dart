@@ -26,6 +26,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: HexColor('00C2FF'),
       ),
       body: ListView(
         padding: const EdgeInsets.only(left: 20, right: 20),
@@ -160,4 +161,17 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
       ),
     );
   }
+}
+
+//色をカラーコードで指定するためのクラス
+class HexColor extends Color {
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll('#', '');
+    if (hexColor.length == 6) {
+      hexColor = 'FF' + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
