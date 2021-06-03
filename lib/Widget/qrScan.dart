@@ -10,8 +10,10 @@ Future<ScanResult> qrScan() async {
     var result = await BarcodeScanner.scan();
     Map<String, dynamic> rowContent = json.decode(result.rawContent);
 
-    bool dateCheckResult = Validation.dateCheck(rowContent['date']);
-    bool strCheckResult = Validation.strCheck(rowContent['str']);
+    if (!Validation.dateCheck(rowContent['date']) ||
+        !Validation.strCheck(rowContent['str'])) {
+      result.rawContent = 'データが不正です';
+    }
 
     return result;
   } on PlatformException catch (e) {
@@ -37,22 +39,11 @@ class Validation {
     return date == content ? true : false;
   }
 
-  static bool strCheck(content) {
-    return content.contains('stamp');
+  static bool strCheck(String content) {
+    // 記号・半角を含まない
+    if (RegExp(r'^(?=.*[!-/:-@[-`{-~]).*$').hasMatch(content)) return false;
+    if (!content.contains('stamp')) return false;
+    if (content.contains('http')) return false;
+    return true;
   }
 }
-/*
-ScanResult
-format:BarcodeFormat (qr)
-formatNote:""
-rawContent:"https://ja.wikipedia.org/"
-type:ResultType (Barcode)
-hashCode:120338450
-runtimeType:Type (ScanResult)
-format:BarcodeFormat (qr)
-formatNote:""
-rawContent:"https://ja.wikipedia.org/"
-type:ResultType (Barcode)
-hashCode:120338450
-runtimeType:Type (ScanResult)
-*/
