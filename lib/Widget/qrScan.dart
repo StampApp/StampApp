@@ -10,7 +10,7 @@ Future<ScanResult> qrScan() async {
     var result = await BarcodeScanner.scan();
     Map<String, dynamic> rowContent = json.decode(result.rawContent);
 
-    if (!Validation.dateCheck(rowContent['date']) ||
+    if (!Validation.dateCheck(rowContent['date'], rowContent['time']) ||
         !Validation.strCheck(rowContent['str'])) {
       result.rawContent = 'データが不正です';
     }
@@ -31,12 +31,11 @@ Future<ScanResult> qrScan() async {
 }
 
 class Validation {
-  static bool dateCheck(content) {
-    DateTime now = DateTime(2021, 6, 1);
-    DateFormat outputFormat = DateFormat('yyyy/MM/dd');
-    String date = outputFormat.format(now);
-
-    return date == content ? true : false;
+  static bool dateCheck(date, time) {
+    DateTime verificationDate = DateTime(2021, 6, 1, 12, 0, 0);
+    if (date != DateFormat('yyyy/MM/dd').format(verificationDate)) return false;
+    if (time != DateFormat('HH:mm:ss').format(verificationDate)) return false;
+    return true;
   }
 
   static bool strCheck(String content) {
