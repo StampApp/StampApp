@@ -146,16 +146,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           new Stamp(uuid.v1(), "", i, now.toUtc().toIso8601String());
       stampList.add(newStamp);
     }
-
-    // サンプルコード
-    // checkIsMaxStamps(int successStampLen, int maxStamp)
-    // successStampLen(集めたスタンプの個数)プラス1した数がmaxStamp(上限)以上だったらtrueを返す、そうじゃなかったらfalseを返す
-    // maxStampが0(上限無し)の場合falseを返す
-    print(checkIsMaxStamps(3, 0)); //上限無し false
-    print(checkIsMaxStamps(2, 3)); //上限3 スタンプ数2 true
-    print(checkIsMaxStamps(1, 3)); //上限3 スタンプ数1 false
-    print(checkIsMaxStamps(3, 3)); //上限3 スタンプ数3 true
-    print(checkIsMaxStamps(4, 3)); //上限3 スタンプ数4 true
   }
 
   @override
