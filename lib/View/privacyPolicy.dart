@@ -7,6 +7,7 @@
 * Propsとは親から子に値を受け渡すための値
 */
 import 'package:flutter/material.dart';
+import '../Widget/HexColor.dart';
 
 class PrivacyPolicyPage extends StatefulWidget {
   // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
@@ -161,17 +162,4 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
       ),
     );
   }
-}
-
-//色をカラーコードで指定するためのクラス
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
