@@ -159,7 +159,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   }
 
   void _crudSample() async {
-    static final DateTime dateTime = DateTime.now();
+    final DateTime dateTime = DateTime.now();
     final update = new Stamp(
       id: '4eef4900-c340-11eb-80aa-4babbebbda13',
       data: "ok",
@@ -214,8 +214,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   Future<void> _qrScan() async {
     ScanResult result = await qrScan();
-    static final DateTime dateTime = DateTime.now();
-    
+    final DateTime dateTime = DateTime.now();
+
     if (result.format.name == "qr") {
       int maxStamp = 9; //上限無しの場合0を指定
       int stampListLen = stampList.length;
@@ -228,15 +228,14 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           stampMaxDialogAlert(context, maxStamp);
         } else {
           Stamp newStamp = new Stamp(
-            id: uuid.v1(),
-            data: "ok",
-            getDate: dateTime,
-            getTime: dateTime,
-            stampNum: successStampLen + 1,
-            deletedFlg: true,
-            createdAt: dateTime,
-            deletedAt: dateTime
-          );
+              id: uuid.v1(),
+              data: "ok",
+              getDate: dateTime,
+              getTime: dateTime,
+              stampNum: (successStampLen + 1).toString(),
+              deletedFlg: true,
+              createdAt: dateTime,
+              deletedAt: dateTime);
           setState(() {
             stampList[successStampLen] = newStamp;
           });
@@ -246,28 +245,26 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         if (stampListLen == successStampLen + 1) {
           for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
             Stamp newStamp = new Stamp(
-              id: uuid.v1(),
-              data: "",
-              getDate: dateTime,
-              getTime: dateTime,
-              stampNum: i + 1,
-              deletedFlg: true,
-              createdAt: dateTime,
-              deletedAt: dateTime
-            );
+                id: uuid.v1(),
+                data: "",
+                getDate: dateTime,
+                getTime: dateTime,
+                stampNum: (i + 1).toString(),
+                deletedFlg: true,
+                createdAt: dateTime,
+                deletedAt: dateTime);
             stampList.add(newStamp);
           }
         }
         Stamp newStamp = new Stamp(
-          id: uuid.v1(),
-          data: "ok",
-          getDate: dateTime,
-          getTime: dateTime,
-          stampNum: successStampLen + 1,
-          deletedFlg: true,
-          createdAt: dateTime,
-          deletedAt: dateTime
-        );
+            id: uuid.v1(),
+            data: "ok",
+            getDate: dateTime,
+            getTime: dateTime,
+            stampNum: (successStampLen + 1).toString(),
+            deletedFlg: true,
+            createdAt: dateTime,
+            deletedAt: dateTime);
         setState(() {
           stampList[successStampLen] = newStamp;
         });
@@ -284,8 +281,15 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     int listRow = stampListLen ~/ crossAxisCount + 1;
     crossAxisCount < listRow ? null : listRow = 3;
     for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
-      Stamp newStamp =
-          new Stamp(uuid.v1(), "", i, now.toUtc().toIso8601String());
+      Stamp newStamp = new Stamp(
+          id: uuid.v1(),
+          data: "",
+          getDate: dateTime,
+          getTime: dateTime,
+          stampNum: (i).toString(),
+          deletedFlg: true,
+          createdAt: dateTime,
+          deletedAt: dateTime);
       stampList.add(newStamp);
     }
   }
