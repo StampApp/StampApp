@@ -14,7 +14,6 @@ Future<ScanResult> qrScan() async {
         !Validation.strCheck(rowContent['str'])) {
       result.rawContent = 'データが不正です';
     }
-
     return result;
   } on PlatformException catch (e) {
     var result = ScanResult(
@@ -30,6 +29,7 @@ Future<ScanResult> qrScan() async {
   }
 }
 
+// 読み込んだQRを検証するクラス
 class Validation {
   static bool dateCheck(date, time) {
     DateTime verificationDate = DateTime(2021, 6, 1, 12, 0, 0);
