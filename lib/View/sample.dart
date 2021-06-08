@@ -40,7 +40,7 @@ class _SamplePageState extends State<SamplePage> {
 
   void _demoCRUD() async {
     var memo = Memo(
-      id: 0,
+      id: 'aa',
       text: 'Flutterで遊ぶ',
       priority: 1,
     );
@@ -99,14 +99,8 @@ class _SamplePageState extends State<SamplePage> {
               ),
               margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
             ),
-            ElevatedButton(
-                child: Text('ホーム画面へ'),
-                onPressed: _homeNavigate
-            ),
-            ElevatedButton(
-              child: Text('DBサンプル'),
-              onPressed: _demoCRUD
-            )
+            ElevatedButton(child: Text('ホーム画面へ'), onPressed: _homeNavigate),
+            ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD)
           ],
         ),
       ),

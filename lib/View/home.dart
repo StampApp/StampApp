@@ -1,5 +1,10 @@
-import 'package:barcode_scan/barcode_scan.dart';
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:stamp_app/models/stamp.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:stamp_app/Widget/qrScan.dart';
 import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
@@ -27,7 +32,7 @@ class HexColor extends Color {
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
-
+/*
 class Stamp {
   String id;
   String data;
@@ -35,10 +40,11 @@ class Stamp {
   String createAt;
   Stamp(this.id, this.data, this.stampNum, this.createAt);
 }
+*/
 
 class _HomeSamplePageState extends State<HomeSamplePage> {
-  static final DateTime now = DateTime.now();
   static final uuid = Uuid();
+  static final DateTime dateTime = DateTime.now();
 
   // 画面に表示するリストを定義
   // final List<Stamp> stampList = [
@@ -54,14 +60,96 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   // ];
 
   final List<Stamp> stampList = [
-    new Stamp(uuid.v1(), "ok", 1, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "ok", 2, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "ok", 3, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "ok", 4, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "ok", 5, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "ok", 6, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "ok", 7, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "ok", 8, now.toUtc().toIso8601String()),
+    new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '1',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '2',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '3',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '4',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '5',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '6',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '7',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '8',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '9',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
   ];
 
   static final String stampCheckString = "ok";
@@ -70,9 +158,37 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     Navigator.of(context).pushNamed('/Setting');
   }
 
+  void _crudSample() async {
+    static final DateTime dateTime = DateTime.now();
+    final update = new Stamp(
+      id: '4eef4900-c340-11eb-80aa-4babbebbda13',
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '10',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    );
+
+    /*
+    await DbInterface.insert('Stamp', Stamp.database, stampList[0]);
+
+    print(await DbInterface.select('Stamp', Stamp.database, 0));
+
+    await DbInterface.insert('Stamp', Stamp.database, stampList[1]);
+*/
+    await DbInterface.update('Stamp', Stamp.database, update);
+
+    print(await DbInterface.allSelect('Stamp', Stamp.database));
+/*
+    await DbInterface.delete('Stamp', Stamp.database, 0);
+    */
+  }
+
   void _demoCRUD() async {
     var memo = Memo(
-      id: 0,
+      id: uuid.v1(),
       text: 'Flutterで遊ぶ',
       priority: 1,
     );
@@ -82,7 +198,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     print(await DbInterface.select('memo', Memo.database, memo.id));
 
     memo = Memo(
-      id: memo.id + 1,
+      id: uuid.v1(),
       text: memo.text,
       priority: memo.priority + 1,
     );
@@ -98,6 +214,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   Future<void> _qrScan() async {
     ScanResult result = await qrScan();
+    static final DateTime dateTime = DateTime.now();
+    
     if (result.format.name == "qr") {
       int maxStamp = 9; //上限無しの場合0を指定
       int stampListLen = stampList.length;
@@ -109,8 +227,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         if (successStampLen >= maxStamp) {
           stampMaxDialogAlert(context, maxStamp);
         } else {
-          Stamp newStamp = new Stamp(uuid.v1(), "ok", successStampLen + 1,
-              DateTime.now().toUtc().toIso8601String());
+          Stamp newStamp = new Stamp(
+            id: uuid.v1(),
+            data: "ok",
+            getDate: dateTime,
+            getTime: dateTime,
+            stampNum: successStampLen + 1,
+            deletedFlg: true,
+            createdAt: dateTime,
+            deletedAt: dateTime
+          );
           setState(() {
             stampList[successStampLen] = newStamp;
           });
@@ -119,13 +245,29 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       } else {
         if (stampListLen == successStampLen + 1) {
           for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
-            Stamp newStamp =
-                new Stamp(uuid.v1(), "", i + 1, now.toUtc().toIso8601String());
+            Stamp newStamp = new Stamp(
+              id: uuid.v1(),
+              data: "",
+              getDate: dateTime,
+              getTime: dateTime,
+              stampNum: i + 1,
+              deletedFlg: true,
+              createdAt: dateTime,
+              deletedAt: dateTime
+            );
             stampList.add(newStamp);
           }
         }
-        Stamp newStamp = new Stamp(uuid.v1(), "ok", successStampLen + 1,
-            DateTime.now().toUtc().toIso8601String());
+        Stamp newStamp = new Stamp(
+          id: uuid.v1(),
+          data: "ok",
+          getDate: dateTime,
+          getTime: dateTime,
+          stampNum: successStampLen + 1,
+          deletedFlg: true,
+          createdAt: dateTime,
+          deletedAt: dateTime
+        );
         setState(() {
           stampList[successStampLen] = newStamp;
         });
@@ -253,7 +395,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                     .toList(),
               ),
             ),
-            ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD)
+            ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD),
+            ElevatedButton(child: Text('CRUDサンプル'), onPressed: _crudSample)
           ],
         ),
       ),
