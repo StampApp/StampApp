@@ -10,6 +10,8 @@ import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
+import '../Widget/stampMaxDialog.dart';
+import '../checkIsMaxStamps.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
@@ -45,10 +47,22 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   static final DateTime dateTime = DateTime.now();
 
   // 画面に表示するリストを定義
+  // final List<Stamp> stampList = [
+  //   new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp2", 2, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp3", 3, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp4", 4, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp5", 5, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp6", 6, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp7", 7, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
+  //   new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
+  // ];
+
   final List<Stamp> stampList = [
     new Stamp(
       id: uuid.v1(),
-      data: "stamp1",
+      data: "ok",
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '1',
@@ -58,7 +72,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ),
     new Stamp(
       id: uuid.v1(),
-      data: "stamp2",
+      data: "ok",
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '2',
@@ -68,7 +82,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ),
     new Stamp(
       id: uuid.v1(),
-      data: "stamp3",
+      data: "ok",
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '3',
@@ -78,7 +92,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ),
     new Stamp(
       id: uuid.v1(),
-      data: "stamp4",
+      data: "ok",
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '4',
@@ -88,7 +102,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ),
     new Stamp(
       id: uuid.v1(),
-      data: "stamp5",
+      data: "ok",
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '5',
@@ -98,7 +112,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ),
     new Stamp(
       id: uuid.v1(),
-      data: "stamp6",
+      data: "ok",
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '6',
@@ -108,7 +122,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ),
     new Stamp(
       id: uuid.v1(),
-      data: "stamp7",
+      data: "ok",
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '7',
@@ -118,7 +132,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ),
     new Stamp(
       id: uuid.v1(),
-      data: "stamp8",
+      data: "ok",
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '8',
@@ -128,7 +142,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ),
     new Stamp(
       id: uuid.v1(),
-      data: "stamp9",
+      data: "ok",
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '9',
@@ -138,25 +152,23 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ),
   ];
 
+  static final String stampCheckString = "ok";
+
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
   }
 
   void _crudSample() async {
-    DateTime dateTime = DateTime.now();
-    DateTime getDate = dateTime;
-    DateTime getTime = dateTime;
-    DateTime createdAt = dateTime;
-    DateTime deletedAt = dateTime;
+    final DateTime dateTime = DateTime.now();
     final update = new Stamp(
       id: '4eef4900-c340-11eb-80aa-4babbebbda13',
-      data: "stamp10",
-      getDate: getDate,
-      getTime: getTime,
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
       stampNum: '10',
       deletedFlg: true,
-      createdAt: createdAt,
-      deletedAt: deletedAt,
+      createdAt: dateTime,
+      deletedAt: dateTime,
     );
 
     /*
@@ -202,20 +214,83 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   Future<void> _qrScan() async {
     ScanResult result = await qrScan();
+    final DateTime dateTime = DateTime.now();
+
     if (result.format.name == "qr") {
-      String stringStampNum = stampList.length.toString();
+      int maxStamp = 9; //上限無しの場合0を指定
+      int stampListLen = stampList.length;
+      int crossAxisCount = 3;
+      int successStampLen =
+          stampList.where((element) => element.data == stampCheckString).length;
+
+      if (checkIsMaxStamps(successStampLen, maxStamp)) {
+        if (successStampLen >= maxStamp) {
+          stampMaxDialogAlert(context, maxStamp);
+        } else {
+          Stamp newStamp = new Stamp(
+              id: uuid.v1(),
+              data: "ok",
+              getDate: dateTime,
+              getTime: dateTime,
+              stampNum: (successStampLen + 1).toString(),
+              deletedFlg: true,
+              createdAt: dateTime,
+              deletedAt: dateTime);
+          setState(() {
+            stampList[successStampLen] = newStamp;
+          });
+          stampMaxDialogAlert(context, maxStamp);
+        }
+      } else {
+        if (stampListLen == successStampLen + 1) {
+          for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
+            Stamp newStamp = new Stamp(
+                id: uuid.v1(),
+                data: "",
+                getDate: dateTime,
+                getTime: dateTime,
+                stampNum: (i + 1).toString(),
+                deletedFlg: true,
+                createdAt: dateTime,
+                deletedAt: dateTime);
+            stampList.add(newStamp);
+          }
+        }
+        Stamp newStamp = new Stamp(
+            id: uuid.v1(),
+            data: "ok",
+            getDate: dateTime,
+            getTime: dateTime,
+            stampNum: (successStampLen + 1).toString(),
+            deletedFlg: true,
+            createdAt: dateTime,
+            deletedAt: dateTime);
+        setState(() {
+          stampList[successStampLen] = newStamp;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    //アプリ起動時に一度だけ実行、スタンプテーブルの個数を3の倍数にする
+    int stampListLen = stampList.length;
+    //GridViewのcrossAxisCountの値
+    int crossAxisCount = 3;
+    int listRow = stampListLen ~/ crossAxisCount + 1;
+    crossAxisCount < listRow ? null : listRow = 3;
+    for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
       Stamp newStamp = new Stamp(
           id: uuid.v1(),
-          data: result.rawContent,
+          data: "",
           getDate: dateTime,
           getTime: dateTime,
-          stampNum: stringStampNum,
+          stampNum: (i).toString(),
           deletedFlg: true,
           createdAt: dateTime,
           deletedAt: dateTime);
-      setState(() {
-        stampList.add(newStamp);
-      });
+      stampList.add(newStamp);
     }
   }
 
@@ -263,44 +338,66 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                 letterSpacing: 4.0,
               ),
             ),
-            GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 3,
-              padding: const EdgeInsets.all(10),
-              // スタンプをListの数だけ生成する
-              children: stampList
-                  .map(
-                    (Stamp stamp) => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () => stampDialog(context, stamp),
-                          child: Container(
-                            padding: const EdgeInsets.all(11.0),
-                            width: 60,
-                            height: 60,
-                            // 円を生成
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              border: Border.all(
-                                  color: HexColor('00C2FF'), width: 3),
-                            ),
-                            child: Text(
-                              stamp.stampNum.toString(),
-                              style: TextStyle(
-                                fontSize: 25.0,
-                                fontStyle: FontStyle.normal,
-                                letterSpacing: 4.0,
+            SizedBox(
+              height: MediaQuery.of(context).size.width,
+              child: GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 3,
+                physics: ClampingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                padding: const EdgeInsets.all(10),
+                // スタンプをListの数だけ生成する
+                children: stampList
+                    .map(
+                      (Stamp stamp) => Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () => stamp.data == stampCheckString
+                                  ? stampDialog(context, stamp)
+                                  : (context),
+                              child: Container(
+                                padding: const EdgeInsets.all(11.0),
+                                width: MediaQuery.of(context).size.width / 3 -
+                                    11 * 2,
+                                height: MediaQuery.of(context).size.width / 3 -
+                                    11 * 2,
+                                // 円を生成
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: stamp.data == stampCheckString
+                                          ? AssetImage(
+                                              'assets/images/flower-4.png')
+                                          : AssetImage(
+                                              'assets/images/none.png')),
+                                  // border: Border.all(
+                                  //     color: HexColor('00C2FF'), width: 3),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text(
+                                    stamp.stampNum.toString(),
+                                    style: TextStyle(
+                                      fontSize: 25.0,
+                                      fontStyle: FontStyle.normal,
+                                      letterSpacing: 4.0,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )
-                  .toList(),
+                      ),
+                    )
+                    .toList(),
+              ),
             ),
             ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD),
             ElevatedButton(child: Text('CRUDサンプル'), onPressed: _crudSample)
