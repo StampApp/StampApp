@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/View/home.dart';
+import 'package:stamp_app/models/stamp.dart';
 
 // 読み込み結果を表示するダイアログ
 void stampDialog(BuildContext context, Stamp stamp) {
@@ -22,7 +22,7 @@ void stampDialog(BuildContext context, Stamp stamp) {
               ),
               ListTile(
                 title: Text("createAt"),
-                subtitle: Text(stamp.createAt),
+                subtitle: Text(stamp.createdAt.toString()),
               ),
             ],
           ),

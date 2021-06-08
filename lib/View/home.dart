@@ -1,5 +1,10 @@
-import 'package:barcode_scan/barcode_scan.dart';
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:stamp_app/models/stamp.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:stamp_app/Widget/qrScan.dart';
 import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
@@ -25,7 +30,7 @@ class HexColor extends Color {
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
-
+/*
 class Stamp {
   String id;
   String data;
@@ -33,31 +38,145 @@ class Stamp {
   String createAt;
   Stamp(this.id, this.data, this.stampNum, this.createAt);
 }
+*/
 
 class _HomeSamplePageState extends State<HomeSamplePage> {
-  static final DateTime now = DateTime.now();
   static final uuid = Uuid();
+  static final DateTime dateTime = DateTime.now();
 
   // 画面に表示するリストを定義
   final List<Stamp> stampList = [
-    new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp2", 2, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp3", 3, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp4", 4, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp5", 5, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp6", 6, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp7", 7, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
-    new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
+    new Stamp(
+      id: uuid.v1(),
+      data: "stamp1",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '1',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "stamp2",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '2',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "stamp3",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '3',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "stamp4",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '4',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "stamp5",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '5',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "stamp6",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '6',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "stamp7",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '7',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "stamp8",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '8',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "stamp9",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '9',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
   ];
 
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
   }
 
+  void _crudSample() async {
+    DateTime dateTime = DateTime.now();
+    DateTime getDate = dateTime;
+    DateTime getTime = dateTime;
+    DateTime createdAt = dateTime;
+    DateTime deletedAt = dateTime;
+    final update = new Stamp(
+      id: '4eef4900-c340-11eb-80aa-4babbebbda13',
+      data: "stamp10",
+      getDate: getDate,
+      getTime: getTime,
+      stampNum: '10',
+      deletedFlg: true,
+      createdAt: createdAt,
+      deletedAt: deletedAt,
+    );
+
+    /*
+    await DbInterface.insert('Stamp', Stamp.database, stampList[0]);
+
+    print(await DbInterface.select('Stamp', Stamp.database, 0));
+
+    await DbInterface.insert('Stamp', Stamp.database, stampList[1]);
+*/
+    await DbInterface.update('Stamp', Stamp.database, update);
+
+    print(await DbInterface.allSelect('Stamp', Stamp.database));
+/*
+    await DbInterface.delete('Stamp', Stamp.database, 0);
+    */
+  }
+
   void _demoCRUD() async {
     var memo = Memo(
-      id: 0,
+      id: uuid.v1(),
       text: 'Flutterで遊ぶ',
       priority: 1,
     );
@@ -67,7 +186,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     print(await DbInterface.select('memo', Memo.database, memo.id));
 
     memo = Memo(
-      id: memo.id + 1,
+      id: uuid.v1(),
       text: memo.text,
       priority: memo.priority + 1,
     );
@@ -84,8 +203,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Future<void> _qrScan() async {
     ScanResult result = await qrScan();
     if (result.format.name == "qr") {
-      Stamp newStamp = new Stamp(uuid.v1(), result.rawContent,
-          stampList.length + 1, now.toUtc().toIso8601String());
+      String stringStampNum = stampList.length.toString();
+      Stamp newStamp = new Stamp(
+          id: uuid.v1(),
+          data: result.rawContent,
+          getDate: dateTime,
+          getTime: dateTime,
+          stampNum: stringStampNum,
+          deletedFlg: true,
+          createdAt: dateTime,
+          deletedAt: dateTime);
       setState(() {
         stampList.add(newStamp);
       });
@@ -175,7 +302,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                   )
                   .toList(),
             ),
-            ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD)
+            ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD),
+            ElevatedButton(child: Text('CRUDサンプル'), onPressed: _crudSample)
           ],
         ),
       ),

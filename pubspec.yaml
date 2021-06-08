@@ -28,7 +28,6 @@ dependencies:
   page_view_indicators: ^2.0.0
   sqflite:
   path:
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   intl: ^0.15.7
@@ -88,3 +87,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+

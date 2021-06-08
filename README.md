@@ -1,5 +1,7 @@
 # stamp_app
 
+[![GitHub license](https://img.shields.io/github/license/RimlTempest/StampApp)](https://github.com/RimlTempest/StampApp/blob/develop/LICENSE)  
+
 このアプリはスタンプラリーアプリのモックです。
 
 ## 概要
