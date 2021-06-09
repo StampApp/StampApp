@@ -372,9 +372,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                       fit: BoxFit.fill,
                                       image: stamp.data == stampCheckString
                                           ? AssetImage(
-                                              'assets/images/flower-4.png')
+                                              'assets/images/stamp/flower-4.png')
                                           : AssetImage(
-                                              'assets/images/none.png')),
+                                              'assets/images/stamp/none.png')),
                                   // border: Border.all(
                                   //     color: HexColor('00C2FF'), width: 3),
                                 ),
