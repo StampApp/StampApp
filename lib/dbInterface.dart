@@ -8,7 +8,7 @@ class DbInterface {
   @param id         レコードID   
   */
   // idを指定して取得
-  static Future<List> select(String _tableName, var database, int id) async {
+  static Future<List> select(String _tableName, var database, String id) async {
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query('$_tableName',
         where: 'id = ?', orderBy: 'id asc', whereArgs: [id]);
@@ -68,7 +68,7 @@ class DbInterface {
   @param id         レコードID   
   */
   // 削除
-  static Future<void> delete(String _tableName, var database, int id) async {
+  static Future<void> delete(String _tableName, var database, String id) async {
     final db = await database;
     await db.delete(
       '$_tableName',

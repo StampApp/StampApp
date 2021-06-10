@@ -40,9 +40,9 @@ class _IntroductionState extends State<Introduction> {
   final _currentPageNotifier = ValueNotifier<int>(0);
   // 表示する画像
   List<String> _imageList = [
-    "image/home.png",
-    "image/setting.png",
-    "image/history.png",
+    "assets/images/instructions/home.png",
+    "assets/images/instructions/setting.png",
+    "assets/images/instructions/history.png",
   ];
   // 表示するテキスト
   List<String> _textList = [

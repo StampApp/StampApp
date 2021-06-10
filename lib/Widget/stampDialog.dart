@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/View/home.dart';
+import 'package:stamp_app/models/stamp.dart';
 
 // 読み込み結果を表示するダイアログ
 void stampDialog(BuildContext context, Stamp stamp) {
@@ -9,9 +9,15 @@ void stampDialog(BuildContext context, Stamp stamp) {
     builder: (BuildContext context) {
       return AlertDialog(
         content: Container(
-          height: 320,
+          // height: 320,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              ListTile(
+                title: Text("Image"),
+                subtitle:
+                    Image.asset('assets/images/my4.png', fit: BoxFit.fitWidth),
+              ),
               ListTile(
                 title: Text("stampNum"),
                 subtitle: Text(stamp.stampNum.toString()),
@@ -22,7 +28,7 @@ void stampDialog(BuildContext context, Stamp stamp) {
               ),
               ListTile(
                 title: Text("createAt"),
-                subtitle: Text(stamp.createAt),
+                subtitle: Text(stamp.createdAt.toString()),
               ),
             ],
           ),
