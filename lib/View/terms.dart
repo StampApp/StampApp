@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Widget/HexColor.dart';
 
 class TermsPage extends StatefulWidget {
   TermsPage({Key key, this.title}) : super(key: key);
@@ -12,6 +13,7 @@ class _TermsPageState extends State<TermsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: HexColor('00C2FF'),
       ),
       body: ListView(
         padding: const EdgeInsets.only(left: 20, right: 20),
@@ -28,8 +30,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           //第1条
-          Text('第1条（各種規約について）',
-              style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('第1条（各種規約について）', style: TextStyle(fontWeight: FontWeight.bold)),
           Divider(
             height: 40,
             thickness: 1,
@@ -133,8 +134,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           //第6条
-          Text('第6条（スタンプの取消し等）',
-              style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('第6条（スタンプの取消し等）', style: TextStyle(fontWeight: FontWeight.bold)),
           Divider(
             height: 40,
             thickness: 1,
@@ -243,8 +243,7 @@ class _TermsPageState extends State<TermsPage> {
             indent: 16,
             endIndent: 16,
           ),
-          Text(
-              '当社は、一定の予告期間をおいて変更後の本規約の内容を周知することにより、本規約の内容を変更することができるものとします。'),
+          Text('当社は、一定の予告期間をおいて変更後の本規約の内容を周知することにより、本規約の内容を変更することができるものとします。'),
           Divider(
             height: 40,
             thickness: 2,

@@ -7,6 +7,7 @@
 * Propsとは親から子に値を受け渡すための値
 */
 import 'package:flutter/material.dart';
+import '../Widget/HexColor.dart';
 
 class PrivacyPolicyPage extends StatefulWidget {
   // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
@@ -26,6 +27,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: HexColor('00C2FF'),
       ),
       body: ListView(
         padding: const EdgeInsets.only(left: 20, right: 20),
