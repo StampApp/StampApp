@@ -5,25 +5,13 @@ import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
+import 'package:stamp_app/Widget/HexColor.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
   final String title;
   @override
   _HomeSamplePageState createState() => _HomeSamplePageState();
-}
-
-// カラーコードをHexColorでできるように
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
 
 class Stamp {
