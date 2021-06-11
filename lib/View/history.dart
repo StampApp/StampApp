@@ -3,7 +3,6 @@ import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/enumDateType.dart';
 import 'package:stamp_app/models/stamp.dart';
-import "package:intl/intl.dart";
 
 class HistoryPage extends StatefulWidget {
   HistoryPage({Key key, this.title}) : super(key: key);
@@ -18,10 +17,14 @@ final bool useFlag = true;
 class _HistoryPageState extends State<HistoryPage> {
   List<DropdownMenuItem<int>> _items = List();
   int _selectItem = 0;
+  List<String> dateList = [];
+  List<Stamp> stampList = [];
+  int pastMonth = 3;
 
+  // DBから使用したスタンプを取得する
   getStampList() async {
-    List<Map<String, dynamic>> maps =
-        await DbInterface.allSelect('Stamp', Stamp.database);
+    List<Map<String, dynamic>> maps = 
+      await DbInterface.selectDateDesc('Stamp', Stamp.database, DateTime.now(), 3);
 
     return List.generate(maps.length, (i) {
       return Stamp(
@@ -33,11 +36,7 @@ class _HistoryPageState extends State<HistoryPage> {
     });
   }
 
-  //DateList初期化
-  List<String> dateList = [];
-  List<Stamp> stampList = [];
-
-  //重複しないDateをsatmpListから取得する
+  // 重複しないDateをsatmpListから取得する
   getDateList() async {
     stampList = await getStampList();
     for (int i = 0; i < stampList.length; i++) {
@@ -52,6 +51,11 @@ class _HistoryPageState extends State<HistoryPage> {
     return dateList;
   }
 
+  // 取得するスタンプの条件を変更する
+  pastMonthChange(int month) {
+    pastMonth = month;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -61,95 +65,75 @@ class _HistoryPageState extends State<HistoryPage> {
 
   //ドロップダウンの中身のアイテム
   void setItem() {
-    _items
-      ..add(DropdownMenuItem(
+    List<Map> dropdownItem = [
+      {'text': '利用時期', 'month': 3, 'value': 0},
+      {'text': '過去3ヶ月', 'month': 3, 'value': 1},
+      {'text': '過去6ヶ月', 'month': 6, 'value': 2},
+      {'text': '過去9ヶ月', 'month': 9, 'value': 3},
+      {'text': '過去12ヶ月', 'month': 12, 'value': 4},
+    ];
+    _items = 
+    dropdownItem.map<DropdownMenuItem<int>>((Map maps) {
+      return DropdownMenuItem<int>(
+        value: maps['value'],
+        onTap: pastMonthChange(maps['month']),
         child: Text(
-          '利用時期',
+          maps['text'],
           style: TextStyle(fontSize: 20.0),
         ),
-        value: 0,
-      ))
-      ..add(DropdownMenuItem(
-        child: Text(
-          '過去3ヶ月',
-          style: TextStyle(fontSize: 20.0),
-        ),
-        value: 1,
-      ))
-      ..add(DropdownMenuItem(
-        child: Text(
-          '過去6ヶ月',
-          style: TextStyle(fontSize: 20.0),
-        ),
-        value: 2,
-      ))
-      ..add(DropdownMenuItem(
-        child: Text(
-          '過去9ヶ月',
-          style: TextStyle(fontSize: 20.0),
-        ),
-        value: 3,
-      ))
-      ..add(DropdownMenuItem(
-        child: Text(
-          '過去12ヶ月',
-          style: TextStyle(fontSize: 20.0),
-        ),
-        value: 4,
-      ));
+      );
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          backgroundColor: HexColor('00C2FF'),
-        ),
+        home: Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
+              leading: new IconButton(
+                icon: new Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              backgroundColor: HexColor('00C2FF'),
+            ),
 
-        // リストの日付の処理が終わるまで読み込み中を表示する
-        body: FutureBuilder(
-          future: getDateList(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.hasData) {
-              return ListView(children: <Widget>[
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      //ドロップダウンメニュー
-                      Container(
-                        padding: EdgeInsets.only(left: 15),
-                        margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
-                        decoration: BoxDecoration(
-                          //枠線を丸くするかどうか
-                          //borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(
-                              color: HexColor('00C2FF'), width: 1),
-                        ),
-                        child: DropdownButton(
-                          items: _items,
-                          value: _selectItem,
-                          onChanged: (value) => {
-                            setState(() => _selectItem = value),
-                          },
-                        ),
-                      )
-                    ]),
-                for (int i = 0; i < dateList.length; i++)
-                  _line(dateList[i], stampList)
-              ]);
-            } else {
-              return Text("読み込み中");
-            }
-          },
-        )
-      )
-    );
+            // リストの日付の処理が終わるまで読み込み中を表示する
+            body: FutureBuilder(
+              future: getDateList(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView(children: <Widget>[
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          //ドロップダウンメニュー
+                          Container(
+                            padding: EdgeInsets.only(left: 15),
+                            margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
+                            decoration: BoxDecoration(
+                              //枠線を丸くするかどうか
+                              //borderRadius: BorderRadius.circular(10.0),
+                              border: Border.all(
+                                  color: HexColor('00C2FF'), width: 1),
+                            ),
+                            child: DropdownButton(
+                              items: _items,
+                              value: _selectItem,
+                              onChanged: (value) => {
+                                setState(() => _selectItem = value),
+                              },
+                            ),
+                          )
+                        ]),
+                    for (int i = 0; i < dateList.length; i++)
+                      _line(dateList[i], stampList)
+                  ]);
+                } else {
+                  return Text("読み込み中");
+                }
+              },
+            )));
   }
 }
 
@@ -165,12 +149,14 @@ Widget _line(String targetDate, List<Stamp> stampList) {
           children: <Widget>[
             Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: stampList.map((Stamp stamp) => 
-                  Column(children: <Widget>[
-                          if (toDateOrTime(stamp.getDate, enumDateType.date.toString()) == targetDate)
+                children: stampList
+                    .map((Stamp stamp) => Column(children: <Widget>[
+                          if (toDateOrTime(stamp.getDate,
+                                  enumDateType.date.toString()) ==
+                              targetDate)
                             _row(stamp)
-                  ]))
-            .toList())
+                        ]))
+                    .toList())
           ]),
     ],
   ));

@@ -18,7 +18,22 @@ class DbInterface {
   /*
   @param _tableName テーブル名
   @param database   DB 
+  @param nowDate 現在の日付
+  @param pastMonths 何ヶ月かを指定
   */
+  //($_pastMonths)ヶ月前に取得したデータを日付時刻を降順で全件取得
+  static Future<List> selectDateDesc(String _tableName, var database, DateTime nowDate, int pastMonths) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+      "SELECT * " + 
+      "FROM $_tableName " +
+      "WHERE datetime('$nowDate', '-$pastMonths months') " +
+      "< getDate " +
+      "order by getDate desc, getTime desc"
+      );
+    return maps;
+  }
+
   //全件取得
   static Future<List> allSelect(String _tableName, var database) async {
     final Database db = await database;
