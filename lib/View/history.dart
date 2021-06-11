@@ -24,13 +24,11 @@ class _HistoryPageState extends State<HistoryPage> {
         await DbInterface.allSelect('Stamp', Stamp.database);
 
     return List.generate(maps.length, (i) {
-      final dateFormatter = DateFormat("y/M/d");
-      final timeFormatter = DateFormat("HH:mm:ss");
       return Stamp(
         id: maps[i]['id'],
         data: maps[i]['data'],
-        getDate: dateFormatter.parseStrict(maps[i]['getdate']),
-        getTime: timeFormatter.parseStrict(maps[i]['gettime']),
+        getDate: dateFormatParse(maps[i]['getdate'], enumDateType.date.toString()),
+        getTime: dateFormatParse(maps[i]['gettime'], enumDateType.time.toString()),
       );
     });
   }
@@ -42,15 +40,13 @@ class _HistoryPageState extends State<HistoryPage> {
   //重複しないDateをsatmpListから取得する
   getDateList() async {
     stampList = await getStampList();
-    int j = 0;
     for (int i = 0; i < stampList.length; i++) {
       var getDate =
           toDateOrTime(stampList[i].getDate, enumDateType.date.toString());
-      if (i == 0) {
+      if (dateList.length == 0) {
         dateList.add(getDate);
-      } else if (getDate != dateList[j]) {
+      } else if (getDate != dateList.last) {
         dateList.add(getDate);
-        j++;
       }
     }
     return dateList;
@@ -106,78 +102,54 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              title: Text(widget.title),
-              leading: new IconButton(
-                icon: new Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              backgroundColor: HexColor('00C2FF'),
-            ),
-            body: FutureBuilder(
-              future: getDateList(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.hasData) {
-                  return ListView(children: <Widget>[
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          //ドロップダウンメニュー
-                          Container(
-                            padding: EdgeInsets.only(left: 15),
-                            margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
-                            decoration: BoxDecoration(
-                              //枠線を丸くするかどうか
-                              //borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(
-                                  color: HexColor('00C2FF'), width: 1),
-                            ),
-                            child: DropdownButton(
-                              items: _items,
-                              value: _selectItem,
-                              onChanged: (value) => {
-                                setState(() {
-                                  _selectItem = value;
-                                }),
-                              },
-                            ),
-                          )
-                        ]),
-                    for (int i = 0; i < dateList.length; i++)
-                      _line(dateList[i], stampList)
-                  ]);
-                } else {
-                  return Text("読み込み中");
-                }
-              },
-            )
-            // body: ListView(children: <Widget>[
-            //   Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-            //     //ドロップダウンメニュー
-            //     Container(
-            //       padding: EdgeInsets.only(left: 15),
-            //       margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
-            //       decoration: BoxDecoration(
-            //         //枠線を丸くするかどうか
-            //         //borderRadius: BorderRadius.circular(10.0),
-            //         border: Border.all(color: HexColor('00C2FF'), width: 1),
-            //       ),
-            //       child: DropdownButton(
-            //         items: _items,
-            //         value: _selectItem,
-            //         onChanged: (value) => {
-            //           setState(() {
-            //             _selectItem = value;
-            //           }),
-            //         },
-            //       ),
-            //     )
-            //   ]),
-            //   for (int i = 0; i < dateList.length; i++)
-            //     _line(dateList[i], stampList)
-            // ])
-            ));
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          leading: new IconButton(
+            icon: new Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          backgroundColor: HexColor('00C2FF'),
+        ),
+
+        // リストの日付の処理が終わるまで読み込み中を表示する
+        body: FutureBuilder(
+          future: getDateList(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasData) {
+              return ListView(children: <Widget>[
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      //ドロップダウンメニュー
+                      Container(
+                        padding: EdgeInsets.only(left: 15),
+                        margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
+                        decoration: BoxDecoration(
+                          //枠線を丸くするかどうか
+                          //borderRadius: BorderRadius.circular(10.0),
+                          border: Border.all(
+                              color: HexColor('00C2FF'), width: 1),
+                        ),
+                        child: DropdownButton(
+                          items: _items,
+                          value: _selectItem,
+                          onChanged: (value) => {
+                            setState(() => _selectItem = value),
+                          },
+                        ),
+                      )
+                    ]),
+                for (int i = 0; i < dateList.length; i++)
+                  _line(dateList[i], stampList)
+              ]);
+            } else {
+              return Text("読み込み中");
+            }
+          },
+        )
+      )
+    );
   }
 }
 
@@ -193,14 +165,12 @@ Widget _line(String targetDate, List<Stamp> stampList) {
           children: <Widget>[
             Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: stampList
-                    .map((Stamp stamp) => Column(children: <Widget>[
-                          if (toDateOrTime(stamp.getDate,
-                                  enumDateType.date.toString()) ==
-                              targetDate)
+                children: stampList.map((Stamp stamp) => 
+                  Column(children: <Widget>[
+                          if (toDateOrTime(stamp.getDate, enumDateType.date.toString()) == targetDate)
                             _row(stamp)
-                        ]))
-                    .toList())
+                  ]))
+            .toList())
           ]),
     ],
   ));
