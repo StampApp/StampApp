@@ -288,7 +288,21 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     // Scaffoldは画面構成の基本Widget
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        //title: Text(widget.title),
+        //ヘッダーのロゴ表示
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            //ロゴを中央にしたい場合↓
+            //padding: const EdgeInsets.all(8.0), child: Text('         ')),
+            Image.asset(
+              "assets/images/other/logo_Contrast.png",
+              fit: BoxFit.contain,
+              height: 50,
+            ),
+            Container(padding: EdgeInsets.only(left: 200))
+          ],
+        ),
         actions: <Widget>[
           // 設定ボタン
           IconButton(
