@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import 'package:stamp_app/Widget/HexColor.dart';
 
 class InstructionsPage extends StatefulWidget {
   InstructionsPage({Key key, this.title}) : super(key: key);
@@ -39,9 +40,9 @@ class _IntroductionState extends State<Introduction> {
   final _currentPageNotifier = ValueNotifier<int>(0);
   // 表示する画像
   List<String> _imageList = [
-    "image/home.png",
-    "image/setting.png",
-    "image/history.png",
+    "assets/images/instructions/home.png",
+    "assets/images/instructions/setting.png",
+    "assets/images/instructions/history.png",
   ];
   // 表示するテキスト
   List<String> _textList = [
@@ -62,7 +63,8 @@ class _IntroductionState extends State<Introduction> {
       }
     });
   }
-   // アニメーションカード生成
+
+  // アニメーションカード生成
   AnimatedContainer _createCardAnimate(String imagePath, bool active) {
     // アニメーション設定
     return AnimatedContainer(
@@ -83,7 +85,7 @@ class _IntroductionState extends State<Introduction> {
     return SafeArea(
       child: Column(
         children: <Widget>[
-           // ページ
+          // ページ
           Expanded(
             child: PageView.builder(
               controller: controller,
@@ -99,7 +101,7 @@ class _IntroductionState extends State<Introduction> {
               },
             ),
           ),
-           // ページインジケータ
+          // ページインジケータ
           Container(
             height: 5.0,
             child: CirclePageIndicator(
@@ -107,7 +109,7 @@ class _IntroductionState extends State<Introduction> {
               currentPageNotifier: _currentPageNotifier,
             ),
           ),
-           // 説明エリア
+          // 説明エリア
           Container(
             height: 60.0,
             padding: EdgeInsets.all(7.0),
@@ -136,16 +138,4 @@ class _IntroductionState extends State<Introduction> {
       ),
     );
   }
-}
-
-//色をカラーコードで指定するためのクラス
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }

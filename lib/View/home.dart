@@ -8,6 +8,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:stamp_app/Widget/qrScan.dart';
 import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
+import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
@@ -20,18 +21,6 @@ class HomeSamplePage extends StatefulWidget {
   _HomeSamplePageState createState() => _HomeSamplePageState();
 }
 
-// カラーコードをHexColorでできるように
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
-}
 /*
 class Stamp {
   String id;
@@ -299,7 +288,21 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     // Scaffoldは画面構成の基本Widget
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        //title: Text(widget.title),
+        //ヘッダーのロゴ表示
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            //ロゴを中央にしたい場合↓
+            //padding: const EdgeInsets.all(8.0), child: Text('         ')),
+            Image.asset(
+              "assets/images/other/logo_Contrast.png",
+              fit: BoxFit.contain,
+              height: 50,
+            ),
+            Container(padding: EdgeInsets.only(left: 200))
+          ],
+        ),
         actions: <Widget>[
           // 設定ボタン
           IconButton(
@@ -372,9 +375,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                       fit: BoxFit.fill,
                                       image: stamp.data == stampCheckString
                                           ? AssetImage(
-                                              'assets/images/flower-4.png')
+                                              'assets/images/stamp/flower-4.png')
                                           : AssetImage(
-                                              'assets/images/none.png')),
+                                              'assets/images/stamp/none.png')),
                                   // border: Border.all(
                                   //     color: HexColor('00C2FF'), width: 3),
                                 ),

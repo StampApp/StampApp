@@ -38,7 +38,7 @@ dependencies:
 
 #スプラッシュスクリーンの実装
 flutter_native_splash:
-  image: "image/logo_transparent.png"
+  image: "assets/images/other/logo_transparent.png"
   color: "4DD0E1"
 
 dev_dependencies:
@@ -57,8 +57,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/
-    - image/
+    - assets/images/instructions/
+    - assets/images/other/
+    - assets/images/stamp/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

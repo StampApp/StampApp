@@ -3,6 +3,7 @@ import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/enumDateType.dart';
 import 'package:stamp_app/models/stamp.dart';
+import 'package:stamp_app/Widget/HexColor.dart';
 
 class HistoryPage extends StatefulWidget {
   HistoryPage({Key key, this.title}) : super(key: key);
@@ -230,17 +231,4 @@ Widget _delimiter(String date) {
       ),
     ),
   );
-}
-
-//色をカラーコードで指定するためのクラス
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
