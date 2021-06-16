@@ -28,8 +28,8 @@ class DbInterface {
       "SELECT * " + 
       "FROM $_tableName " +
       "WHERE datetime('$nowDate', '-$pastMonths months') " +
-      "< getDate " +
-      "order by getDate desc, getTime desc"
+      "< getdate " +
+      "order by getdate desc, gettime desc"
       );
     return maps;
   }

@@ -24,14 +24,16 @@ class _HistoryPageState extends State<HistoryPage> {
   // DBから使用したスタンプを取得する
   getStampList() async {
     List<Map<String, dynamic>> maps = 
-      await DbInterface.selectDateDesc('Stamp', Stamp.database, DateTime.now(), 3);
+      await DbInterface.selectDateDesc('Stamp', Stamp.database, DateTime.now(), pastMonth);
 
+    // mapからstamp型への変換
     return List.generate(maps.length, (i) {
       return Stamp(
         id: maps[i]['id'],
         data: maps[i]['data'],
         getDate: dateFormatParse(maps[i]['getdate'], enumDateType.date.toString()),
         getTime: dateFormatParse(maps[i]['gettime'], enumDateType.time.toString()),
+        deletedFlg: maps[i]['deletedflg'] == 0,
       );
     });
   }
@@ -40,10 +42,10 @@ class _HistoryPageState extends State<HistoryPage> {
   getDateList() async {
     stampList = await getStampList();
     for (int i = 0; i < stampList.length; i++) {
-      var getDate =
-          toDateOrTime(stampList[i].getDate, enumDateType.date.toString());
+      var getDate = toDateOrTime(stampList[i].getDate, enumDateType.date.toString());
       if (dateList.length == 0) {
         dateList.add(getDate);
+        // datelistの最後尾と一致しない場合
       } else if (getDate != dateList.last) {
         dateList.add(getDate);
       }
@@ -51,9 +53,10 @@ class _HistoryPageState extends State<HistoryPage> {
     return dateList;
   }
 
-  // 取得するスタンプの条件を変更する
-  pastMonthChange(int month) {
-    pastMonth = month;
+  // 取得するスタンプの日付条件を変更する
+  pastMonthChange(int dropDownValue) {
+    List pastMonthArr = [3, 6, 9, 12];
+    pastMonth = pastMonthArr[dropDownValue];
   }
 
   @override
@@ -66,17 +69,15 @@ class _HistoryPageState extends State<HistoryPage> {
   //ドロップダウンの中身のアイテム
   void setItem() {
     List<Map> dropdownItem = [
-      {'text': '利用時期', 'month': 3, 'value': 0},
-      {'text': '過去3ヶ月', 'month': 3, 'value': 1},
-      {'text': '過去6ヶ月', 'month': 6, 'value': 2},
-      {'text': '過去9ヶ月', 'month': 9, 'value': 3},
-      {'text': '過去12ヶ月', 'month': 12, 'value': 4},
+      {'text': '過去3ヶ月', 'value': 0},
+      {'text': '過去6ヶ月', 'value': 1},
+      {'text': '過去9ヶ月', 'value': 2},
+      {'text': '過去12ヶ月', 'value': 3},
     ];
     _items = 
     dropdownItem.map<DropdownMenuItem<int>>((Map maps) {
       return DropdownMenuItem<int>(
         value: maps['value'],
-        onTap: pastMonthChange(maps['month']),
         child: Text(
           maps['text'],
           style: TextStyle(fontSize: 20.0),
@@ -102,7 +103,7 @@ class _HistoryPageState extends State<HistoryPage> {
             body: FutureBuilder(
               future: getDateList(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.data != null) {
                   return ListView(children: <Widget>[
                     Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -121,6 +122,8 @@ class _HistoryPageState extends State<HistoryPage> {
                               items: _items,
                               value: _selectItem,
                               onChanged: (value) => {
+                                pastMonthChange(value),
+                                dateList = [],
                                 setState(() => _selectItem = value),
                               },
                             ),
