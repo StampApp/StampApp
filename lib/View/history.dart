@@ -11,9 +11,6 @@ class HistoryPage extends StatefulWidget {
   _HistoryPageState createState() => _HistoryPageState();
 }
 
-//スタンプ使用か判断するために使用
-final bool useFlag = true;
-
 class _HistoryPageState extends State<HistoryPage> {
   List<DropdownMenuItem<int>> _items = List();
   int _selectItem = 0;
@@ -176,8 +173,8 @@ Widget _row(Stamp stamplist) {
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                //flagがuseFlagならスタンプ使用、それ以外ならスタンプゲットwidget呼び出し
-                (stamplist.deletedFlg == useFlag) ? _usestamp() : _getstamp(),
+                //trueならスタンプ使用、それ以外ならスタンプゲットwidget呼び出し
+                (stamplist.deletedFlg == true) ? _usestamp() : _getstamp(),
                 Container(
                     child: Text(toDateOrTime(
                         stamplist.getTime, enumDateType.time.toString())))
