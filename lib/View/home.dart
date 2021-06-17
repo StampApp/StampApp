@@ -12,6 +12,7 @@ import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../checkIsMaxStamps.dart';
+import 'package:flutter/material.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
@@ -32,32 +33,16 @@ class HexColor extends Color {
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
-/*
-class Stamp {
-  String id;
-  String data;
-  num stampNum;
-  String createAt;
-  Stamp(this.id, this.data, this.stampNum, this.createAt);
-}
-*/
 
 class _HomeSamplePageState extends State<HomeSamplePage> {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
 
-  // 画面に表示するリストを定義
-  // final List<Stamp> stampList = [
-  //   new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp2", 2, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp3", 3, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp4", 4, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp5", 5, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp6", 6, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp7", 7, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
-  // ];
+  //test
+  PageController controller;
+
+  PageController _pageController;
+  int _currentPage = 0;
 
   final List<Stamp> stampList = [
     new Stamp(
@@ -122,7 +107,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ),
     new Stamp(
       id: uuid.v1(),
-      data: "ok",
+      data: "no",
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '7',
@@ -130,6 +115,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       createdAt: dateTime,
       deletedAt: dateTime,
     ),
+    /*
     new Stamp(
       id: uuid.v1(),
       data: "ok",
@@ -149,7 +135,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       deletedFlg: true,
       createdAt: dateTime,
       deletedAt: dateTime,
-    ),
+    ),*/
   ];
 
   static final String stampCheckString = "ok";
@@ -278,8 +264,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     int stampListLen = stampList.length;
     //GridViewのcrossAxisCountの値
     int crossAxisCount = 3;
-    int listRow = stampListLen ~/ crossAxisCount + 1;
-    crossAxisCount < listRow ? null : listRow = 3;
+    int listRow = 3;
+    //int listRow = stampListLen ~/ crossAxisCount + 1;
+    //crossAxisCount < listRow ? null : listRow = 3;
     for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
       Stamp newStamp = new Stamp(
           id: uuid.v1(),
@@ -292,12 +279,33 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           deletedAt: dateTime);
       stampList.add(newStamp);
     }
+
+    //Pageviewのため-------------------------------
+    super.initState();
+
+    controller = PageController();
+    _pageController = PageController();
+    _pageController.addListener(() {
+      final nextPage = _pageController.page.round();
+      if (_currentPage != nextPage) {
+        _currentPage = nextPage;
+      }
+    });
+    //-------------------------------------
+  }
+
+  //pageviewで使用
+
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     // Scaffoldは画面構成の基本Widget
     return Scaffold(
+      //resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
@@ -323,85 +331,129 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         onPressed: _qrScan,
         backgroundColor: HexColor('00C2FF'),
       ),
-      body: Container(
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            SizedBox(
-              height: 30,
+      body: Column(children: <Widget>[
+        Expanded(
+            flex: 1,
+            child: PageView(controller: controller, children: <Widget>[
+              _Slider(context, stampList, stampCheckString),
+              _Slider(context, stampList, stampCheckString),
+              _Slider(context, stampList, stampCheckString),
+            ])),
+        _TotalPoint()
+      ]),
+    );
+  }
+
+  Widget _Slider(
+      BuildContext context, List<Stamp> stampList, String stampCheckString) {
+    return Container(
+        color: HexColor('00C2FF'),
+        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        child: _Stampcard(context, stampList, stampCheckString));
+  }
+
+  Widget _Stampcard(
+      BuildContext context, List<Stamp> stampList, String stampCheckString) {
+    return Column(
+        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text(
+            '1枚目',
+            style: TextStyle(
+              fontSize: 40.0,
+              fontStyle: FontStyle.normal,
+              letterSpacing: 4.0,
             ),
-            Text(
-              '獲得スタンプ',
-              style: TextStyle(
-                fontSize: 32.0,
-                fontStyle: FontStyle.normal,
-                letterSpacing: 4.0,
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.width,
-              child: GridView.count(
-                shrinkWrap: true,
-                crossAxisCount: 3,
-                physics: ClampingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.all(10),
-                // スタンプをListの数だけ生成する
-                children: stampList
-                    .map(
-                      (Stamp stamp) => Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () => stamp.data == stampCheckString
-                                  ? stampDialog(context, stamp)
-                                  : (context),
-                              child: Container(
-                                padding: const EdgeInsets.all(11.0),
-                                width: MediaQuery.of(context).size.width / 3 -
-                                    11 * 2,
-                                height: MediaQuery.of(context).size.width / 3 -
-                                    11 * 2,
-                                // 円を生成
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: stamp.data == stampCheckString
-                                          ? AssetImage(
-                                              'assets/images/stamp/flower-4.png')
-                                          : AssetImage(
-                                              'assets/images/stamp/none.png')),
-                                  // border: Border.all(
-                                  //     color: HexColor('00C2FF'), width: 3),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Text(
-                                    stamp.stampNum.toString(),
-                                    style: TextStyle(
-                                      fontSize: 25.0,
-                                      fontStyle: FontStyle.normal,
-                                      letterSpacing: 4.0,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
+          ),
+          Divider(
+            thickness: 3,
+            color: Colors.black,
+            indent: 10,
+            endIndent: 10,
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.width,
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 3,
+              physics: ClampingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              padding: const EdgeInsets.all(10),
+              // スタンプをListの数だけ生成する
+              children: stampList
+                  .map(
+                    (Stamp stamp) => Container(
+                      //decoration: BoxDecoration(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () => stamp.data == stampCheckString
+                                ? stampDialog(context, stamp)
+                                : (context),
+                            child: Container(
+                              padding: const EdgeInsets.all(11.0),
+                              width: MediaQuery.of(context).size.width / 3 -
+                                  16 * 2,
+                              height: MediaQuery.of(context).size.width / 3 -
+                                  16 * 2,
+                              // 円を生成
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    color: HexColor("00FFFF"), width: 3),
+                                color: HexColor('FFFFFF'),
+                                image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: stamp.data == stampCheckString
+                                        ? AssetImage(
+                                            'assets/images/stamp/flower-4.png')
+                                        : AssetImage(
+                                            'assets/images/stamp/none.png')),
+                              ),
+                              //円内の数字表示
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: stamp.data == stampCheckString
+                                    ? Text("")
+                                    : Text(
+                                        stamp.stampNum.toString(),
+                                        style: TextStyle(
+                                          fontSize: 25.0,
+                                          fontStyle: FontStyle.normal,
+                                          letterSpacing: 4.0,
+                                          color: HexColor('00C2FF'),
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    )
-                    .toList(),
-              ),
+                    ),
+                  )
+                  .toList(),
             ),
-            ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD),
-            ElevatedButton(child: Text('CRUDサンプル'), onPressed: _crudSample)
-          ],
+          ),
+        ]);
+  }
+
+  Widget _TotalPoint() {
+    return Container(
+      margin: EdgeInsets.fromLTRB(0, 20, 100, 0),
+      alignment: Alignment.centerLeft,
+      width: 180,
+      decoration: BoxDecoration(
+        border: Border.all(color: HexColor('00C2FF'), width: 4),
+      ),
+      child: Text(
+        '合計スタンプ数：　6',
+        style: TextStyle(
+          fontSize: 14,
+          fontStyle: FontStyle.normal,
+          letterSpacing: 2.0,
         ),
       ),
     );
