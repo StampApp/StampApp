@@ -13,7 +13,7 @@ String toDateOrTime(DateTime datetime, String dateType) {
 // stringからdatetimeへの変換
 DateTime dateFormatParse(String strDateTime, String dateType) {
   if (dateType == enumDateType.date.toString()) {
-    DateFormat dateFormatter = DateFormat("y-M-d");
+    DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
     return dateFormatter.parseStrict(strDateTime);
 
   } else if (dateType == enumDateType.time.toString()) {
