@@ -101,7 +101,8 @@ class _HistoryPageState extends State<HistoryPage> {
             body: FutureBuilder(
               future: getDateList(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.data != null) {
+                // getDateListの処理が終了した場合
+                if (snapshot.connectionState == ConnectionState.done) {
                   return ListView(children: <Widget>[
                     Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -127,8 +128,11 @@ class _HistoryPageState extends State<HistoryPage> {
                             ),
                           )
                         ]),
-                    for (int i = 0; i < dateList.length; i++)
-                      _line(dateList[i], stampList)
+                    if(dateList.length != 0)
+                      for (int i = 0; i < dateList.length; i++)
+                        _line(dateList[i], stampList)
+                    // データが存在しなかった場合
+                    else Text("データが存在しません")
                   ]);
                 } else {
                   return Text("読み込み中");
