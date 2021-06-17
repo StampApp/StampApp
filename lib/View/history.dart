@@ -15,22 +15,23 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   List<DropdownMenuItem<int>> _items = List();
   int _selectItem = 0;
-  List<String> dateList = [];
   List<Stamp> stampList = [];
   int pastMonth = 3;
 
   // DBから使用したスタンプを取得する
   getStampList() async {
-    List<Map<String, dynamic>> maps = 
-      await DbInterface.selectDateDesc('Stamp', Stamp.database, DateTime.now(), pastMonth);
+    List<Map<String, dynamic>> maps = await DbInterface.selectDateDesc(
+        'Stamp', Stamp.database, DateTime.now(), pastMonth);
 
     // mapからstamp型への変換
     return List.generate(maps.length, (i) {
       return Stamp(
         id: maps[i]['id'],
         data: maps[i]['data'],
-        getDate: dateFormatParse(maps[i]['getdate'], enumDateType.date.toString()),
-        getTime: dateFormatParse(maps[i]['gettime'], enumDateType.time.toString()),
+        getDate:
+            dateFormatParse(maps[i]['getdate'], enumDateType.date.toString()),
+        getTime:
+            dateFormatParse(maps[i]['gettime'], enumDateType.time.toString()),
         deletedFlg: maps[i]['deletedflg'] == 0,
       );
     });
@@ -38,9 +39,11 @@ class _HistoryPageState extends State<HistoryPage> {
 
   // 重複しないDateをsatmpListから取得する
   getDateList() async {
+    List dateList = [];
     stampList = await getStampList();
     for (int i = 0; i < stampList.length; i++) {
-      var getDate = toDateOrTime(stampList[i].getDate, enumDateType.date.toString());
+      var getDate =
+          toDateOrTime(stampList[i].getDate, enumDateType.date.toString());
       if (dateList.length == 0) {
         dateList.add(getDate);
         // datelistの最後尾と一致しない場合
@@ -72,8 +75,7 @@ class _HistoryPageState extends State<HistoryPage> {
       {'text': '過去9ヶ月', 'value': 2},
       {'text': '過去12ヶ月', 'value': 3},
     ];
-    _items = 
-    dropdownItem.map<DropdownMenuItem<int>>((Map maps) {
+    _items = dropdownItem.map<DropdownMenuItem<int>>((Map maps) {
       return DropdownMenuItem<int>(
         value: maps['value'],
         child: Text(
@@ -122,17 +124,17 @@ class _HistoryPageState extends State<HistoryPage> {
                               value: _selectItem,
                               onChanged: (value) => {
                                 pastMonthChange(value),
-                                dateList = [],
                                 setState(() => _selectItem = value),
                               },
                             ),
                           )
                         ]),
-                    if(dateList.length != 0)
-                      for (int i = 0; i < dateList.length; i++)
-                        _line(dateList[i], stampList)
+                    if (snapshot.data.length != 0)
+                      for (int i = 0; i < snapshot.data.length; i++)
+                        _line(snapshot.data[i], stampList)
                     // データが存在しなかった場合
-                    else Text("データが存在しません")
+                    else
+                      Text("データが存在しません")
                   ]);
                 } else {
                   return Text("読み込み中");
