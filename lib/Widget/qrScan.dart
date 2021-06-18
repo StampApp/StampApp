@@ -10,8 +10,9 @@ Future<ScanResult> qrScan() async {
     var result = await BarcodeScanner.scan();
     Map<String, dynamic> rowContent = json.decode(result.rawContent);
 
-    if (!Validation.dateCheck(rowContent['date'], rowContent['time']) ||
-        !Validation.strCheck(rowContent['str'])) {
+    if (!Validation.dateCheck(
+            rowContent['createdAt'], rowContent['createdAt']) ||
+        !Validation.strCheck(rowContent['data'])) {
       result.rawContent = 'データが不正です';
     }
     return result;
@@ -25,6 +26,13 @@ Future<ScanResult> qrScan() async {
     } else {
       result.rawContent = 'エラー: $e';
     }
+    return result;
+  } on FormatException catch (e) {
+    var result = ScanResult(
+      type: ResultType.Error,
+      format: BarcodeFormat.unknown,
+    );
+    result.rawContent = 'エラー: ${e.message}';
     return result;
   }
 }
@@ -41,7 +49,7 @@ class Validation {
   static bool strCheck(String content) {
     // 記号・半角を含まない
     if (RegExp(r'^(?=.*[!-/:-@[-`{-~]).*$').hasMatch(content)) return false;
-    if (!content.contains('stamp')) return false;
+    if (!content.contains('ok')) return false;
     if (content.contains('http')) return false;
     return true;
   }

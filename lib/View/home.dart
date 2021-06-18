@@ -45,7 +45,7 @@ class Stamp {
 class _HomeSamplePageState extends State<HomeSamplePage> {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
-
+  Future<List<Stamp>> _getStamp;
   // 画面に表示するリストを定義
   // final List<Stamp> stampList = [
   //   new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
@@ -59,98 +59,100 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   //   new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
   // ];
 
-  final List<Stamp> stampList = [
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '1',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '2',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '3',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '4',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '5',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '6',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '7',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '8',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '9',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-  ];
+  // final List<Stamp> stampList = [
+  //   new Stamp(
+  //     id: uuid.v1(),
+  //     data: "ok",
+  //     getDate: dateTime,
+  //     getTime: dateTime,
+  //     stampNum: '1',
+  //     deletedFlg: true,
+  //     createdAt: dateTime,
+  //     deletedAt: dateTime,
+  //   ),
+  //   new Stamp(
+  //     id: uuid.v1(),
+  //     data: "ok",
+  //     getDate: dateTime,
+  //     getTime: dateTime,
+  //     stampNum: '2',
+  //     deletedFlg: true,
+  //     createdAt: dateTime,
+  //     deletedAt: dateTime,
+  //   ),
+  //   new Stamp(
+  //     id: uuid.v1(),
+  //     data: "ok",
+  //     getDate: dateTime,
+  //     getTime: dateTime,
+  //     stampNum: '3',
+  //     deletedFlg: true,
+  //     createdAt: dateTime,
+  //     deletedAt: dateTime,
+  //   ),
+  //   new Stamp(
+  //     id: uuid.v1(),
+  //     data: "ok",
+  //     getDate: dateTime,
+  //     getTime: dateTime,
+  //     stampNum: '4',
+  //     deletedFlg: true,
+  //     createdAt: dateTime,
+  //     deletedAt: dateTime,
+  //   ),
+  //   new Stamp(
+  //     id: uuid.v1(),
+  //     data: "ok",
+  //     getDate: dateTime,
+  //     getTime: dateTime,
+  //     stampNum: '5',
+  //     deletedFlg: true,
+  //     createdAt: dateTime,
+  //     deletedAt: dateTime,
+  //   ),
+  //   new Stamp(
+  //     id: uuid.v1(),
+  //     data: "ok",
+  //     getDate: dateTime,
+  //     getTime: dateTime,
+  //     stampNum: '6',
+  //     deletedFlg: true,
+  //     createdAt: dateTime,
+  //     deletedAt: dateTime,
+  //   ),
+  //   new Stamp(
+  //     id: uuid.v1(),
+  //     data: "ok",
+  //     getDate: dateTime,
+  //     getTime: dateTime,
+  //     stampNum: '7',
+  //     deletedFlg: true,
+  //     createdAt: dateTime,
+  //     deletedAt: dateTime,
+  //   ),
+  //   new Stamp(
+  //     id: uuid.v1(),
+  //     data: "ok",
+  //     getDate: dateTime,
+  //     getTime: dateTime,
+  //     stampNum: '8',
+  //     deletedFlg: true,
+  //     createdAt: dateTime,
+  //     deletedAt: dateTime,
+  //   ),
+  //   new Stamp(
+  //     id: uuid.v1(),
+  //     data: "ok",
+  //     getDate: dateTime,
+  //     getTime: dateTime,
+  //     stampNum: '9',
+  //     deletedFlg: true,
+  //     createdAt: dateTime,
+  //     deletedAt: dateTime,
+  //   ),
+  // ];
+
+  List<Stamp> stampList = [];
 
   static final String stampCheckString = "ok";
 
@@ -212,11 +214,79 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     print(await DbInterface.allSelect('memo', Memo.database));
   }
 
+  Future<List<Stamp>> asyncGetStampList() async {
+    var satamp1 = new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '1',
+      deletedFlg: false,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    );
+
+    var satamp2 = new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '2',
+      deletedFlg: false,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    );
+
+    // await DbInterface.deleteall("Stamp", Stamp.database, "");
+    // await DbInterface.insert('Stamp', Stamp.database, satamp1);
+    // await DbInterface.insert('Stamp', Stamp.database, satamp2);
+
+    List<Map<String, dynamic>> maps =
+        await DbInterface.allSelect('Stamp', Stamp.database);
+
+    stampList = List.generate(maps.length, (i) {
+      return Stamp(
+        id: maps[i]['id'],
+        data: maps[i]['data'],
+        getDate: dateTime,
+        getTime: dateTime,
+        stampNum: maps[i]['stampnum'],
+        deletedFlg: maps[i]['deleteflg'] == 0 ? true : false,
+        createdAt: dateTime,
+        deletedAt: dateTime,
+      );
+    });
+
+    int stampListLen = stampList.length;
+    //GridViewのcrossAxisCountの値
+    int crossAxisCount = 3;
+    int listRow = stampListLen ~/ crossAxisCount + 1;
+    if (!(crossAxisCount < listRow)) {
+      listRow = 3;
+    }
+    for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
+      Stamp newStamp = new Stamp(
+          id: uuid.v1(),
+          data: "",
+          getDate: dateTime,
+          getTime: dateTime,
+          stampNum: (i).toString(),
+          deletedFlg: false,
+          createdAt: dateTime,
+          deletedAt: dateTime);
+      stampList.add(newStamp);
+    }
+    return stampList;
+  }
+
   Future<void> _qrScan() async {
     ScanResult result = await qrScan();
     final DateTime dateTime = DateTime.now();
 
-    if (result.format.name == "qr") {
+    dynamic resulJson = json.decode(result.rawContent);
+
+    if (result.format.name == "qr" &&
+        resulJson.rawContent["data"] == stampCheckString) {
       int maxStamp = 9; //上限無しの場合0を指定
       int stampListLen = stampList.length;
       int crossAxisCount = 3;
@@ -229,13 +299,14 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         } else {
           Stamp newStamp = new Stamp(
               id: uuid.v1(),
-              data: "ok",
+              data: resulJson.rawContent["str"],
               getDate: dateTime,
               getTime: dateTime,
-              stampNum: (successStampLen + 1).toString(),
-              deletedFlg: true,
+              stampNum: resulJson.rawContent["stampNum"],
+              deletedFlg: false,
               createdAt: dateTime,
               deletedAt: dateTime);
+          await DbInterface.insert('Stamp', Stamp.database, newStamp);
           setState(() {
             stampList[successStampLen] = newStamp;
           });
@@ -249,8 +320,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                 data: "",
                 getDate: dateTime,
                 getTime: dateTime,
-                stampNum: (i + 1).toString(),
-                deletedFlg: true,
+                stampNum: "",
+                deletedFlg: false,
                 createdAt: dateTime,
                 deletedAt: dateTime);
             stampList.add(newStamp);
@@ -258,13 +329,14 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         }
         Stamp newStamp = new Stamp(
             id: uuid.v1(),
-            data: "ok",
+            data: resulJson.rawContent["str"],
             getDate: dateTime,
             getTime: dateTime,
-            stampNum: (successStampLen + 1).toString(),
-            deletedFlg: true,
+            stampNum: resulJson.rawContent["stampNum"],
+            deletedFlg: false,
             createdAt: dateTime,
             deletedAt: dateTime);
+        await DbInterface.insert('Stamp', Stamp.database, newStamp);
         setState(() {
           stampList[successStampLen] = newStamp;
         });
@@ -274,24 +346,63 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   @override
   void initState() {
+    // super.initState();
+    // var satamp1 = new Stamp(
+    //   id: uuid.v1(),
+    //   data: "ok",
+    //   getDate: dateTime,
+    //   getTime: dateTime,
+    //   stampNum: '1',
+    //   deletedFlg: false,
+    //   createdAt: dateTime,
+    //   deletedAt: dateTime,
+    // );
+
+    // var satamp2 = new Stamp(
+    //   id: uuid.v1(),
+    //   data: "ok",
+    //   getDate: dateTime,
+    //   getTime: dateTime,
+    //   stampNum: '2',
+    //   deletedFlg: false,
+    //   createdAt: dateTime,
+    //   deletedAt: dateTime,
+    // );
+
+    // await DbInterface.deleteall("Stamp", Stamp.database, "");
+
+    // Future(() async {
+    //   await DbInterface.deleteall("Stamp", Stamp.database, "");
+    //   await DbInterface.insert('Stamp', Stamp.database, satamp1);
+    //   await DbInterface.insert('Stamp', Stamp.database, satamp2);
+    // });
+
+    // List<Stamp> testList = [];
+    // testList = await getStampList();
+    _getStamp = asyncGetStampList();
+
+    // testList = await getStampList();
+
     //アプリ起動時に一度だけ実行、スタンプテーブルの個数を3の倍数にする
-    int stampListLen = stampList.length;
+    // int stampListLen = stampList.length;
     //GridViewのcrossAxisCountの値
-    int crossAxisCount = 3;
-    int listRow = stampListLen ~/ crossAxisCount + 1;
-    crossAxisCount < listRow ? null : listRow = 3;
-    for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
-      Stamp newStamp = new Stamp(
-          id: uuid.v1(),
-          data: "",
-          getDate: dateTime,
-          getTime: dateTime,
-          stampNum: (i).toString(),
-          deletedFlg: true,
-          createdAt: dateTime,
-          deletedAt: dateTime);
-      stampList.add(newStamp);
-    }
+    // int crossAxisCount = 3;
+    // int listRow = stampListLen ~/ crossAxisCount + 1;
+    // if (!(crossAxisCount < listRow)) {
+    //   listRow = 3;
+    // }
+    // for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
+    //   Stamp newStamp = new Stamp(
+    //       id: uuid.v1(),
+    //       data: "",
+    //       getDate: dateTime,
+    //       getTime: dateTime,
+    //       stampNum: (i).toString(),
+    //       deletedFlg: true,
+    //       createdAt: dateTime,
+    //       deletedAt: dateTime);
+    //   stampList.add(newStamp);
+    // }
   }
 
   @override
@@ -340,64 +451,82 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
             ),
             SizedBox(
               height: MediaQuery.of(context).size.width,
-              child: GridView.count(
-                shrinkWrap: true,
-                crossAxisCount: 3,
-                physics: ClampingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.all(10),
-                // スタンプをListの数だけ生成する
-                children: stampList
-                    .map(
-                      (Stamp stamp) => Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () => stamp.data == stampCheckString
-                                  ? stampDialog(context, stamp)
-                                  : (context),
-                              child: Container(
-                                padding: const EdgeInsets.all(11.0),
-                                width: MediaQuery.of(context).size.width / 3 -
-                                    11 * 2,
-                                height: MediaQuery.of(context).size.width / 3 -
-                                    11 * 2,
-                                // 円を生成
+              child: FutureBuilder(
+                  future: _getStamp,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Stamp>> snapshot) {
+                    Widget childWidget;
+                    if (snapshot.hasData) {
+                      childWidget = GridView.count(
+                        shrinkWrap: true,
+                        crossAxisCount: 3,
+                        physics: ClampingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        padding: const EdgeInsets.all(10),
+                        // スタンプをListの数だけ生成する
+                        children: stampList
+                            .map(
+                              (Stamp stamp) => Container(
                                 decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: stamp.data == stampCheckString
-                                          ? AssetImage(
-                                              'assets/images/stamp/flower-4.png')
-                                          : AssetImage(
-                                              'assets/images/stamp/none.png')),
-                                  // border: Border.all(
-                                  //     color: HexColor('00C2FF'), width: 3),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Text(
-                                    stamp.stampNum.toString(),
-                                    style: TextStyle(
-                                      fontSize: 25.0,
-                                      fontStyle: FontStyle.normal,
-                                      letterSpacing: 4.0,
+                                    border: Border.all(color: Colors.black)),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () =>
+                                          stamp.data == stampCheckString
+                                              ? stampDialog(context, stamp)
+                                              : (context),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(11.0),
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                    3 -
+                                                11 * 2,
+                                        height:
+                                            MediaQuery.of(context).size.width /
+                                                    3 -
+                                                11 * 2,
+                                        // 円を生成
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: stamp.data ==
+                                                      stampCheckString
+                                                  ? AssetImage(
+                                                      'assets/images/stamp/flower-4.png')
+                                                  : AssetImage(
+                                                      'assets/images/stamp/none.png')),
+                                          // border: Border.all(
+                                          //     color: HexColor('00C2FF'), width: 3),
+                                        ),
+                                        child: Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Text(
+                                            stamp.stampNum.toString(),
+                                            style: TextStyle(
+                                              fontSize: 25.0,
+                                              fontStyle: FontStyle.normal,
+                                              letterSpacing: 4.0,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
+                            )
+                            .toList(),
+                      );
+                    } else {
+                      childWidget = const CircularProgressIndicator();
+                    }
+                    return childWidget;
+                  }),
             ),
             ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD),
             ElevatedButton(child: Text('CRUDサンプル'), onPressed: _crudSample)

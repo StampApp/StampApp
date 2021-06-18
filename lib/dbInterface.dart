@@ -5,7 +5,7 @@ class DbInterface {
   /*
   @param _tableName テーブル名
   @param database   DB
-  @param id         レコードID   
+  @param id         レコードID
   */
   // idを指定して取得
   static Future<List> select(String _tableName, var database, String id) async {
@@ -17,7 +17,7 @@ class DbInterface {
 
   /*
   @param _tableName テーブル名
-  @param database   DB 
+  @param database   DB
   */
   //全件取得
   static Future<List> allSelect(String _tableName, var database) async {
@@ -30,7 +30,7 @@ class DbInterface {
   /*
   @param _tableName テーブル名
   @param database   DB
-  @param values     テーブルの型を持った更新内容   
+  @param values     テーブルの型を持った更新内容
   */
   // 追加
   static Future<void> insert(
@@ -46,7 +46,7 @@ class DbInterface {
   /*
   @param _tableName テーブル名
   @param database   DB
-  @param values     テーブルの型を持った更新内容   
+  @param values     テーブルの型を持った更新内容
   */
   // 更新
   static Future<void> update(
@@ -65,7 +65,7 @@ class DbInterface {
   /*
   @param _tableName テーブル名
   @param database   DB
-  @param id         レコードID   
+  @param id         レコードID
   */
   // 削除
   static Future<void> delete(String _tableName, var database, String id) async {
@@ -74,6 +74,15 @@ class DbInterface {
       '$_tableName',
       where: "id = ?",
       whereArgs: [id],
+    );
+  }
+
+  // 全件削除
+  static Future<void> deleteall(
+      String _tableName, var database, String id) async {
+    final db = await database;
+    await db.delete(
+      '$_tableName',
     );
   }
 }
