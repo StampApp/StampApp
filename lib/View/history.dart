@@ -138,7 +138,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     Container(
                       alignment: Alignment.center,
                       height: displaySize.height *0.6,
-                      child: Text("データが存在しません" ,style: TextStyle(fontSize: 20.0)),
+                      child: Text("利用履歴がありません" ,style: TextStyle(fontSize: 20.0)),
                     )
                   ]);
                 } else {
@@ -190,7 +190,7 @@ Widget _row(Stamp stamplist) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 //trueならスタンプ使用、それ以外ならスタンプゲットwidget呼び出し
-                (stamplist.deletedFlg == true) ? _usestamp() : _getstamp(),
+                (stamplist.deletedFlg) ? _usestamp() : _getstamp(),
                 Container(
                     child: Text(toDateOrTime(
                         stamplist.getTime, enumDateType.time.toString())))
