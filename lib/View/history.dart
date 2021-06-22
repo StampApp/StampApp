@@ -88,6 +88,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Size displaySize = MediaQuery.of(context).size;
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -134,10 +135,18 @@ class _HistoryPageState extends State<HistoryPage> {
                         _line(snapshot.data[i], stampList)
                     // データが存在しなかった場合
                     else
-                      Text("データが存在しません")
+                    Container(
+                      alignment: Alignment.center,
+                      height: displaySize.height *0.6,
+                      child: Text("データが存在しません" ,style: TextStyle(fontSize: 20.0)),
+                    )
                   ]);
                 } else {
-                  return Text("読み込み中");
+                  return Container(
+                      alignment: Alignment.center,
+                      height: displaySize.height,
+                      child: Text("読み込み中" ,style: TextStyle(fontSize: 20.0)),
+                    );
                 }
               },
             )));
