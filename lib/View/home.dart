@@ -275,7 +275,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ScanResult result = await qrScan();
     final DateTime dateTime = DateTime.now();
 
-    if (result.rawContent != "データが不正です" && result.type.name != "Error") {
+    if (result.rawContent != "データが不正です" &&
+        result.type.name != "Error" &&
+        result.type.name != "Cancelled") {
       dynamic resultJson = json.decode(result.rawContent);
 
       if (result.format.name == "qr" &&
@@ -341,7 +343,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
             result.format.name != "qr" ? "これはQRコードではありません" : "このQRコードは無効です";
         qrAlertDialog(context, title, text);
       }
-    } else {
+    } else if (result.type.name != "Cancelled") {
       String title = "エラー";
       String text = '不正なQRコードです\n${result.rawContent}';
       qrAlertDialog(context, title, text);

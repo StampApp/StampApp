@@ -9,6 +9,9 @@ import 'package:stamp_app/Util/enumCheckString.dart';
 Future<ScanResult> qrScan() async {
   try {
     var result = await BarcodeScanner.scan();
+    if (result.type.name == "Cancelled") {
+      return result;
+    }
     Map<String, dynamic> rowContent = json.decode(result.rawContent);
 
     if (!Validation.dateCheck(rowContent['createdAt']) ||
