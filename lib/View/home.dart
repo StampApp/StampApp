@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:stamp_app/Widget/qrScan.dart';
@@ -12,6 +13,7 @@ import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../checkIsMaxStamps.dart';
+import '../Util/enumCheckString.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
@@ -154,7 +156,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   List<Stamp> stampList = [];
 
-  static final String stampCheckString = "ok";
+  static final String stampCheckString = CheckString.ok.CheckStringValue;
 
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
@@ -164,7 +166,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     final DateTime dateTime = DateTime.now();
     final update = new Stamp(
       id: '4eef4900-c340-11eb-80aa-4babbebbda13',
-      data: "ok",
+      data: stampCheckString,
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '10',
@@ -283,26 +285,58 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ScanResult result = await qrScan();
     final DateTime dateTime = DateTime.now();
 
-    dynamic resulJson = json.decode(result.rawContent);
+    if (result.rawContent != "データが不正です" && result.type.name != "Error") {
+      dynamic resultJson = json.decode(result.rawContent);
 
-    if (result.format.name == "qr" &&
-        resulJson.rawContent["data"] == stampCheckString) {
-      int maxStamp = 9; //上限無しの場合0を指定
-      int stampListLen = stampList.length;
-      int crossAxisCount = 3;
-      int successStampLen =
-          stampList.where((element) => element.data == stampCheckString).length;
+      if (result.format.name == "qr" &&
+          resultJson["data"] == stampCheckString) {
+        int maxStamp = 9; //上限無しの場合0を指定
+        int stampListLen = stampList.length;
+        int crossAxisCount = 3;
+        int successStampLen = stampList
+            .where((element) => element.data == stampCheckString)
+            .length;
 
-      if (checkIsMaxStamps(successStampLen, maxStamp)) {
-        if (successStampLen >= maxStamp) {
-          stampMaxDialogAlert(context, maxStamp);
+        if (checkIsMaxStamps(successStampLen, maxStamp)) {
+          if (successStampLen >= maxStamp) {
+            stampMaxDialogAlert(context, maxStamp);
+          } else {
+            Stamp newStamp = new Stamp(
+                id: uuid.v1(),
+                data: stampCheckString,
+                getDate: dateTime,
+                getTime: dateTime,
+                stampNum: resultJson["stampNum"],
+                deletedFlg: false,
+                createdAt: dateTime,
+                deletedAt: dateTime);
+            await DbInterface.insert('Stamp', Stamp.database, newStamp);
+            setState(() {
+              stampList[successStampLen] = newStamp;
+            });
+            stampMaxDialogAlert(context, maxStamp);
+          }
         } else {
+          if (stampListLen == successStampLen + 1) {
+            for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
+              Stamp newStamp = new Stamp(
+                  id: uuid.v1(),
+                  data: "",
+                  getDate: dateTime,
+                  getTime: dateTime,
+                  stampNum: "",
+                  deletedFlg: false,
+                  createdAt: dateTime,
+                  deletedAt: dateTime);
+              stampList.add(newStamp);
+            }
+          }
           Stamp newStamp = new Stamp(
               id: uuid.v1(),
-              data: resulJson.rawContent["str"],
+              data: stampCheckString,
               getDate: dateTime,
               getTime: dateTime,
-              stampNum: resulJson.rawContent["stampNum"],
+              stampNum: resultJson["stampNum"],
               deletedFlg: false,
               createdAt: dateTime,
               deletedAt: dateTime);
@@ -310,37 +344,17 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           setState(() {
             stampList[successStampLen] = newStamp;
           });
-          stampMaxDialogAlert(context, maxStamp);
         }
       } else {
-        if (stampListLen == successStampLen + 1) {
-          for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
-            Stamp newStamp = new Stamp(
-                id: uuid.v1(),
-                data: "",
-                getDate: dateTime,
-                getTime: dateTime,
-                stampNum: "",
-                deletedFlg: false,
-                createdAt: dateTime,
-                deletedAt: dateTime);
-            stampList.add(newStamp);
-          }
-        }
-        Stamp newStamp = new Stamp(
-            id: uuid.v1(),
-            data: resulJson.rawContent["str"],
-            getDate: dateTime,
-            getTime: dateTime,
-            stampNum: resulJson.rawContent["stampNum"],
-            deletedFlg: false,
-            createdAt: dateTime,
-            deletedAt: dateTime);
-        await DbInterface.insert('Stamp', Stamp.database, newStamp);
-        setState(() {
-          stampList[successStampLen] = newStamp;
-        });
+        String title = "エラー";
+        String text =
+            result.format.name != "qr" ? "これはQRコードではありません" : "このQRコードは無効です";
+        qrAlertDialog(context, title, text);
       }
+    } else {
+      String title = "エラー";
+      String text = '不正なQRコードです\n${result.rawContent}';
+      qrAlertDialog(context, title, text);
     }
   }
 
@@ -505,7 +519,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                         child: Align(
                                           alignment: Alignment.bottomRight,
                                           child: Text(
-                                            stamp.stampNum.toString(),
+                                            (stampList.indexOf(stamp) + 1)
+                                                .toString(),
                                             style: TextStyle(
                                               fontSize: 25.0,
                                               fontStyle: FontStyle.normal,

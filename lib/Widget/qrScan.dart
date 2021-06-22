@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:stamp_app/Util/enumCheckString.dart';
 
 // 読み込み結果を表示するダイアログ
 Future<ScanResult> qrScan() async {
@@ -10,8 +11,7 @@ Future<ScanResult> qrScan() async {
     var result = await BarcodeScanner.scan();
     Map<String, dynamic> rowContent = json.decode(result.rawContent);
 
-    if (!Validation.dateCheck(
-            rowContent['createdAt'], rowContent['createdAt']) ||
+    if (!Validation.dateCheck(rowContent['createdAt']) ||
         !Validation.strCheck(rowContent['data'])) {
       result.rawContent = 'データが不正です';
     }
@@ -39,17 +39,19 @@ Future<ScanResult> qrScan() async {
 
 // 読み込んだQRを検証するクラス
 class Validation {
-  static bool dateCheck(date, time) {
-    DateTime verificationDate = DateTime(2021, 6, 1, 12, 0, 0);
-    if (date != DateFormat('yyyy/MM/dd').format(verificationDate)) return false;
-    if (time != DateFormat('HH:mm:ss').format(verificationDate)) return false;
+  static final String stampCheckString = CheckString.ok.CheckStringValue;
+  static bool dateCheck(datetime) {
+    DateTime verificationDate = DateTime(2021, 5, 1, 12, 0, 0);
+
+    if (verificationDate.isAfter(
+        DateFormat("yyyy/MM/dd HH:mm:ss").parseStrict(datetime))) return false;
     return true;
   }
 
   static bool strCheck(String content) {
     // 記号・半角を含まない
     if (RegExp(r'^(?=.*[!-/:-@[-`{-~]).*$').hasMatch(content)) return false;
-    if (!content.contains('ok')) return false;
+    if (!content.contains(stampCheckString)) return false;
     if (content.contains('http')) return false;
     return true;
   }
