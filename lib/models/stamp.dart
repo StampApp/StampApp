@@ -17,15 +17,18 @@ class Stamp {
   final bool deletedFlg; // 使用済みフラグ
   final DateTime createdAt; // スタンプが押された時間
   final DateTime deletedAt; // 削除日時
-  Stamp(
-      {this.id,
-      this.data,
-      this.getDate,
-      this.getTime,
-      this.stampNum,
-      this.deletedFlg,
-      this.createdAt,
-      this.deletedAt});
+
+  Stamp ({
+    this.id,
+    this.data,
+    this.getDate,
+    this.getTime,
+    this.stampNum,
+    this.deletedFlg,
+    this.createdAt,
+    this.deletedAt
+  });
+  
   // StampからMap型に変換
   // カラム名に対応する必要あり
   Map<String, dynamic> toMap() {
