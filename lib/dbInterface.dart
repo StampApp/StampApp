@@ -78,8 +78,7 @@ class DbInterface {
   }
 
   // 全件削除
-  static Future<void> deleteall(
-      String _tableName, var database, String id) async {
+  static Future<void> allDelete(String _tableName, var database) async {
     final db = await database;
     await db.delete(
       '$_tableName',

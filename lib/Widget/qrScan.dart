@@ -39,12 +39,13 @@ Future<ScanResult> qrScan() async {
 
 // 読み込んだQRを検証するクラス
 class Validation {
-  static final String stampCheckString = CheckString.ok.CheckStringValue;
+  static final String stampCheckString = CheckString.ok.checkStringValue;
   static bool dateCheck(datetime) {
-    DateTime verificationDate = DateTime(2021, 5, 1, 12, 0, 0);
+    DateTime verificationDate =
+        DateFormat("yyyy/MM/dd HH:mm:ss").parseStrict(datetime);
+    DateTime now = DateTime.now();
 
-    if (verificationDate.isAfter(
-        DateFormat("yyyy/MM/dd HH:mm:ss").parseStrict(datetime))) return false;
+    if (now.isBefore(verificationDate)) return false;
     return true;
   }
 

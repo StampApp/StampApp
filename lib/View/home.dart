@@ -156,7 +156,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   List<Stamp> stampList = [];
 
-  static final String stampCheckString = CheckString.ok.CheckStringValue;
+  static final String stampCheckString = CheckString.ok.checkStringValue;
 
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
@@ -217,6 +217,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   }
 
   Future<List<Stamp>> asyncGetStampList() async {
+    //初期データなので後で消す
     var satamp1 = new Stamp(
       id: uuid.v1(),
       data: "ok",
@@ -239,7 +240,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       deletedAt: dateTime,
     );
 
-    // await DbInterface.deleteall("Stamp", Stamp.database, "");
+    // await DbInterface.allDelete("Stamp", Stamp.database);
     // await DbInterface.insert('Stamp', Stamp.database, satamp1);
     // await DbInterface.insert('Stamp', Stamp.database, satamp2);
 
