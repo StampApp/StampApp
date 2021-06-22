@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Widget/HexColor.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({Key key, this.title}) : super(key: key);
@@ -16,11 +17,12 @@ class _SettingPageState extends State<SettingPage> {
   void _privacyPolicyNavigate() {
     Navigator.of(context).pushNamed('/privacyPolicy');
   }
-    void _historyNavigate() {
+
+  void _historyNavigate() {
     Navigator.of(context).pushNamed('/history');
   }
 
-  void _instructionsNavigate(){
+  void _instructionsNavigate() {
     Navigator.of(context).pushNamed('/instructions');
   }
 
@@ -53,8 +55,10 @@ class _SettingPageState extends State<SettingPage> {
         body: ListView(children: [
           _menuItem("利用履歴", Icon(Icons.update), _historyNavigate),
           _menuItem("使い方", Icon(Icons.phone_android), _instructionsNavigate),
-          _menuItem("利用規約", Icon(Icons.phonelink_setup_rounded), _termsNavigate),
-          _menuItem("プライバシーポリシー", Icon(Icons.visibility), _privacyPolicyNavigate),
+          _menuItem(
+              "利用規約", Icon(Icons.phonelink_setup_rounded), _termsNavigate),
+          _menuItem(
+              "プライバシーポリシー", Icon(Icons.visibility), _privacyPolicyNavigate),
           _menuItem("Version", Icon(Icons.visibility)),
         ]),
       ),
@@ -112,17 +116,4 @@ Widget _version() {
       ),
     ),
   );
-}
-
-//色をカラーコードで指定するためのクラス
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
