@@ -13,6 +13,9 @@ import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../checkIsMaxStamps.dart';
 import 'package:flutter/material.dart';
+import 'size_config.dart';
+
+import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
@@ -38,9 +41,13 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
 
-  //test
-  PageController controller;
+  int cardnum = 1;
 
+  //スタンプ合計
+  int stampsum = 0;
+
+  //pageviewで使用
+  PageController controller;
   PageController _pageController;
   int _currentPage = 0;
 
@@ -107,7 +114,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     ),
     new Stamp(
       id: uuid.v1(),
-      data: "no",
+      data: "ok",
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '7',
@@ -115,7 +122,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       createdAt: dateTime,
       deletedAt: dateTime,
     ),
-    /*
     new Stamp(
       id: uuid.v1(),
       data: "ok",
@@ -135,8 +141,20 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       deletedFlg: true,
       createdAt: dateTime,
       deletedAt: dateTime,
-    ),*/
+    ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '10',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    ),
   ];
+
+  //List<List<Stamp>> cardlist = [];
 
   static final String stampCheckString = "ok";
 
@@ -267,6 +285,28 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     int listRow = 3;
     //int listRow = stampListLen ~/ crossAxisCount + 1;
     //crossAxisCount < listRow ? null : listRow = 3;
+
+    //スタンプ総数から必要なカード枚数取得
+    cardnum = (stampListLen / 9).ceil();
+    debugPrint('{$cardnum}');
+
+/* StampListからStampを9個ずつ配列に格納する処理(まだ動かない)
+    int num = 0;
+    List<List<Stamp>> cardList;
+
+    
+    for (int j = 0; j < cardnum; j++) {
+      debugPrint('{$cardnum},{$j}');
+      for (int i = num; i < num + 9; i++) {
+        Stamp sp = stampList[i];
+        debugPrint('{$sp}');
+        cardList[j].add(sp);
+      }
+      num = num + 9;
+      debugPrint('{$num}');
+    }
+    */
+
     for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
       Stamp newStamp = new Stamp(
           id: uuid.v1(),
@@ -335,10 +375,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         Expanded(
             flex: 1,
             child: PageView(controller: controller, children: <Widget>[
-              _Slider(context, stampList, stampCheckString),
-              _Slider(context, stampList, stampCheckString),
-              _Slider(context, stampList, stampCheckString),
+              for (int i = 0; i < cardnum; i++)
+                _Slider(context, stampList, stampCheckString),
             ])),
+        /*
+        Container(
+          height: 5,
+          child: CirclePageIndicator(
+            itemCount: cardnum,
+          ),
+        ),*/
         _TotalPoint()
       ]),
     );
@@ -348,7 +394,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       BuildContext context, List<Stamp> stampList, String stampCheckString) {
     return Container(
         color: HexColor('00C2FF'),
-        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: _Stampcard(context, stampList, stampCheckString));
   }
@@ -358,22 +404,37 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     return Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Text(
-            '1枚目',
-            style: TextStyle(
-              fontSize: 40.0,
-              fontStyle: FontStyle.normal,
-              letterSpacing: 4.0,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                color: HexColor('FFFFFF'),
+                child: Text(
+                  '1',
+                  style: TextStyle(
+                    fontSize: 40.0,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 4.0,
+                  ),
+                ),
+              ),
+              Text(
+                '枚目',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontStyle: FontStyle.normal,
+                  letterSpacing: 4.0,
+                ),
+              ),
+            ],
           ),
           Divider(
             thickness: 3,
             color: Colors.black,
-            indent: 10,
-            endIndent: 10,
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.width,
             child: GridView.count(
               shrinkWrap: true,
               crossAxisCount: 3,
@@ -384,7 +445,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               children: stampList
                   .map(
                     (Stamp stamp) => Container(
-                      //decoration: BoxDecoration(),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -393,11 +453,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                 ? stampDialog(context, stamp)
                                 : (context),
                             child: Container(
-                              padding: const EdgeInsets.all(11.0),
-                              width: MediaQuery.of(context).size.width / 3 -
-                                  16 * 2,
-                              height: MediaQuery.of(context).size.width / 3 -
-                                  16 * 2,
+                              //padding: const EdgeInsets.all(11.0),
+                              width: MediaQuery.of(context).size.width / 3 - 40,
+                              height:
+                                  MediaQuery.of(context).size.width / 3 - 40,
                               // 円を生成
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -441,21 +500,21 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   }
 
   Widget _TotalPoint() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(0, 20, 100, 0),
-      alignment: Alignment.centerLeft,
-      width: 180,
-      decoration: BoxDecoration(
-        border: Border.all(color: HexColor('00C2FF'), width: 4),
-      ),
-      child: Text(
-        '合計スタンプ数：　6',
-        style: TextStyle(
-          fontSize: 14,
-          fontStyle: FontStyle.normal,
-          letterSpacing: 2.0,
-        ),
-      ),
-    );
+    return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+      Container(
+          margin: EdgeInsets.fromLTRB(10, 20, 0, 20),
+          width: 250,
+          decoration: BoxDecoration(
+            border: Border.all(color: HexColor('00C2FF'), width: 4),
+          ),
+          child: Text(
+            '合計スタンプ数:  9',
+            style: TextStyle(
+              fontSize: 20,
+              fontStyle: FontStyle.normal,
+              letterSpacing: 2.0,
+            ),
+          ))
+    ]);
   }
 }
