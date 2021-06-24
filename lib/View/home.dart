@@ -13,7 +13,8 @@ import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../checkIsMaxStamps.dart';
 import 'package:flutter/material.dart';
-import 'size_config.dart';
+import 'package:page_indicator/page_indicator.dart';
+//import 'size_config.dart';
 
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
@@ -50,7 +51,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   PageController controller;
   PageController _pageController;
   int _currentPage = 0;
-
+  
   final List<Stamp> stampList = [
     new Stamp(
       id: uuid.v1(),
@@ -153,6 +154,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       deletedAt: dateTime,
     ),
   ];
+  //final List<List<Stamp>> cardList =[];
+  //final Map <int,List<Stamp>> cardList = {};
 
   //List<List<Stamp>> cardlist = [];
 
@@ -290,23 +293,22 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     cardnum = (stampListLen / 9).ceil();
     debugPrint('{$cardnum}');
 
-/* StampListからStampを9個ずつ配列に格納する処理(まだ動かない)
+// StampListからStampを9個ずつ配列に格納する処理(まだ動かない)
     int num = 0;
-    List<List<Stamp>> cardList;
-
-    
+    /*
     for (int j = 0; j < cardnum; j++) {
       debugPrint('{$cardnum},{$j}');
       for (int i = num; i < num + 9; i++) {
         Stamp sp = stampList[i];
         debugPrint('{$sp}');
-        cardList[j].add(sp);
+        cardList[j] = (sp);
+        //cardList[j] = stampList[i];
       }
       num = num + 9;
       debugPrint('{$num}');
     }
-    */
-
+    debugPrint('{$cardList[0]}');
+*/
     for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
       Stamp newStamp = new Stamp(
           id: uuid.v1(),
@@ -371,27 +373,43 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         onPressed: _qrScan,
         backgroundColor: HexColor('00C2FF'),
       ),
-      body: Column(children: <Widget>[
-        Expanded(
-            flex: 1,
-            child: PageView(controller: controller, children: <Widget>[
-              for (int i = 0; i < cardnum; i++)
-                _Slider(context, stampList, stampCheckString),
-            ])),
-        /*
-        Container(
-          height: 5,
-          child: CirclePageIndicator(
-            itemCount: cardnum,
-          ),
-        ),*/
-        _TotalPoint()
-      ]),
+      body : new Container(
+              child:Container(
+                child: PageIndicatorContainer(
+                  child: PageView(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: PageView(controller: controller, children: <Widget>[
+                          for (int i = 0; i < cardnum; i++)
+                          
+                            _Slider(context, stampList, stampCheckString),
+                            /*for (int i = 0; i < cardnum; i++)
+                            _Slider(context, cardList[i], i + 1,stampCheckString),*/
+                          ],),
+                      ),
+                    ],
+                    controller: controller,
+                    ),
+                      align: IndicatorAlign.bottom,
+                      length: cardnum,
+                      indicatorSpace: 20.0,
+                      padding: const EdgeInsets.all(10),
+                      indicatorColor: Colors.white,
+                      indicatorSelectorColor: Colors.grey,
+                      shape: IndicatorShape.circle(size: 15)
+                )
+              )
+      ),
+      //_TotalPoint(),
     );
   }
 
   Widget _Slider(
       BuildContext context, List<Stamp> stampList, String stampCheckString) {
+  
+  /*Widget _Slider(
+      BuildContext context, List<Stamp> stampList, int pagenum, String stampCheckString) {*/
     return Container(
         color: HexColor('00C2FF'),
         margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -402,6 +420,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Widget _Stampcard(
       BuildContext context, List<Stamp> stampList, String stampCheckString) {
     return Column(
+      
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Row(
@@ -413,6 +432,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                 color: HexColor('FFFFFF'),
                 child: Text(
                   '1',
+                  //'$pagenum'
                   style: TextStyle(
                     fontSize: 40.0,
                     fontStyle: FontStyle.normal,
@@ -487,16 +507,21 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                         textAlign: TextAlign.center,
                                       ),
                               ),
+                              
                             ),
                           ),
+                          
                         ],
                       ),
                     ),
                   )
                   .toList(),
+                  
             ),
+            
           ),
         ]);
+        
   }
 
   Widget _TotalPoint() {
