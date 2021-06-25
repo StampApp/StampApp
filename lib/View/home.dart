@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:page_indicator/page_indicator.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:barcode_scan/barcode_scan.dart';
@@ -13,7 +14,6 @@ import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../checkIsMaxStamps.dart';
 import 'package:flutter/material.dart';
-import 'size_config.dart';
 
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
@@ -41,11 +41,17 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
 
+  //カード枚数は1以上
   int cardnum = 1;
 
   //スタンプ合計
   int stampsum = 0;
 
+  //カード枚数格納配列
+  List<String> cardnumber = [];
+
+  List<List<Stamp>> cardList = [];
+  //var cardList = <List<List<Stamp>>>[[]];
   //pageviewで使用
   PageController controller;
   PageController _pageController;
@@ -152,9 +158,17 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       createdAt: dateTime,
       deletedAt: dateTime,
     ),
+    new Stamp(
+      id: uuid.v1(),
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '11',
+      deletedFlg: true,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    )
   ];
-
-  //List<List<Stamp>> cardlist = [];
 
   static final String stampCheckString = "ok";
 
@@ -279,33 +293,57 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   @override
   void initState() {
     //アプリ起動時に一度だけ実行、スタンプテーブルの個数を3の倍数にする
+
     int stampListLen = stampList.length;
+
     //GridViewのcrossAxisCountの値
     int crossAxisCount = 3;
     int listRow = 3;
     //int listRow = stampListLen ~/ crossAxisCount + 1;
     //crossAxisCount < listRow ? null : listRow = 3;
 
-    //スタンプ総数から必要なカード枚数取得
-    cardnum = (stampListLen / 9).ceil();
-    debugPrint('{$cardnum}');
-
-/* StampListからStampを9個ずつ配列に格納する処理(まだ動かない)
-    int num = 0;
-    List<List<Stamp>> cardList;
-
-    
-    for (int j = 0; j < cardnum; j++) {
-      debugPrint('{$cardnum},{$j}');
-      for (int i = num; i < num + 9; i++) {
-        Stamp sp = stampList[i];
-        debugPrint('{$sp}');
-        cardList[j].add(sp);
-      }
-      num = num + 9;
-      debugPrint('{$num}');
+    //スタンプが1個以上あるなら必要なカードを求める
+    if (stampListLen != 0) {
+      cardnum = (stampListLen / 9).ceil();
     }
-    */
+
+    //StampListからStampを9個ずつ配列に格納する
+    int num = 0;
+
+    for (int j = 0; j < cardnum; j++) {
+      List<Stamp> cardStamp = [];
+      for (int i = num; i < num + 9 && i != stampListLen; i++) {
+        Stamp sp = stampList[i];
+        cardStamp.add(sp);
+      }
+      //一つのカードにStampが9個未満の場合
+      if (cardStamp.length != 9) {
+        Stamp lastStamp = cardStamp.last;
+        String stampnumber = lastStamp.stampNum;
+        int number = int.parse(stampnumber);
+
+        while (cardStamp.length < 9) {
+          number++;
+          //一つのカードの中身を9個埋めるために空のStampデータ代入
+          Stamp noStamp = new Stamp(
+            id: uuid.v1(),
+            data: "no",
+            getDate: dateTime,
+            getTime: dateTime,
+            stampNum: number.toString(),
+            deletedFlg: true,
+            createdAt: dateTime,
+            deletedAt: dateTime,
+          );
+          cardStamp.add(noStamp);
+        }
+      }
+
+      cardnumber.add(j.toString());
+      cardList.add(cardStamp);
+
+      num = num + 9;
+    }
 
     for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
       Stamp newStamp = new Stamp(
@@ -376,31 +414,24 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
             flex: 1,
             child: PageView(controller: controller, children: <Widget>[
               for (int i = 0; i < cardnum; i++)
-                _Slider(context, stampList, stampCheckString),
+                _Slider(context, cardList[i], stampCheckString, i + 1)
             ])),
-        /*
-        Container(
-          height: 5,
-          child: CirclePageIndicator(
-            itemCount: cardnum,
-          ),
-        ),*/
-        _TotalPoint()
+        _TotalPoint(stampList.length)
       ]),
     );
   }
 
-  Widget _Slider(
-      BuildContext context, List<Stamp> stampList, String stampCheckString) {
+  Widget _Slider(BuildContext context, List<Stamp> stampList,
+      String stampCheckString, int number) {
     return Container(
         color: HexColor('00C2FF'),
         margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        child: _Stampcard(context, stampList, stampCheckString));
+        child: _Stampcard(context, stampList, stampCheckString, number));
   }
 
-  Widget _Stampcard(
-      BuildContext context, List<Stamp> stampList, String stampCheckString) {
+  Widget _Stampcard(BuildContext context, List<Stamp> stampList,
+      String stampCheckString, int number) {
     return Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -412,7 +443,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                 padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                 color: HexColor('FFFFFF'),
                 child: Text(
-                  '1',
+                  number.toString(),
                   style: TextStyle(
                     fontSize: 40.0,
                     fontStyle: FontStyle.normal,
@@ -499,7 +530,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         ]);
   }
 
-  Widget _TotalPoint() {
+  Widget _TotalPoint(int point) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
           margin: EdgeInsets.fromLTRB(10, 20, 0, 20),
@@ -508,7 +539,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
             border: Border.all(color: HexColor('00C2FF'), width: 4),
           ),
           child: Text(
-            '合計スタンプ数:  9',
+            '合計スタンプ数: $point',
             style: TextStyle(
               fontSize: 20,
               fontStyle: FontStyle.normal,
