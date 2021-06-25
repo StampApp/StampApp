@@ -15,6 +15,8 @@ import '../Widget/stampMaxDialog.dart';
 import '../checkIsMaxStamps.dart';
 import 'package:flutter/material.dart';
 
+import 'package:page_indicator/page_indicator.dart';
+
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class HomeSamplePage extends StatefulWidget {
@@ -51,7 +53,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   List<String> cardnumber = [];
 
   List<List<Stamp>> cardList = [];
-  //var cardList = <List<List<Stamp>>>[[]];
+
   //pageviewで使用
   PageController controller;
   PageController _pageController;
@@ -409,15 +411,34 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         onPressed: _qrScan,
         backgroundColor: HexColor('00C2FF'),
       ),
-      body: Column(children: <Widget>[
-        Expanded(
-            flex: 1,
-            child: PageView(controller: controller, children: <Widget>[
-              for (int i = 0; i < cardnum; i++)
-                _Slider(context, cardList[i], stampCheckString, i + 1)
-            ])),
-        _TotalPoint(stampList.length)
-      ]),
+
+      body: new Container(
+          child: Container(
+              child: PageIndicatorContainer(
+                  child: PageView(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: PageView(
+                          controller: controller,
+                          children: <Widget>[
+                            for (int i = 0; i < cardnum; i++)
+                              _Slider(context, cardList[i], stampCheckString,
+                                  i + 1),
+                          ],
+                        ),
+                      ),
+                    ],
+                    controller: controller,
+                  ),
+                  align: IndicatorAlign.bottom,
+                  length: cardnum,
+                  indicatorSpace: 20.0,
+                  padding: const EdgeInsets.all(10),
+                  indicatorColor: Colors.white,
+                  indicatorSelectorColor: Colors.grey,
+                  shape: IndicatorShape.circle(size: 15)))),
+      //_TotalPoint(),
     );
   }
 
@@ -433,6 +454,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Widget _Stampcard(BuildContext context, List<Stamp> stampList,
       String stampCheckString, int number) {
     return Column(
+
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Row(
@@ -485,9 +507,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                 : (context),
                             child: Container(
                               //padding: const EdgeInsets.all(11.0),
-                              width: MediaQuery.of(context).size.width / 3 - 40,
-                              height:
-                                  MediaQuery.of(context).size.width / 3 - 40,
+                              width: MediaQuery.of(context).size.width / 3 -
+                                  19 * 2,
+                              height: MediaQuery.of(context).size.width / 3 -
+                                  19 * 2,
                               // 円を生成
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
