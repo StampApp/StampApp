@@ -7,7 +7,6 @@ import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:stamp_app/Widget/qrScan.dart';
-import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:uuid/uuid.dart';
@@ -177,32 +176,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 /*
     await DbInterface.delete('Stamp', Stamp.database, 0);
     */
-  }
-
-  void _demoCRUD() async {
-    var memo = Memo(
-      id: uuid.v1(),
-      text: 'Flutterで遊ぶ',
-      priority: 1,
-    );
-
-    await DbInterface.insert('memo', Memo.database, memo);
-
-    print(await DbInterface.select('memo', Memo.database, memo.id));
-
-    memo = Memo(
-      id: uuid.v1(),
-      text: memo.text,
-      priority: memo.priority + 1,
-    );
-
-    await DbInterface.insert('memo', Memo.database, memo);
-
-    print(await DbInterface.select('memo', Memo.database, memo.id));
-
-    await DbInterface.delete('memo', Memo.database, memo.id);
-
-    print(await DbInterface.allSelect('memo', Memo.database));
   }
 
   Future<List<Stamp>> asyncGetStampList() async {
@@ -549,8 +522,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                     return childWidget;
                   }),
             ),
-            ElevatedButton(child: Text('DBサンプル'), onPressed: _demoCRUD),
-            ElevatedButton(child: Text('CRUDサンプル'), onPressed: _crudSample)
           ],
         ),
       ),
