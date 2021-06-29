@@ -415,7 +415,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Widget build(BuildContext context) {
     // Scaffoldは画面構成の基本Widget
     return Scaffold(
-      //resizeToAvoidBottomInset: false, 
       appBar: AppBar(
         //title: Text(widget.title),
         //ヘッダーのロゴ表示
