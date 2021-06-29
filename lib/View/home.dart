@@ -415,6 +415,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Widget build(BuildContext context) {
     // Scaffoldは画面構成の基本Widget
     return Scaffold(
+      //resizeToAvoidBottomInset: false, 
       appBar: AppBar(
         //title: Text(widget.title),
         //ヘッダーのロゴ表示
@@ -428,7 +429,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               fit: BoxFit.contain,
               height: 50,
             ),
-            Container(padding: EdgeInsets.only(left: 200))
+            Expanded(
+              child: Container(padding: EdgeInsets.only(left: 200))
+            ),
           ],
         ),
         actions: <Widget>[
@@ -454,7 +457,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         onPressed: _qrScan,
         backgroundColor: HexColor('00C2FF'),
       ),
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
