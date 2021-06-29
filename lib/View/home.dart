@@ -54,7 +54,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   List<List<Stamp>> cardList = [];
 
-  //pageviewで使用
+  //pageviewで使用する
   PageController controller;
   PageController _pageController;
   int _currentPage = 0;
