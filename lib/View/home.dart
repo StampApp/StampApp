@@ -296,7 +296,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   void initState() {
     //アプリ起動時に一度だけ実行、スタンプテーブルの個数を3の倍数にする
 
-    int stampListLen = stampList.length;
+    stampListLen = stampList.length;
 
     //GridViewのcrossAxisCountの値
     int crossAxisCount = 3;
