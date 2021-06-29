@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:barcode_scan/barcode_scan.dart';
@@ -352,7 +349,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   @override
   void initState() {
-    // super.initState();
+    super.initState();
     // var satamp1 = new Stamp(
     //   id: uuid.v1(),
     //   data: "ok",
