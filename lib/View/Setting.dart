@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Constants/version.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 
 class SettingPage extends StatefulWidget {
@@ -109,7 +110,7 @@ class _SettingPageState extends State<SettingPage> {
 Widget _version() {
   return GestureDetector(
     child: Text(
-      "0.1.0",
+      Version.value,
       style: TextStyle(
         color: Colors.grey,
         fontSize: 18.0,
