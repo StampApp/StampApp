@@ -25,15 +25,15 @@ String formatDateTimeToString(DateTime datetime, EnumDateType dateType) {
 DateTime formatStringToDateTime(String strDateTime, EnumDateType dateType) {
   switch (dateType) {
     case EnumDateType.date:
-      DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
+      DateFormat dateFormatter = DateFormat('yyyy-MM-dd');
       return dateFormatter.parseStrict(strDateTime);
       break;
     case EnumDateType.time:
-      DateFormat dateFormatter = DateFormat("HH:mm:ss");
+      DateFormat dateFormatter = DateFormat('HH:mm:ss');
       return dateFormatter.parseStrict(strDateTime);
       break;
     default:
-      DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
+      DateFormat dateFormatter = DateFormat('yyyy-MM-dd');
       return dateFormatter.parseStrict(strDateTime);
       break;
   }
