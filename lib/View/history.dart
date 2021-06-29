@@ -13,7 +13,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  List<DropdownMenuItem<int>> _items = List();
+  List<DropdownMenuItem<int>> _items = [];
   int _selectItem = 0;
   List<Stamp> stampList = [];
   int pastMonth = 3;
@@ -28,10 +28,8 @@ class _HistoryPageState extends State<HistoryPage> {
       return Stamp(
         id: maps[i]['id'],
         data: maps[i]['data'],
-        getDate:
-            dateFormatParse(maps[i]['getdate'], enumDateType.date.toString()),
-        getTime:
-            dateFormatParse(maps[i]['gettime'], enumDateType.time.toString()),
+        getDate: formatStringToDateTime(maps[i]['getdate'], EnumDateType.date),
+        getTime: formatStringToDateTime(maps[i]['gettime'], EnumDateType.time),
         deletedFlg: maps[i]['deletedflg'] == 0,
       );
     });
@@ -43,7 +41,7 @@ class _HistoryPageState extends State<HistoryPage> {
     stampList = await getStampList();
     for (int i = 0; i < stampList.length; i++) {
       var getDate =
-          toDateOrTime(stampList[i].getDate, enumDateType.date.toString());
+          formatDateTimeToString(stampList[i].getDate, EnumDateType.date);
       if (dateList.length == 0) {
         dateList.add(getDate);
         // datelistの最後尾と一致しない場合
@@ -135,18 +133,19 @@ class _HistoryPageState extends State<HistoryPage> {
                         _line(snapshot.data[i], stampList)
                     // データが存在しなかった場合
                     else
-                    Container(
-                      alignment: Alignment.center,
-                      height: displaySize.height *0.6,
-                      child: Text("利用履歴がありません" ,style: TextStyle(fontSize: 20.0)),
-                    )
+                      Container(
+                        alignment: Alignment.center,
+                        height: displaySize.height * 0.6,
+                        child: Text("利用履歴がありません",
+                            style: TextStyle(fontSize: 20.0)),
+                      )
                   ]);
                 } else {
                   return Container(
-                      alignment: Alignment.center,
-                      height: displaySize.height,
-                      child: Text("読み込み中" ,style: TextStyle(fontSize: 20.0)),
-                    );
+                    alignment: Alignment.center,
+                    height: displaySize.height,
+                    child: Text("読み込み中", style: TextStyle(fontSize: 20.0)),
+                  );
                 }
               },
             )));
@@ -167,8 +166,8 @@ Widget _line(String targetDate, List<Stamp> stampList) {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: stampList
                     .map((Stamp stamp) => Column(children: <Widget>[
-                          if (toDateOrTime(stamp.getDate,
-                                  enumDateType.date.toString()) ==
+                          if (formatDateTimeToString(
+                                  stamp.getDate, EnumDateType.date) ==
                               targetDate)
                             _row(stamp)
                         ]))
@@ -192,8 +191,8 @@ Widget _row(Stamp stamplist) {
                 //trueならスタンプ使用、それ以外ならスタンプゲットwidget呼び出し
                 (stamplist.deletedFlg) ? _usestamp() : _getstamp(),
                 Container(
-                    child: Text(toDateOrTime(
-                        stamplist.getTime, enumDateType.time.toString())))
+                    child: Text(formatDateTimeToString(
+                        stamplist.getTime, EnumDateType.time)))
               ])));
 }
 
