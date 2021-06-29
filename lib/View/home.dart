@@ -47,7 +47,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   int cardnum = 1;
 
   //スタンプ合計
-  int stampsum = 0;
+  int stampListLen = 0;
 
   //カード枚数格納配列
   List<String> cardnumber = [];
@@ -318,15 +318,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         Stamp sp = stampList[i];
         cardStamp.add(sp);
       }
+
       //一つのカードにStampが9個未満の場合
       if (cardStamp.length != 9) {
         Stamp lastStamp = cardStamp.last;
         String stampnumber = lastStamp.stampNum;
         int number = int.parse(stampnumber);
 
+        //一つのカードの中身を9個埋めるために空のStampデータ代入
         while (cardStamp.length < 9) {
           number++;
-          //一つのカードの中身を9個埋めるために空のStampデータ代入
           Stamp noStamp = new Stamp(
             id: uuid.v1(),
             data: "no",
@@ -359,23 +360,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           deletedAt: dateTime);
       stampList.add(newStamp);
     }
-
-    //Pageviewのため-------------------------------
-    super.initState();
-
-    controller = PageController();
-    _pageController = PageController();
-    _pageController.addListener(() {
-      final nextPage = _pageController.page.round();
-      if (_currentPage != nextPage) {
-        _currentPage = nextPage;
-      }
-    });
-    //-------------------------------------
   }
 
   //pageviewで使用
-
   void dispose() {
     controller.dispose();
     super.dispose();
@@ -385,67 +372,67 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Widget build(BuildContext context) {
     // Scaffoldは画面構成の基本Widget
     return Scaffold(
-      //resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: <Widget>[
-          // 設定ボタン
-          IconButton(
-            icon: Icon(Icons.settings, color: Colors.white, size: 38),
-            onPressed: _settingNavigate,
-          ),
-        ],
-        backgroundColor: HexColor('00C2FF'),
-      ),
-      // QRへ遷移
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text(
-          'QR',
-          style: TextStyle(
-            fontSize: 24.0,
-            fontStyle: FontStyle.normal,
-            letterSpacing: 4.0,
-          ),
+        //resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          title: Text(widget.title),
+          actions: <Widget>[
+            // 設定ボタン
+            IconButton(
+              icon: Icon(Icons.settings, color: Colors.white, size: 38),
+              onPressed: _settingNavigate,
+            ),
+          ],
+          backgroundColor: HexColor('00C2FF'),
         ),
-        icon: Icon(Icons.qr_code),
-        onPressed: _qrScan,
-        backgroundColor: HexColor('00C2FF'),
-      ),
-
-      body: new Container(
-          child: Container(
-              child: PageIndicatorContainer(
-                  child: PageView(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: PageView(
-                          controller: controller,
-                          children: <Widget>[
-                            for (int i = 0; i < cardnum; i++)
-                              _Slider(context, cardList[i], stampCheckString,
-                                  i + 1),
-                          ],
-                        ),
+        // QRへ遷移
+        floatingActionButton: FloatingActionButton.extended(
+          label: Text(
+            'QR',
+            style: TextStyle(
+              fontSize: 24.0,
+              fontStyle: FontStyle.normal,
+              letterSpacing: 4.0,
+            ),
+          ),
+          icon: Icon(Icons.qr_code),
+          onPressed: _qrScan,
+          backgroundColor: HexColor('00C2FF'),
+        ),
+        body: Column(children: [
+          Expanded(
+              child: Container(
+                  child: PageIndicatorContainer(
+                      child: PageView(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: PageView(
+                              controller: controller,
+                              children: <Widget>[
+                                for (int i = 0; i < cardnum; i++)
+                                  _Slider(context, cardList[i],
+                                      stampCheckString, i + 1),
+                              ],
+                            ),
+                          ),
+                        ],
+                        controller: controller,
                       ),
-                    ],
-                    controller: controller,
-                  ),
-                  align: IndicatorAlign.bottom,
-                  length: cardnum,
-                  indicatorSpace: 20.0,
-                  padding: const EdgeInsets.all(10),
-                  indicatorColor: Colors.white,
-                  indicatorSelectorColor: Colors.grey,
-                  shape: IndicatorShape.circle(size: 15)))),
-      //_TotalPoint(),
-    );
+                      align: IndicatorAlign.bottom,
+                      length: cardnum,
+                      indicatorSpace: 20.0,
+                      padding: const EdgeInsets.all(10),
+                      indicatorColor: Colors.grey,
+                      indicatorSelectorColor: Colors.black,
+                      shape: IndicatorShape.circle(size: 15)))),
+          _TotalPoint(stampListLen)
+        ]));
   }
 
   Widget _Slider(BuildContext context, List<Stamp> stampList,
       String stampCheckString, int number) {
     return Container(
-        color: HexColor('00C2FF'),
+        color: HexColor('00C2FF').withOpacity(0.6),
         margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: _Stampcard(context, stampList, stampCheckString, number));
@@ -514,8 +501,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                               // 円を生成
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border: Border.all(
-                                    color: HexColor("00FFFF"), width: 3),
+                                //border: Border.all(
+                                //  color: HexColor("00FFFF"), width: 3),
                                 color: HexColor('FFFFFF'),
                                 image: DecorationImage(
                                     fit: BoxFit.fill,
@@ -556,15 +543,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Widget _TotalPoint(int point) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
-          margin: EdgeInsets.fromLTRB(10, 20, 0, 20),
-          width: 250,
+          margin: EdgeInsets.fromLTRB(10, 10, 0, 10),
+          width: 190,
           decoration: BoxDecoration(
-            border: Border.all(color: HexColor('00C2FF'), width: 4),
+            border: Border.all(
+                color: HexColor('00C2FF').withOpacity(0.6), width: 3),
           ),
           child: Text(
             '合計スタンプ数: $point',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 17,
               fontStyle: FontStyle.normal,
               letterSpacing: 2.0,
             ),
