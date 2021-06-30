@@ -371,6 +371,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   @override
   Widget build(BuildContext context) {
     // Scaffoldは画面構成の基本Widget
+    final double deviceHeight = MediaQuery.of(context).size.height;
+    final double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
@@ -378,7 +380,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           actions: <Widget>[
             // 設定ボタン
             IconButton(
-              icon: Icon(Icons.settings, color: Colors.white, size: 38),
+              icon: Icon(Icons.settings,
+                  color: Colors.white, size: deviceWidth * 0.07),
               onPressed: _settingNavigate,
             ),
           ],
@@ -389,7 +392,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           label: Text(
             'QR',
             style: TextStyle(
-              fontSize: 24.0,
+              fontSize: deviceWidth * 0.06,
               fontStyle: FontStyle.normal,
               letterSpacing: 4.0,
             ),
@@ -411,7 +414,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                               children: <Widget>[
                                 for (int i = 0; i < cardnum; i++)
                                   _Slider(context, cardList[i],
-                                      stampCheckString, i + 1),
+                                      stampCheckString, i + 1, deviceWidth),
                               ],
                             ),
                           ),
@@ -425,23 +428,24 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                       indicatorColor: Colors.grey,
                       indicatorSelectorColor: Colors.black,
                       shape: IndicatorShape.circle(size: 15)))),
-          _TotalPoint(stampListLen)
+          _TotalPoint(stampListLen, deviceWidth, deviceHeight)
         ]));
   }
 
   Widget _Slider(BuildContext context, List<Stamp> stampList,
-      String stampCheckString, int number) {
+      String stampCheckString, int number, double deviceWidth) {
     return Container(
         color: HexColor('00C2FF').withOpacity(0.6),
-        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        margin: EdgeInsets.fromLTRB(
+            deviceWidth / 20, deviceWidth / 18, deviceWidth / 20, 0),
+        width: deviceWidth / 4 - 4 * 1,
+        height: deviceWidth / 4 - 4 * 1,
         child: _Stampcard(context, stampList, stampCheckString, number));
   }
 
   Widget _Stampcard(BuildContext context, List<Stamp> stampList,
       String stampCheckString, int number) {
     return Column(
-
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Row(
@@ -494,10 +498,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                 : (context),
                             child: Container(
                               //padding: const EdgeInsets.all(11.0),
-                              width: MediaQuery.of(context).size.width / 3 -
-                                  19 * 2,
-                              height: MediaQuery.of(context).size.width / 3 -
-                                  19 * 2,
+                              width:
+                                  MediaQuery.of(context).size.width / 4 - 4 * 1,
+                              height:
+                                  MediaQuery.of(context).size.width / 4 - 4 * 1,
                               // 円を生成
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
@@ -540,11 +544,12 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         ]);
   }
 
-  Widget _TotalPoint(int point) {
+  Widget _TotalPoint(int point, double deviceWidth, double deviceHeight) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
-          margin: EdgeInsets.fromLTRB(10, 10, 0, 10),
-          width: 190,
+          margin: EdgeInsets.fromLTRB(10, 0, 0, 10),
+          width: deviceWidth / 2 * 1,
+          height: deviceHeight / 16 * 1,
           decoration: BoxDecoration(
             border: Border.all(
                 color: HexColor('00C2FF').withOpacity(0.6), width: 3),
@@ -552,7 +557,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           child: Text(
             '合計スタンプ数: $point',
             style: TextStyle(
-              fontSize: 17,
+              fontSize: deviceHeight * 0.028,
               fontStyle: FontStyle.normal,
               letterSpacing: 2.0,
             ),
