@@ -436,15 +436,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       String stampCheckString, int number, double deviceWidth) {
     return Container(
         color: HexColor('00C2FF').withOpacity(0.6),
-        margin: EdgeInsets.fromLTRB(
-            deviceWidth / 20, deviceWidth / 18, deviceWidth / 20, 0),
+        margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 18,
+            deviceWidth / 20, deviceWidth / 10),
         width: deviceWidth / 4 - 4 * 1,
         height: deviceWidth / 4 - 4 * 1,
-        child: _Stampcard(context, stampList, stampCheckString, number));
+        child: _Stampcard(
+            context, stampList, stampCheckString, number, deviceWidth));
   }
 
   Widget _Stampcard(BuildContext context, List<Stamp> stampList,
-      String stampCheckString, int number) {
+      String stampCheckString, int number, double deviceWidth) {
     return Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -458,7 +459,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                 child: Text(
                   number.toString(),
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: deviceWidth * 0.1,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 4.0,
                   ),
@@ -467,7 +468,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               Text(
                 '枚目',
                 style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: deviceWidth * 0.06,
                   fontStyle: FontStyle.normal,
                   letterSpacing: 4.0,
                 ),
@@ -547,7 +548,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Widget _TotalPoint(int point, double deviceWidth, double deviceHeight) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
-          margin: EdgeInsets.fromLTRB(10, 0, 0, 10),
+          margin: EdgeInsets.fromLTRB(deviceWidth / 20, 0, 0, 10),
           width: deviceWidth / 2 * 1,
           height: deviceHeight / 16 * 1,
           decoration: BoxDecoration(
