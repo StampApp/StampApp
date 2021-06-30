@@ -486,9 +486,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                               image: stamp.data ==
                                                       stampCheckString
                                                   ? AssetImage(
-                                                      'assets/images/stamp/flower-4.png')
+                                                      stamp.stampNum.toString())
                                                   : AssetImage(
-                                                      'assets/images/stamp/none.png')),
+                                                      './assets/images/stamp/none.png')),
                                           // border: Border.all(
                                           //     color: HexColor('00C2FF'), width: 3),
                                         ),
