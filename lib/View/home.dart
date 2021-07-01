@@ -446,9 +446,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   Widget _Stampcard(BuildContext context, List<Stamp> stampList,
       String stampCheckString, int number, double deviceWidth) {
-    return Column(
-        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
+    return SingleChildScrollView(
+        child: Column(
+            //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -542,7 +543,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                   .toList(),
             ),
           ),
-        ]);
+        ]));
   }
 
   Widget _TotalPoint(int point, double deviceWidth, double deviceHeight) {
