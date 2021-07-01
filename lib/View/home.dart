@@ -548,7 +548,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Widget _TotalPoint(int point, double deviceWidth, double deviceHeight) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
-          margin: EdgeInsets.fromLTRB(deviceWidth / 20, 0, 0, 10),
+          margin:
+              EdgeInsets.fromLTRB(deviceWidth / 20, deviceHeight / 85, 0, 25),
           width: deviceWidth / 2 * 1,
           height: deviceHeight / 16 * 1,
           decoration: BoxDecoration(
