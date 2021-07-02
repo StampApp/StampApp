@@ -9,7 +9,7 @@ import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
-import '../checkIsMaxStamps.dart';
+import '../Util/checkIsMaxStamps.dart';
 import '../Util/enumCheckString.dart';
 
 class HomeSamplePage extends StatefulWidget {
