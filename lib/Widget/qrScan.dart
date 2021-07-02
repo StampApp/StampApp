@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
-import 'package:stamp_app/Util/Validation.dart';
+import 'package:stamp_app/Util/validation.dart';
 
 // 読み込み結果を表示するダイアログ
 Future<ScanResult> qrScan() async {
