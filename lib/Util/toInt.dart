@@ -5,3 +5,11 @@ int parseBooleanToInt(bool deletedFlg) {
   }
   return ret;
 }
+
+bool parseIntToBoolean(int deletedFlg) {
+  var ret = true;
+  if (deletedFlg != 0) {
+    ret = false;
+  }
+  return ret;
+}
