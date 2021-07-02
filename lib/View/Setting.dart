@@ -54,13 +54,13 @@ class _SettingPageState extends State<SettingPage> {
         ),
 
         body: ListView(children: [
-          _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),
-          _menuItem("使い方", Icon(Icons.menu_book), _instructionsNavigate),
+          _menuItem("利用履歴", Icon(Icons.update), _historyNavigate),
+          _menuItem("使い方", Icon(Icons.phone_android), _instructionsNavigate),
           _menuItem(
-              "利用規約", Icon(Icons.verified_user_outlined), _termsNavigate),
+              "利用規約", Icon(Icons.phonelink_setup_rounded), _termsNavigate),
           _menuItem(
-              "プライバシーポリシー", Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
-          _menuItem("Version", Icon(Icons.system_update_alt_rounded)),
+              "プライバシーポリシー", Icon(Icons.visibility), _privacyPolicyNavigate),
+          _menuItem("Version", Icon(Icons.visibility)),
         ]),
       ),
     );
