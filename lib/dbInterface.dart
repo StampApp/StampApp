@@ -22,19 +22,42 @@ class DbInterface {
   @param pastMonths 何ヶ月かを指定
   */
   //($_pastMonths)ヶ月前に取得したデータを日付時刻を降順で全件取得
-  static Future<List> selectDateDesc(String _tableName, var database, DateTime nowDate, int pastMonths) async {
+  static Future<List> selectDateDesc(
+      String _tableName, var database, DateTime nowDate, int pastMonths) async {
     final Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.rawQuery(
-      "SELECT * " + 
-      "FROM $_tableName " +
-      "WHERE datetime('$nowDate', '-$pastMonths months') " +
-      "< getdate " +
-      "order by getdate desc, gettime desc"
-      );
+    final List<Map<String, dynamic>> maps = await db.rawQuery("SELECT * " +
+        "FROM $_tableName " +
+        "WHERE datetime('$nowDate', '-$pastMonths months') " +
+        "< getdate " +
+        "order by getdate desc, gettime desc");
     return maps;
   }
 
-  //全件取得
+  // deleteflgがfalseのスタンプ数を取得する
+  static Future<int> selectStampCount(String _tableName, var database) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+        "SELECT count(*) as count " + 
+        "FROM $_tableName " + 
+        "WHERE deletedflg = 1");
+   int count = maps[0]['count'];
+    return count;
+  }
+
+  // 
+  static Future<List> selectDeleteFlg(String _tableName, var database) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      '$_tableName',
+      where: 'deletedflg = ?',
+      limit: 9, 
+      orderBy: 'getdate asc, gettime asc', 
+      whereArgs: [1]
+    );
+    return maps;
+  }
+
+  // 全件取得
   static Future<List> allSelect(String _tableName, var database) async {
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query(_tableName);
