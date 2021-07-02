@@ -72,6 +72,7 @@ class _IntroductionState extends State<Introduction> {
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
       curve: Curves.easeOutQuint,
+      //空白をデバイスごとに変更
       margin: EdgeInsets.only(
           top: deviceHeight * 0.05,
           bottom: deviceHeight * 0.05,
@@ -135,6 +136,7 @@ class _IntroductionState extends State<Introduction> {
                 child: Text(
                   _textList[_currentPageNotifier.value],
                   style: TextStyle(
+                    //横長のデバイス上でTextがつぶれないよう
                     fontSize: deviceHeight * 0.022,
                     fontWeight: FontWeight.bold,
                   ),
