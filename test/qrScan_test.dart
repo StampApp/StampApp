@@ -3,26 +3,26 @@ import 'package:stamp_app/Util/enumCheckString.dart';
 import 'package:stamp_app/Util/validation.dart';
 
 void main() {
-  group('qr content validation test', () {
+  group('QRコードのContentのValidation Test: ', () {
     final String stampCheckString = CheckString.ok.checkStringValue;
     //QRの日付が今の日付より前
-    test('dateCheck validation true test', () {
+    test('QRの日付が今の日付より前 -> true', () {
       expect(Validation.dateCheck('2021/06/11 12:00:00'), true);
     });
     // QRの日付が今の日付より後
-    test('dateCheck validation date false test', () {
-      expect(Validation.dateCheck('2021/07/02 12:00:00'), false);
+    test('QRの日付が今の日付より後 -> false', () {
+      expect(Validation.dateCheck('2022/07/02 12:00:00'), false);
     });
     //checkStringValueの内容が含まれる
-    test('strCheck validation true test', () {
+    test('checkStringValueの内容[$stampCheckString]が含まれる -> true', () {
       expect(Validation.strCheck(stampCheckString), true);
     });
     // httpが含まれる
-    test('strCheck validation http test', () {
+    test('httpという文字が含まれる -> false', () {
       expect(Validation.strCheck('http' + stampCheckString), false);
     });
     // 記号が含まれる
-    test('strCheck validation symbol test', () {
+    test('記号が含まれる -> test', () {
       expect(Validation.strCheck(stampCheckString + '()#%#'), false);
     });
   });
