@@ -44,7 +44,7 @@ class DbInterface {
     return count;
   }
 
-  // 
+  // deleteFlgが1のスタンプ数を取得する
   static Future<List> selectDeleteFlg(String _tableName, var database) async {
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -61,7 +61,6 @@ class DbInterface {
   static Future<List> allSelect(String _tableName, var database) async {
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query(_tableName);
-    // List.generate(maps.length, (i) => {print(maps[i])});
     return maps;
   }
 

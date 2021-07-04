@@ -45,7 +45,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             TextButton(
               child: Text("OK"),
-              onPressed: () => _useStamp(context),
+              onPressed: () => {Navigator.pop(context), _useStampDialog()},
             ),
           ],
         );
@@ -53,13 +53,11 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Future<dynamic> _useStamp(context) async {
-    // deletedFlgがfalseのスタンプ数を取得
-    int count = await DbInterface.selectStampCount('Stamp', Stamp.database);
-
+  // スタンプを使用した結果を表示
+  Future<dynamic> _useStampDialog() async {
+    Map res = await _useStamp();
     // スタンプが足りてない場合アラートを出して終了
-    if (count < 9) {
-      Navigator.pop(context);
+    if (!res['canUseStamp']) {
       return showDialog(
           context: context,
           builder: (_) {
@@ -76,36 +74,8 @@ class _SettingPageState extends State<SettingPage> {
             );
           });
     }
-    // deletedFlgがfalseのスタンプを取得
-    List<Map<String, dynamic>> maps =
-        await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
 
-    // 更新レコードを作成
-    DateTime nowDate = DateTime.now();
-    List<Stamp> stampList = List.generate(maps.length, (i) {
-      return Stamp(
-        id: maps[i]['id'],
-        data: maps[i]['data'],
-        getDate:
-            dateFormatParse(maps[i]['getdate'], enumDateType.date.toString()),
-        getTime:
-            dateFormatParse(maps[i]['gettime'], enumDateType.time.toString()),
-        stampNum: maps[i]['stampnum'],
-        deletedFlg: true,
-        createdAt: nowDate,
-        deletedAt: DateTime.parse(maps[i]['deletedat']),
-      );
-    });
-
-    String idsText = '';
-    // スタンプ更新
-    for (var element in stampList) {
-      await DbInterface.update('Stamp', Stamp.database, element);
-      String id = element.id;
-      idsText += '$id \n';
-    }
-
-    Navigator.pop(context);
+    String idsText = res['idsText'];
     return showDialog(
       context: context,
       builder: (_) {
@@ -202,4 +172,42 @@ Widget _version() {
       ),
     ),
   );
+}
+
+// スタンプ数を取得し規定数あった場合使用する
+Future<Map> _useStamp() async {
+  // deletedFlgがfalseのスタンプ数を取得
+  int count = await DbInterface.selectStampCount('Stamp', Stamp.database);
+
+  if (count < 9) return {'idsText': null, 'canUseStamp': false};
+  // deletedFlgがfalseのスタンプを取得
+  List<Map<String, dynamic>> maps =
+      await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
+
+  // 更新レコードを作成
+  DateTime nowDate = DateTime.now();
+  List<Stamp> stampList = List.generate(maps.length, (i) {
+    return Stamp(
+      id: maps[i]['id'],
+      data: maps[i]['data'],
+      getDate:
+          dateFormatParse(maps[i]['getdate'], enumDateType.date.toString()),
+      getTime:
+          dateFormatParse(maps[i]['gettime'], enumDateType.time.toString()),
+      stampNum: maps[i]['stampnum'],
+      deletedFlg: true,
+      createdAt: nowDate,
+      deletedAt: DateTime.parse(maps[i]['deletedat']),
+    );
+  });
+
+  String idsText = '';
+  // スタンプ更新
+  for (var element in stampList) {
+    await DbInterface.update('Stamp', Stamp.database, element);
+    String id = element.id;
+    idsText += '$id \n';
+  }
+
+  return {'idsText': idsText, 'canUseStamp': true};
 }
