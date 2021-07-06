@@ -4,6 +4,7 @@ import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/enumDateType.dart';
+import 'package:stamp_app/Util/enumStampCount.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({Key key, this.title}) : super(key: key);
@@ -36,7 +37,7 @@ class _SettingPageState extends State<SettingPage> {
       builder: (_) {
         return AlertDialog(
           title: Text("確認"),
-          content: Text("本当に使用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
+          content: Text("本当に利用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
           actions: <Widget>[
             // ボタン領域
             TextButton(
@@ -62,7 +63,7 @@ class _SettingPageState extends State<SettingPage> {
           context: context,
           builder: (_) {
             return AlertDialog(
-              title: Text("完了"),
+              title: Text("スタンプ利用"),
               content: Text("スタンプが溜まっていません"),
               actions: <Widget>[
                 // ボタン領域
@@ -80,7 +81,7 @@ class _SettingPageState extends State<SettingPage> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text("完了"),
+          title: Text("スタンプ利用"),
           content: Text("スタンプを利用しました\n\n$idsText"),
           actions: <Widget>[
             // ボタン領域
@@ -178,8 +179,10 @@ Widget _version() {
 Future<Map> _useStamp() async {
   // deletedFlgがfalseのスタンプ数を取得
   int count = await DbInterface.selectStampCount('Stamp', Stamp.database);
+  final int stampCheckString = StampCount.count.stampCount;
 
-  if (count < 9) return {'idsText': null, 'canUseStamp': false};
+  if (count < stampCheckString)
+    return {'idsText': null, 'canUseStamp': false};
   // deletedFlgがfalseのスタンプを取得
   List<Map<String, dynamic>> maps =
       await DbInterface.selectDeleteFlg('Stamp', Stamp.database);

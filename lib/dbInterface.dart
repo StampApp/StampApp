@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:sqflite/sqflite.dart';
+import 'package:stamp_app/Util/enumStampCount.dart';
 
 class DbInterface {
   /*
@@ -35,25 +36,26 @@ class DbInterface {
 
   // deleteflgがfalseのスタンプ数を取得する
   static Future<int> selectStampCount(String _tableName, var database) async {
+    final hoge = await getDatabasesPath();
+    print(hoge);
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.rawQuery(
-        "SELECT count(*) as count " + 
-        "FROM $_tableName " + 
-        "WHERE deletedflg = 1");
-   int count = maps[0]['count'];
+        "SELECT count(*) as count " +
+            "FROM $_tableName " +
+            "WHERE deletedflg = 1");
+    int count = maps[0]['count'];
     return count;
   }
 
   // deleteFlgが1のスタンプ数を取得する
   static Future<List> selectDeleteFlg(String _tableName, var database) async {
+    final int stampCheckString = StampCount.count.stampCount;
     final Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      '$_tableName',
-      where: 'deletedflg = ?',
-      limit: 9, 
-      orderBy: 'getdate asc, gettime asc', 
-      whereArgs: [1]
-    );
+    final List<Map<String, dynamic>> maps = await db.query('$_tableName',
+        where: 'deletedflg = ?',
+        limit: stampCheckString,
+        orderBy: 'getdate asc, gettime asc',
+        whereArgs: [1]);
     return maps;
   }
 
