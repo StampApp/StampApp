@@ -398,7 +398,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               fit: BoxFit.contain,
               height: 50,
             ),
-            Container(padding: EdgeInsets.only(left: 200))
+            //画面下ににスタンプカードが被らないように
+            Expanded(child: Container(padding: EdgeInsets.only(left: 200))),
           ],
         ),
         actions: <Widget>[
@@ -424,7 +425,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         onPressed: _qrScan,
         backgroundColor: HexColor('00C2FF'),
       ),
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
