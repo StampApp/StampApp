@@ -67,13 +67,20 @@ class _IntroductionState extends State<Introduction> {
   // アニメーションカード生成
   AnimatedContainer _createCardAnimate(String imagePath, bool active) {
     // アニメーション設定
+    //デバイスのサイズを変数deviceHeightへ
+    final double deviceHeight = MediaQuery.of(context).size.height;
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
       curve: Curves.easeOutQuint,
-      margin: EdgeInsets.only(top: 20, bottom: 14.0, right: 30, left: 30),
+      //空白をデバイスごとに変更
+      margin: EdgeInsets.only(
+          top: deviceHeight * 0.05,
+          bottom: deviceHeight * 0.05,
+          right: deviceHeight * 0.01,
+          left: deviceHeight * 0.01),
       decoration: BoxDecoration(
         image: DecorationImage(
-          fit: BoxFit.fitWidth,
+          fit: BoxFit.fitHeight,
           image: Image.asset(imagePath).image,
         ),
       ),
@@ -82,6 +89,8 @@ class _IntroductionState extends State<Introduction> {
 
   @override
   Widget build(BuildContext context) {
+    //デバイスのサイズを変数deviceHeightへ
+    final double deviceHeight = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Column(
         children: <Widget>[
@@ -111,10 +120,10 @@ class _IntroductionState extends State<Introduction> {
           ),
           // 説明エリア
           Container(
-            height: 60.0,
+            height: deviceHeight * 0.1,
             padding: EdgeInsets.all(7.0),
             child: Container(
-              width: double.infinity,
+              width: deviceHeight * 0.4, //double.infinity,
               padding: EdgeInsets.all(7.0),
               decoration: BoxDecoration(
                 border: Border.all(
@@ -127,7 +136,8 @@ class _IntroductionState extends State<Introduction> {
                 child: Text(
                   _textList[_currentPageNotifier.value],
                   style: TextStyle(
-                    fontSize: 15.0,
+                    //横長のデバイス上でTextがつぶれないよう
+                    fontSize: deviceHeight * 0.022,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
