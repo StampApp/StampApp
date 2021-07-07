@@ -17,6 +17,7 @@ class Stamp {
   final bool deletedFlg; // 使用済みフラグ
   final DateTime createdAt; // スタンプが押された時間
   final DateTime deletedAt; // 削除日時
+
   Stamp(
       {this.id,
       this.data,
@@ -26,12 +27,13 @@ class Stamp {
       this.deletedFlg,
       this.createdAt,
       this.deletedAt});
+
   // StampからMap型に変換
   // カラム名に対応する必要あり
   Map<String, dynamic> toMap() {
-    String toDate = toDateOrTime(getDate, enumDateType.date.toString());
-    String toTime = toDateOrTime(getTime, enumDateType.time.toString());
-    int deleted = toInt(deletedFlg);
+    String toDate = formatDateTimeToString(getDate, EnumDateType.date);
+    String toTime = formatDateTimeToString(getTime, EnumDateType.time);
+    int deleted = parseBooleanToInt(deletedFlg);
     return {
       'id': id,
       'data': data,

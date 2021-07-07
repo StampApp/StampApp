@@ -1,1 +1,1 @@
-enum enumDateType { date, time }
+enum EnumDateType { date, time }

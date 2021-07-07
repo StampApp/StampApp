@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import 'package:stamp_app/Widget/HexColor.dart';
 
 class InstructionsPage extends StatefulWidget {
   InstructionsPage({Key key, this.title}) : super(key: key);
@@ -137,17 +138,4 @@ class _IntroductionState extends State<Introduction> {
       ),
     );
   }
-}
-
-//色をカラーコードで指定するためのクラス
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
