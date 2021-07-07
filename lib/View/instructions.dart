@@ -12,18 +12,16 @@ class InstructionsPage extends StatefulWidget {
 class _InstructionsPageState extends State<InstructionsPage> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          backgroundColor: HexColor('00C2FF'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        body: Introduction(),
+        backgroundColor: HexColor('00C2FF'),
       ),
+      body: Introduction(),
     );
   }
 }
