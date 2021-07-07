@@ -16,7 +16,12 @@ class _TermsPageState extends State<TermsPage> {
         backgroundColor: HexColor('00C2FF'),
       ),
       body: ListView(
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 20,
+          right: 20,
+          bottom: 50,
+        ),
         children: <Widget>[
           SizedBox(height: 25),
 
