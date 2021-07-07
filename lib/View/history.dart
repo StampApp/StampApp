@@ -88,8 +88,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     final Size displaySize = MediaQuery.of(context).size;
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
               title: Text(widget.title),
               leading: new IconButton(
@@ -149,7 +148,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   );
                 }
               },
-            )));
+            ));
   }
 }
 
