@@ -4,12 +4,14 @@
 * ページを追加する場合はimportしてroutesの中でルーティングパスとWidgetを定義する
 */
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'View/home.dart';
 import 'View/terms.dart';
 import 'View/Setting.dart';
 import 'View/privacyPolicy.dart';
 import 'View/history.dart';
 import 'View/instructions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -37,6 +39,17 @@ class MyApp extends StatelessWidget {
         '/privacyPolicy': (BuildContext context) =>
             PrivacyPolicyPage(title: 'プライバシーポリシー'),
       },
+      localizationsDelegates: [
+        // localizations delegateを追加
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', ''), // 英語
+        const Locale('ja', ''), // 日本語
+      ],
     );
   }
 }

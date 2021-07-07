@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/Constants/version.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({Key key, this.title}) : super(key: key);
@@ -32,7 +33,9 @@ class _SettingPageState extends State<SettingPage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(
+            AppLocalizations.of(context).settings,
+          ),
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),
@@ -54,13 +57,16 @@ class _SettingPageState extends State<SettingPage> {
         ),
 
         body: ListView(children: [
-          _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),
-          _menuItem("使い方", Icon(Icons.menu_book), _instructionsNavigate),
-          _menuItem(
-              "利用規約", Icon(Icons.verified_user_outlined), _termsNavigate),
-          _menuItem(
-              "プライバシーポリシー", Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
-          _menuItem("Version", Icon(Icons.system_update_alt_rounded)),
+          _menuItem(AppLocalizations.of(context).usageHistory,
+              Icon(Icons.format_list_bulleted), _historyNavigate),
+          _menuItem(AppLocalizations.of(context).usage, Icon(Icons.menu_book),
+              _instructionsNavigate),
+          _menuItem(AppLocalizations.of(context).termsOfUse,
+              Icon(Icons.verified_user_outlined), _termsNavigate),
+          _menuItem(AppLocalizations.of(context).privacyPolicy,
+              Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
+          _menuItem(AppLocalizations.of(context).version,
+              Icon(Icons.system_update_alt_rounded)),
         ]),
       ),
     );
