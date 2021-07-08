@@ -14,9 +14,7 @@ import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../checkIsMaxStamps.dart';
 import 'package:flutter/material.dart';
-
 import 'package:page_indicator/page_indicator.dart';
-
 import 'package:page_view_indicators/circle_page_indicator.dart';
 import '../Util/enumCheckString.dart';
 
