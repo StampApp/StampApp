@@ -202,6 +202,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   Future<List<Stamp>> asyncGetStampList() async {
     //初期データなので後で消す
+    /*
     var satamp1 = new Stamp(
       id: uuid.v1(),
       data: "ok",
@@ -222,11 +223,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       deletedFlg: false,
       createdAt: dateTime,
       deletedAt: dateTime,
-    );
+    );*/
 
     await DbInterface.allDelete("Stamp", Stamp.database);
-    await DbInterface.insert('Stamp', Stamp.database, satamp1);
-    await DbInterface.insert('Stamp', Stamp.database, satamp2);
+    //await DbInterface.insert('Stamp', Stamp.database, satamp1);
+    //await DbInterface.insert('Stamp', Stamp.database, satamp2);
 
     List<Map<String, dynamic>> maps =
         await DbInterface.allSelect('Stamp', Stamp.database);
@@ -243,49 +244,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         deletedAt: dateTime,
       );
     });
-
-    int stampListLen = stampList.length;
-
-    //カード枚数計算
-    if (stampListLen != 0) {
-      cardnum = (stampListLen / 9).ceil();
-    }
-/*
-    int num = 0;
-
-    for (int j = 0; j < cardnum; j++) {
-      List<Stamp> cardStamp = [];
-      for (int i = num; i < num + 9 && i != stampListLen; i++) {
-        Stamp sp = stampList[i];
-        cardStamp.add(sp);
-      }
-
-      //一つのカードにStampが9個未満の場合
-      if (cardStamp.length != 9) {
-        int number = stampListLen;
-
-        //一つのカードの中身を9個埋めるために空のStampデータ代入
-        while (cardStamp.length < 9) {
-          number++;
-          Stamp noStamp = new Stamp(
-            id: uuid.v1(),
-            data: "",
-            getDate: dateTime,
-            getTime: dateTime,
-            stampNum: number.toString(),
-            deletedFlg: true,
-            createdAt: dateTime,
-            deletedAt: dateTime,
-          );
-          cardStamp.add(noStamp);
-        }
-      }
-
-      cardnumber.add(j.toString());
-      cardList.add(cardStamp);
-      print(cardList.length);
-      num = num + 9;
-    }*/
 
     //GridViewのcrossAxisCountの値
     int crossAxisCount = 3;
@@ -320,7 +278,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
       if (result.format.name == "qr" &&
           resultJson["data"] == stampCheckString) {
-        int maxStamp = 0; //上限無しの場合0を指定
+        int maxStamp = 9; //上限無しの場合0を指定
         int stampListLen = stampList.length;
         int crossAxisCount = 3;
         int successStampLen = stampList
@@ -386,6 +344,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       String text = '不正なQRコードです\n${result.rawContent}';
       qrAlertDialog(context, title, text);
     }
+
+    List<dynamic> countstamp =
+        await DbInterface.allSelect('Stamp', Stamp.database);
+    stampListLen = countstamp.length;
   }
 
   @override
@@ -393,73 +355,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     super.initState();
 
     _getStamp = asyncGetStampList();
-    //_TestStamp = asyncGetStampList();
-
-    stampListLen = stampList.length;
-
-    /*
-    //GridViewのcrossAxisCountの値
-    int crossAxisCount = 3;
-    int listRow = 3;
-    //int listRow = stampListLen ~/ crossAxisCount + 1;
-    //crossAxisCount < listRow ? null : listRow = 3;
-
-    //スタンプが1個以上あるなら必要なカードを求める
-    if (stampListLen != 0) {
-      cardnum = (stampListLen / 9).ceil();
-    }
-
-    //StampListからStampを9個ずつ配列に格納する
-    int num = 0;
-
-    for (int j = 0; j < cardnum; j++) {
-      List<Stamp> cardStamp = [];
-      for (int i = num; i < num + 9 && i != stampListLen; i++) {
-        Stamp sp = stampList[i];
-        cardStamp.add(sp);
-      }
-
-      //一つのカードにStampが9個未満の場合
-      if (cardStamp.length != 9) {
-        Stamp lastStamp = cardStamp.last;
-        String stampnumber = lastStamp.stampNum;
-        int number = int.parse(stampnumber);
-
-        //一つのカードの中身を9個埋めるために空のStampデータ代入
-        while (cardStamp.length < 9) {
-          number++;
-          Stamp noStamp = new Stamp(
-            id: uuid.v1(),
-            data: "no",
-            getDate: dateTime,
-            getTime: dateTime,
-            stampNum: number.toString(),
-            deletedFlg: true,
-            createdAt: dateTime,
-            deletedAt: dateTime,
-          );
-          cardStamp.add(noStamp);
-        }
-      }
-
-      cardnumber.add(j.toString());
-      cardList.add(cardStamp);
-
-      num = num + 9;
-    }
-
-    for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
-      Stamp newStamp = new Stamp(
-          id: uuid.v1(),
-          data: "",
-          getDate: dateTime,
-          getTime: dateTime,
-          stampNum: (i).toString(),
-          deletedFlg: true,
-          createdAt: dateTime,
-          deletedAt: dateTime);
-      stampList.add(newStamp);
-    }*/
   }
 
   //pageviewで使用
@@ -485,7 +380,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                 fit: BoxFit.contain,
                 height: 50,
               ),
-              Container(padding: EdgeInsets.only(left: 200))
+              Container(padding: EdgeInsets.only(left: 150))
             ],
           ),
           actions: <Widget>[
@@ -513,30 +408,22 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         body: Column(children: [
           Expanded(
               child: Container(
-                  child: PageIndicatorContainer(
-                      child: PageView(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: PageView(
-                              controller: controller,
-                              children: <Widget>[
-                                for (int i = 0; i < cardnum; i++)
-                                  _Slider(context, stampCheckString, i + 1,
-                                      deviceWidth),
-                              ],
-                            ),
-                          ),
-                        ],
-                        controller: controller,
-                      ),
-                      align: IndicatorAlign.bottom,
-                      length: cardnum,
-                      indicatorSpace: 20.0,
-                      padding: const EdgeInsets.all(10),
-                      indicatorColor: Colors.grey,
-                      indicatorSelectorColor: Colors.black,
-                      shape: IndicatorShape.circle(size: 15)))),
+            child: PageView(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: PageView(
+                    controller: controller,
+                    children: <Widget>[
+                      for (int i = 0; i < cardnum; i++)
+                        _Slider(context, stampCheckString, i + 1, deviceWidth),
+                    ],
+                  ),
+                ),
+              ],
+              controller: controller,
+            ),
+          )),
           _TotalPoint(stampListLen, deviceWidth, deviceHeight)
         ]));
   }
@@ -545,8 +432,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       double deviceWidth) {
     return Container(
         color: HexColor('00C2FF').withOpacity(0.6),
-        margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 18,
-            deviceWidth / 20, deviceWidth / 10),
+        margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 7,
+            deviceWidth / 20, deviceWidth / 7),
         width: deviceWidth / 4 - 4 * 1,
         height: deviceWidth / 4 - 4 * 1,
         child: _Stampcard(context, stampCheckString, number, deviceWidth));
@@ -558,36 +445,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       child: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                color: HexColor('FFFFFF'),
-                child: Text(
-                  number.toString(),
-                  style: TextStyle(
-                    fontSize: deviceWidth * 0.1,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 4.0,
-                  ),
-                ),
-              ),
-              Text(
-                '枚目',
-                style: TextStyle(
-                  fontSize: deviceWidth * 0.06,
-                  fontStyle: FontStyle.normal,
-                  letterSpacing: 4.0,
-                ),
-              ),
-            ],
-          ),
-          Divider(
-            thickness: 3,
-            color: Colors.black,
-          ),
           SizedBox(
             height: MediaQuery.of(context).size.width,
             child: FutureBuilder(
@@ -601,7 +458,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                       crossAxisCount: 3,
                       physics: ClampingScrollPhysics(),
                       scrollDirection: Axis.vertical,
-                      padding: const EdgeInsets.all(10),
+                      padding: EdgeInsets.fromLTRB(
+                          10, deviceWidth / 7, 10, deviceWidth / 7),
                       // スタンプをListの数だけ生成する
                       children: stampList
                           .map(
