@@ -1,23 +1,22 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:page_indicator/page_indicator.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:stamp_app/Widget/qrScan.dart';
-import 'package:stamp_app/models/memo.dart';
 import 'package:stamp_app/dbInterface.dart';
+import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../checkIsMaxStamps.dart';
 import 'package:flutter/material.dart';
-
 import 'package:page_indicator/page_indicator.dart';
-
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import '../Util/enumCheckString.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
@@ -26,18 +25,15 @@ class HomeSamplePage extends StatefulWidget {
   _HomeSamplePageState createState() => _HomeSamplePageState();
 }
 
-// カラーコードをHexColorでできるように
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+/*
+class Stamp {
+  String id;
+  String data;
+  num stampNum;
+  String createAt;
+  Stamp(this.id, this.data, this.stampNum, this.createAt);
 }
+*/
 
 class _HomeSamplePageState extends State<HomeSamplePage> {
   static final uuid = Uuid();
@@ -54,125 +50,17 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   List<List<Stamp>> cardList = [];
 
-  //pageviewで使用
+  //pageviewで使用する
   PageController controller;
   PageController _pageController;
   int _currentPage = 0;
 
-  final List<Stamp> stampList = [
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '1',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '2',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '3',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '4',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '5',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '6',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '7',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '8',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '9',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '10',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    ),
-    new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '11',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    )
-  ];
+  Future<List<Stamp>> _getStamp;
+  Future<List<List<dynamic>>> _TestStamp;
 
-  static final String stampCheckString = "ok";
+  List<Stamp> stampList = [];
+
+  static final String stampCheckString = CheckString.ok.checkStringValue;
 
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
@@ -182,7 +70,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     final DateTime dateTime = DateTime.now();
     final update = new Stamp(
       id: '4eef4900-c340-11eb-80aa-4babbebbda13',
-      data: "ok",
+      data: stampCheckString,
       getDate: dateTime,
       getTime: dateTime,
       stampNum: '10',
@@ -206,148 +94,57 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     */
   }
 
-  void _demoCRUD() async {
-    var memo = Memo(
+  Future<List<Stamp>> asyncGetStampList() async {
+    //初期データなので後で消す
+    /*
+    var satamp1 = new Stamp(
       id: uuid.v1(),
-      text: 'Flutterで遊ぶ',
-      priority: 1,
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '1',
+      deletedFlg: false,
+      createdAt: dateTime,
+      deletedAt: dateTime,
     );
 
-    await DbInterface.insert('memo', Memo.database, memo);
-
-    print(await DbInterface.select('memo', Memo.database, memo.id));
-
-    memo = Memo(
+    var satamp2 = new Stamp(
       id: uuid.v1(),
-      text: memo.text,
-      priority: memo.priority + 1,
-    );
+      data: "ok",
+      getDate: dateTime,
+      getTime: dateTime,
+      stampNum: '2',
+      deletedFlg: false,
+      createdAt: dateTime,
+      deletedAt: dateTime,
+    );*/
 
-    await DbInterface.insert('memo', Memo.database, memo);
+    //await DbInterface.allDelete("Stamp", Stamp.database);
+    //await DbInterface.insert('Stamp', Stamp.database, satamp1);
+    //await DbInterface.insert('Stamp', Stamp.database, satamp2);
 
-    print(await DbInterface.select('memo', Memo.database, memo.id));
+    List<Map<String, dynamic>> maps =
+        await DbInterface.allSelect('Stamp', Stamp.database);
 
-    await DbInterface.delete('memo', Memo.database, memo.id);
-
-    print(await DbInterface.allSelect('memo', Memo.database));
-  }
-
-  Future<void> _qrScan() async {
-    ScanResult result = await qrScan();
-    final DateTime dateTime = DateTime.now();
-
-    if (result.format.name == "qr") {
-      int maxStamp = 9; //上限無しの場合0を指定
-      int stampListLen = stampList.length;
-      int crossAxisCount = 3;
-      int successStampLen =
-          stampList.where((element) => element.data == stampCheckString).length;
-
-      if (checkIsMaxStamps(successStampLen, maxStamp)) {
-        if (successStampLen >= maxStamp) {
-          stampMaxDialogAlert(context, maxStamp);
-        } else {
-          Stamp newStamp = new Stamp(
-              id: uuid.v1(),
-              data: "ok",
-              getDate: dateTime,
-              getTime: dateTime,
-              stampNum: (successStampLen + 1).toString(),
-              deletedFlg: true,
-              createdAt: dateTime,
-              deletedAt: dateTime);
-          setState(() {
-            stampList[successStampLen] = newStamp;
-          });
-          stampMaxDialogAlert(context, maxStamp);
-        }
-      } else {
-        if (stampListLen == successStampLen + 1) {
-          for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
-            Stamp newStamp = new Stamp(
-                id: uuid.v1(),
-                data: "",
-                getDate: dateTime,
-                getTime: dateTime,
-                stampNum: (i + 1).toString(),
-                deletedFlg: true,
-                createdAt: dateTime,
-                deletedAt: dateTime);
-            stampList.add(newStamp);
-          }
-        }
-        Stamp newStamp = new Stamp(
-            id: uuid.v1(),
-            data: "ok",
-            getDate: dateTime,
-            getTime: dateTime,
-            stampNum: (successStampLen + 1).toString(),
-            deletedFlg: true,
-            createdAt: dateTime,
-            deletedAt: dateTime);
-        setState(() {
-          stampList[successStampLen] = newStamp;
-        });
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    //アプリ起動時に一度だけ実行、スタンプテーブルの個数を3の倍数にする
-
-    stampListLen = stampList.length;
+    stampList = List.generate(maps.length, (i) {
+      return Stamp(
+        id: maps[i]['id'],
+        data: maps[i]['data'],
+        getDate: dateTime,
+        getTime: dateTime,
+        stampNum: maps[i]['stampnum'],
+        deletedFlg: maps[i]['deleteflg'] == 0 ? true : false,
+        createdAt: dateTime,
+        deletedAt: dateTime,
+      );
+    });
 
     //GridViewのcrossAxisCountの値
     int crossAxisCount = 3;
-    int listRow = 3;
-    //int listRow = stampListLen ~/ crossAxisCount + 1;
-    //crossAxisCount < listRow ? null : listRow = 3;
-
-    //スタンプが1個以上あるなら必要なカードを求める
-    if (stampListLen != 0) {
-      cardnum = (stampListLen / 9).ceil();
+    int listRow = stampListLen ~/ crossAxisCount + 1;
+    if (!(crossAxisCount < listRow)) {
+      listRow = 3;
     }
-
-    //StampListからStampを9個ずつ配列に格納する
-    int num = 0;
-
-    for (int j = 0; j < cardnum; j++) {
-      List<Stamp> cardStamp = [];
-      for (int i = num; i < num + 9 && i != stampListLen; i++) {
-        Stamp sp = stampList[i];
-        cardStamp.add(sp);
-      }
-
-      //一つのカードにStampが9個未満の場合
-      if (cardStamp.length != 9) {
-        Stamp lastStamp = cardStamp.last;
-        String stampnumber = lastStamp.stampNum;
-        int number = int.parse(stampnumber);
-
-        //一つのカードの中身を9個埋めるために空のStampデータ代入
-        while (cardStamp.length < 9) {
-          number++;
-          Stamp noStamp = new Stamp(
-            id: uuid.v1(),
-            data: "no",
-            getDate: dateTime,
-            getTime: dateTime,
-            stampNum: number.toString(),
-            deletedFlg: true,
-            createdAt: dateTime,
-            deletedAt: dateTime,
-          );
-          cardStamp.add(noStamp);
-        }
-      }
-
-      cardnumber.add(j.toString());
-      cardList.add(cardStamp);
-
-      num = num + 9;
-    }
-
     for (int i = stampListLen + 1; i <= listRow * crossAxisCount; i++) {
       Stamp newStamp = new Stamp(
           id: uuid.v1(),
@@ -355,11 +152,103 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           getDate: dateTime,
           getTime: dateTime,
           stampNum: (i).toString(),
-          deletedFlg: true,
+          deletedFlg: false,
           createdAt: dateTime,
           deletedAt: dateTime);
       stampList.add(newStamp);
     }
+
+    return stampList;
+  }
+
+  Future<void> _qrScan() async {
+    ScanResult result = await qrScan();
+    final DateTime dateTime = DateTime.now();
+
+    if (result.rawContent != "データが不正です" &&
+        result.type.name != "Error" &&
+        result.type.name != "Cancelled") {
+      dynamic resultJson = json.decode(result.rawContent);
+
+      if (result.format.name == "qr" &&
+          resultJson["data"] == stampCheckString) {
+        int maxStamp = 9; //上限無しの場合0を指定
+        int stampListLen = stampList.length;
+        int crossAxisCount = 3;
+        int successStampLen = stampList
+            .where((element) => element.data == stampCheckString)
+            .length;
+
+        if (checkIsMaxStamps(successStampLen, maxStamp)) {
+          if (successStampLen >= maxStamp) {
+            stampMaxDialogAlert(context, maxStamp);
+          } else {
+            Stamp newStamp = new Stamp(
+                id: uuid.v1(),
+                data: stampCheckString,
+                getDate: dateTime,
+                getTime: dateTime,
+                stampNum: resultJson["stampNum"],
+                deletedFlg: false,
+                createdAt: dateTime,
+                deletedAt: dateTime);
+            await DbInterface.insert('Stamp', Stamp.database, newStamp);
+            setState(() {
+              stampList[successStampLen] = newStamp;
+            });
+            stampMaxDialogAlert(context, maxStamp);
+          }
+        } else {
+          if (stampListLen == successStampLen + 1) {
+            for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
+              Stamp newStamp = new Stamp(
+                  id: uuid.v1(),
+                  data: "",
+                  getDate: dateTime,
+                  getTime: dateTime,
+                  stampNum: "",
+                  deletedFlg: false,
+                  createdAt: dateTime,
+                  deletedAt: dateTime);
+              stampList.add(newStamp);
+            }
+          }
+          Stamp newStamp = new Stamp(
+              id: uuid.v1(),
+              data: stampCheckString,
+              getDate: dateTime,
+              getTime: dateTime,
+              stampNum: resultJson["stampNum"],
+              deletedFlg: false,
+              createdAt: dateTime,
+              deletedAt: dateTime);
+          await DbInterface.insert('Stamp', Stamp.database, newStamp);
+          setState(() {
+            stampList[successStampLen] = newStamp;
+          });
+        }
+      } else {
+        String title = "エラー";
+        String text =
+            result.format.name != "qr" ? "これはQRコードではありません" : "このQRコードは無効です";
+        qrAlertDialog(context, title, text);
+      }
+    } else if (result.type.name != "Cancelled") {
+      String title = "エラー";
+      String text = '不正なQRコードです\n${result.rawContent}';
+      qrAlertDialog(context, title, text);
+    }
+
+    List<dynamic> countstamp =
+        await DbInterface.allSelect('Stamp', Stamp.database);
+    stampListLen = countstamp.length;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _getStamp = asyncGetStampList();
   }
 
   //pageviewで使用
@@ -371,14 +260,28 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   @override
   Widget build(BuildContext context) {
     // Scaffoldは画面構成の基本Widget
+    final double deviceHeight = MediaQuery.of(context).size.height;
+    final double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-        //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //ロゴを中央にしたい場合↓
+              //padding: const EdgeInsets.all(8.0), child: Text('         ')),
+              Image.asset(
+                "assets/images/other/logo_Contrast.png",
+                fit: BoxFit.contain,
+                height: 50,
+              ),
+              Container(padding: EdgeInsets.only(left: 150))
+            ],
+          ),
           actions: <Widget>[
             // 設定ボタン
             IconButton(
-              icon: Icon(Icons.settings, color: Colors.white, size: 38),
+              icon: Icon(Icons.settings,
+                  color: Colors.white, size: deviceWidth * 0.07),
               onPressed: _settingNavigate,
             ),
           ],
@@ -386,14 +289,12 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         ),
         // QRへ遷移
         floatingActionButton: FloatingActionButton.extended(
-          label: Text(
-            'QR',
-            style: TextStyle(
-              fontSize: 24.0,
-              fontStyle: FontStyle.normal,
-              letterSpacing: 4.0,
-            ),
-          ),
+          label: Text('QR',
+              style: TextStyle(
+                fontSize: deviceWidth * 0.06,
+                fontStyle: FontStyle.normal,
+                letterSpacing: 4.0,
+              )),
           icon: Icon(Icons.qr_code),
           onPressed: _qrScan,
           backgroundColor: HexColor('00C2FF'),
@@ -401,150 +302,135 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         body: Column(children: [
           Expanded(
               child: Container(
-                  child: PageIndicatorContainer(
-                      child: PageView(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: PageView(
-                              controller: controller,
-                              children: <Widget>[
-                                for (int i = 0; i < cardnum; i++)
-                                  _Slider(context, cardList[i],
-                                      stampCheckString, i + 1),
-                              ],
-                            ),
-                          ),
-                        ],
-                        controller: controller,
-                      ),
-                      align: IndicatorAlign.bottom,
-                      length: cardnum,
-                      indicatorSpace: 20.0,
-                      padding: const EdgeInsets.all(10),
-                      indicatorColor: Colors.grey,
-                      indicatorSelectorColor: Colors.black,
-                      shape: IndicatorShape.circle(size: 15)))),
-          _TotalPoint(stampListLen)
+            child: PageView(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: PageView(
+                    controller: controller,
+                    children: <Widget>[
+                      _Slider(context, stampCheckString, deviceWidth)
+                    ],
+                  ),
+                ),
+              ],
+              controller: controller,
+            ),
+          )),
+          _TotalPoint(stampListLen, deviceWidth, deviceHeight)
         ]));
   }
 
-  Widget _Slider(BuildContext context, List<Stamp> stampList,
-      String stampCheckString, int number) {
+  Widget _Slider(
+      BuildContext context, String stampCheckString, double deviceWidth) {
     return Container(
         color: HexColor('00C2FF').withOpacity(0.6),
-        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        child: _Stampcard(context, stampList, stampCheckString, number));
+        margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 7,
+            deviceWidth / 20, deviceWidth / 7),
+        width: deviceWidth / 4 - 4 * 1,
+        height: deviceWidth / 4 - 4 * 1,
+        child: _Stampcard(context, stampCheckString, deviceWidth));
   }
 
-  Widget _Stampcard(BuildContext context, List<Stamp> stampList,
-      String stampCheckString, int number) {
-    return Column(
-
+  Widget _Stampcard(
+      BuildContext context, String stampCheckString, double deviceWidth) {
+    return SingleChildScrollView(
+      child: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                color: HexColor('FFFFFF'),
-                child: Text(
-                  number.toString(),
-                  style: TextStyle(
-                    fontSize: 40.0,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 4.0,
-                  ),
-                ),
-              ),
-              Text(
-                '枚目',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontStyle: FontStyle.normal,
-                  letterSpacing: 4.0,
-                ),
-              ),
-            ],
-          ),
-          Divider(
-            thickness: 3,
-            color: Colors.black,
-          ),
           SizedBox(
-            child: GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 3,
-              physics: ClampingScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              padding: const EdgeInsets.all(10),
-              // スタンプをListの数だけ生成する
-              children: stampList
-                  .map(
-                    (Stamp stamp) => Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () => stamp.data == stampCheckString
-                                ? stampDialog(context, stamp)
-                                : (context),
-                            child: Container(
-                              //padding: const EdgeInsets.all(11.0),
-                              width: MediaQuery.of(context).size.width / 3 -
-                                  19 * 2,
-                              height: MediaQuery.of(context).size.width / 3 -
-                                  19 * 2,
-                              // 円を生成
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                //border: Border.all(
-                                //  color: HexColor("00FFFF"), width: 3),
-                                color: HexColor('FFFFFF'),
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: stamp.data == stampCheckString
-                                        ? AssetImage(
-                                            'assets/images/stamp/flower-4.png')
-                                        : AssetImage(
-                                            'assets/images/stamp/none.png')),
-                              ),
-                              //円内の数字表示
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: stamp.data == stampCheckString
-                                    ? Text("")
-                                    : Text(
-                                        stamp.stampNum.toString(),
-                                        style: TextStyle(
-                                          fontSize: 25.0,
-                                          fontStyle: FontStyle.normal,
-                                          letterSpacing: 4.0,
-                                          color: HexColor('00C2FF'),
-                                        ),
-                                        textAlign: TextAlign.center,
+            height: MediaQuery.of(context).size.width,
+            child: FutureBuilder(
+                future: _getStamp,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<Stamp>> snapshot) {
+                  Widget childWidget;
+                  if (snapshot.hasData) {
+                    childWidget = GridView.count(
+                      shrinkWrap: true,
+                      crossAxisCount: 3,
+                      physics: ClampingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      padding: EdgeInsets.fromLTRB(
+                          10, deviceWidth / 7, 10, deviceWidth / 7),
+                      // スタンプをListの数だけ生成する
+                      children: stampList
+                          .map(
+                            (Stamp stamp) => Container(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: () => stamp.data == stampCheckString
+                                        ? stampDialog(context, stamp)
+                                        : (context),
+                                    child: Container(
+                                      //padding: const EdgeInsets.all(11.0),
+                                      width: MediaQuery.of(context).size.width /
+                                              4 -
+                                          4 * 1,
+                                      height:
+                                          MediaQuery.of(context).size.width /
+                                                  4 -
+                                              4 * 1,
+                                      // 円を生成
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        //border: Border.all(
+                                        //  color: HexColor("00FFFF"), width: 3),
+                                        color: HexColor('FFFFFF'),
+                                        image: DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: stamp.data ==
+                                                    stampCheckString
+                                                ? AssetImage(
+                                                    'assets/images/stamp/flower-4.png')
+                                                : AssetImage(
+                                                    'assets/images/stamp/none.png')),
                                       ),
+                                      //円内の数字表示
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: stamp.data == stampCheckString
+                                            ? Text("")
+                                            : Text(
+                                                stamp.stampNum.toString(),
+                                                style: TextStyle(
+                                                  fontSize: 25.0,
+                                                  fontStyle: FontStyle.normal,
+                                                  letterSpacing: 4.0,
+                                                  color: HexColor('00C2FF'),
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
+                          )
+                          .toList(),
+                    );
+                  } else {
+                    childWidget = const CircularProgressIndicator();
+                  }
+                  return childWidget;
+                }),
           ),
-        ]);
+        ],
+      ),
+    );
   }
 
-  Widget _TotalPoint(int point) {
+  Widget _TotalPoint(int point, double deviceWidth, double deviceHeight) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
-          margin: EdgeInsets.fromLTRB(10, 10, 0, 10),
-          width: 190,
+          margin:
+              EdgeInsets.fromLTRB(deviceWidth / 20, deviceHeight / 85, 0, 25),
+          width: deviceWidth / 2 * 1,
+          height: deviceHeight / 16 * 1,
           decoration: BoxDecoration(
             border: Border.all(
                 color: HexColor('00C2FF').withOpacity(0.6), width: 3),
@@ -552,7 +438,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           child: Text(
             '合計スタンプ数: $point',
             style: TextStyle(
-              fontSize: 17,
+              fontSize: deviceHeight * 0.026,
               fontStyle: FontStyle.normal,
               letterSpacing: 2.0,
             ),

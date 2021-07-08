@@ -7,23 +7,23 @@ void main() {
   group('stamp test', () {
     test('toDateOrTime toDate test', () {
       expect(
-        toDateOrTime(DateTime(2021, 6, 3, 16, 25, 10, 10, 10),
-            enumDateType.date.toString()),
+        formatDateTimeToString(
+            DateTime(2021, 6, 3, 16, 25, 10, 10, 10), EnumDateType.date),
         '2021/06/03',
       );
     });
     test('toDateOrTime toTime test', () {
       expect(
-        toDateOrTime(DateTime(2021, 6, 3, 16, 25, 10, 10, 10),
-            enumDateType.time.toString()),
+        formatDateTimeToString(
+            DateTime(2021, 6, 3, 16, 25, 10, 10, 10), EnumDateType.time),
         '16:25:10',
       );
     });
     test('toInt true test', () {
-      expect(toInt(true), 0);
+      expect(parseBooleanToInt(true), 0);
     });
     test('toInt false test', () {
-      expect(toInt(false), 1);
+      expect(parseBooleanToInt(false), 1);
     });
   });
 }
