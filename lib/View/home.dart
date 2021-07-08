@@ -225,7 +225,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       deletedAt: dateTime,
     );*/
 
-    await DbInterface.allDelete("Stamp", Stamp.database);
+    //await DbInterface.allDelete("Stamp", Stamp.database);
     //await DbInterface.insert('Stamp', Stamp.database, satamp1);
     //await DbInterface.insert('Stamp', Stamp.database, satamp2);
 
@@ -415,8 +415,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                   child: PageView(
                     controller: controller,
                     children: <Widget>[
-                      for (int i = 0; i < cardnum; i++)
-                        _Slider(context, stampCheckString, i + 1, deviceWidth),
+                      _Slider(context, stampCheckString, deviceWidth)
                     ],
                   ),
                 ),
@@ -428,19 +427,19 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
         ]));
   }
 
-  Widget _Slider(BuildContext context, String stampCheckString, int number,
-      double deviceWidth) {
+  Widget _Slider(
+      BuildContext context, String stampCheckString, double deviceWidth) {
     return Container(
         color: HexColor('00C2FF').withOpacity(0.6),
         margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 7,
             deviceWidth / 20, deviceWidth / 7),
         width: deviceWidth / 4 - 4 * 1,
         height: deviceWidth / 4 - 4 * 1,
-        child: _Stampcard(context, stampCheckString, number, deviceWidth));
+        child: _Stampcard(context, stampCheckString, deviceWidth));
   }
 
-  Widget _Stampcard(BuildContext context, String stampCheckString, int number,
-      double deviceWidth) {
+  Widget _Stampcard(
+      BuildContext context, String stampCheckString, double deviceWidth) {
     return SingleChildScrollView(
       child: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -545,7 +544,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           child: Text(
             '合計スタンプ数: $point',
             style: TextStyle(
-              fontSize: deviceHeight * 0.028,
+              fontSize: deviceHeight * 0.026,
               fontStyle: FontStyle.normal,
               letterSpacing: 2.0,
             ),
