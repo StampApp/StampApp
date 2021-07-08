@@ -29,40 +29,38 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          backgroundColor: HexColor('00C2FF'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        //デバック用ボタン配置
-        floatingActionButton: FloatingActionButton(
-          child: Icon(
-            Icons.bug_report,
-            size: 30,
-          ),
-          backgroundColor: HexColor('00C2FF'),
-          onPressed: () {
-            print("debug!");
-          },
-          mini: false,
-          clipBehavior: Clip.antiAlias,
-        ),
-
-        body: ListView(children: [
-          _menuItem("利用履歴", Icon(Icons.update), _historyNavigate),
-          _menuItem("使い方", Icon(Icons.phone_android), _instructionsNavigate),
-          _menuItem(
-              "利用規約", Icon(Icons.phonelink_setup_rounded), _termsNavigate),
-          _menuItem(
-              "プライバシーポリシー", Icon(Icons.visibility), _privacyPolicyNavigate),
-          _menuItem("Version", Icon(Icons.visibility)),
-        ]),
+        backgroundColor: HexColor('00C2FF'),
       ),
+      //デバック用ボタン配置
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.bug_report,
+          size: 30,
+        ),
+        backgroundColor: HexColor('00C2FF'),
+        onPressed: () {
+          print("debug!");
+        },
+        mini: false,
+        clipBehavior: Clip.antiAlias,
+      ),
+
+      body: ListView(children: [
+        _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),
+        _menuItem("使い方", Icon(Icons.menu_book), _instructionsNavigate),
+        _menuItem(
+            "利用規約", Icon(Icons.verified_user_outlined), _termsNavigate),
+        _menuItem(
+            "プライバシーポリシー", Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
+        _menuItem("Version", Icon(Icons.system_update_alt_rounded)),
+      ]),
     );
   }
 

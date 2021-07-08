@@ -12,10 +12,9 @@ import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
-import '../checkIsMaxStamps.dart';
-import 'package:flutter/material.dart';
 import 'package:page_indicator/page_indicator.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import '../Util/checkIsMaxStamps.dart';
 import '../Util/enumCheckString.dart';
 
 class HomeSamplePage extends StatefulWidget {
@@ -95,34 +94,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   }
 
   Future<List<Stamp>> asyncGetStampList() async {
-    //初期データなので後で消す
-    /*
-    var satamp1 = new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '1',
-      deletedFlg: false,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    );
-
-    var satamp2 = new Stamp(
-      id: uuid.v1(),
-      data: "ok",
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '2',
-      deletedFlg: false,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    );*/
-
-    //await DbInterface.allDelete("Stamp", Stamp.database);
-    //await DbInterface.insert('Stamp', Stamp.database, satamp1);
-    //await DbInterface.insert('Stamp', Stamp.database, satamp2);
-
     List<Map<String, dynamic>> maps =
         await DbInterface.allSelect('Stamp', Stamp.database);
 
@@ -284,6 +255,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                   color: Colors.white, size: deviceWidth * 0.07),
               onPressed: _settingNavigate,
             ),
+            //画面下ににスタンプカードが被らないように
+            Expanded(child: Container(padding: EdgeInsets.only(left: 200))),
           ],
           backgroundColor: HexColor('00C2FF'),
         ),

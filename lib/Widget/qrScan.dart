@@ -11,10 +11,18 @@ Future<ScanResult> qrScan() async {
     if (result.type.name == "Cancelled") {
       return result;
     }
+
+    var manifestContent = await rootBundle.loadString('AssetManifest.json');
+    Map<String, dynamic> manifestMap = json.decode(manifestContent);
+    List<String> imagePaths = manifestMap.keys
+        .where((String key) => key.contains('images/'))
+        .toList();
+
     Map<String, dynamic> rowContent = json.decode(result.rawContent);
 
     if (!Validation.dateCheck(rowContent['createdAt']) ||
-        !Validation.strCheck(rowContent['data'])) {
+        !Validation.strCheck(rowContent['data']) ||
+        !Validation.pathCheck(rowContent['stampNum'], imagePaths)) {
       result.rawContent = 'データが不正です';
     }
     return result;

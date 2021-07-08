@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Widget/stamp_icon_icons.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/enumDateType.dart';
@@ -87,8 +88,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     final Size displaySize = MediaQuery.of(context).size;
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
               title: Text(widget.title),
               leading: new IconButton(
@@ -148,7 +148,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   );
                 }
               },
-            )));
+            ));
   }
 }
 
@@ -200,7 +200,7 @@ Widget _row(Stamp stamplist) {
 Widget _usestamp() {
   return GestureDetector(
       child: Row(children: <Widget>[
-    Icon(Icons.android),
+    Icon(Icons.autorenew),
     Container(
         margin: const EdgeInsets.only(left: 10),
         child: Text(
@@ -217,7 +217,7 @@ Widget _usestamp() {
 Widget _getstamp() {
   return GestureDetector(
       child: Row(children: <Widget>[
-    Icon(Icons.ac_unit_sharp),
+    Icon(StampIcon.stamp),
     Container(
         margin: const EdgeInsets.only(left: 10),
         child: Text(

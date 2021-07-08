@@ -20,4 +20,18 @@ class Validation {
     if (content.contains('http')) return false;
     return true;
   }
+
+  static bool pathCheck(String path, List<String> imagePaths) {
+    try {
+      String relative = path.substring(0, 2);
+      path = relative == "./"
+          ? path.substring(2)
+          : relative[0] == "/"
+              ? path.substring(1)
+              : path;
+      return imagePaths.contains(path) ? true : false;
+    } catch (e) {
+      return false;
+    }
+  }
 }

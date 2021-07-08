@@ -16,7 +16,12 @@ class _TermsPageState extends State<TermsPage> {
         backgroundColor: HexColor('00C2FF'),
       ),
       body: ListView(
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 20,
+          right: 20,
+          bottom: 50,
+        ),
         children: <Widget>[
           SizedBox(height: 25),
 
@@ -24,7 +29,7 @@ class _TermsPageState extends State<TermsPage> {
               '本規約は■（以下、総称して「当社」といいます）が提供する、デジタルスタンプサービス（以下「本サービス」といいます）の利用に関する条件について、お客様と当社との間で定めるものです。必ずお読みになり、本規約の内容にご同意の上、ご利用ください。'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -42,7 +47,7 @@ class _TermsPageState extends State<TermsPage> {
           Text('（1）お客様が、本サービスをご利用いただく場合、当社が定める、「利用規約」が適用されます。必ずご確認ください。'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -63,7 +68,7 @@ class _TermsPageState extends State<TermsPage> {
           Text('（3）「スタンプサービス加盟企業」とは、本サービスを利用してスタンプサービスを提供する企業のことをいいます。'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -86,7 +91,7 @@ class _TermsPageState extends State<TermsPage> {
           Text('（3）その他前各号に関連するサービス'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -108,7 +113,7 @@ class _TermsPageState extends State<TermsPage> {
               'お客様のインターネットの通信環境や、携帯端末の不具合・故障等により各企業別スタンプカードが表示できない等のエラーが生じた場合は、スタンプを付与することはできません。当社は、これによって利用者に生じたいかなる損害についても一切の責任を負いません。'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -128,7 +133,7 @@ class _TermsPageState extends State<TermsPage> {
               'スタンプの利用後に、お客様が本規約またはその他規約に違反していることが判明した場合など、当社が付与したスタンプを次条に基づき取消したときは、お客様はすみやかに特典を返還するものとします。'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -152,7 +157,7 @@ class _TermsPageState extends State<TermsPage> {
               '当社は、スタンプの交換対象のサービスや特典が利用できないことが判明した場合、デジタルスタンプサービスの全部または一部の提供および利用を停止することができます。当社は、第1項各項によってお客様に生じたいかなる損害についても一切の責任を負いません。'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -169,7 +174,7 @@ class _TermsPageState extends State<TermsPage> {
           Text('貯まったスタンプの有効期限はスタンプカード上に定められています。'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -190,7 +195,7 @@ class _TermsPageState extends State<TermsPage> {
               '当社は、前項の変更、中断、終了にあたっては、事前に相当期間をもって予告するよう努めます。ただし、緊急やむをえない場合は、この限りではありません。'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -208,7 +213,7 @@ class _TermsPageState extends State<TermsPage> {
               'スタンプカードを所定の手続きに従い削除した場合、stamp_appを通じてスタンプカードをご利用いただくことができなくなります。'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -229,7 +234,7 @@ class _TermsPageState extends State<TermsPage> {
           Text('（4）その他、当社が不適切と判断する行為'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -246,7 +251,7 @@ class _TermsPageState extends State<TermsPage> {
           Text('当社は、一定の予告期間をおいて変更後の本規約の内容を周知することにより、本規約の内容を変更することができるものとします。'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
@@ -266,7 +271,7 @@ class _TermsPageState extends State<TermsPage> {
               '当社がお客様に対して損害賠償義務を負う場合、賠償すべき損害の範囲は、利用者に現実に発生した通常の損害に限る（逸失利益を含む特別の損害は含まない）ものとします。'),
           Divider(
             height: 40,
-            thickness: 2,
+            thickness: 1,
             color: Colors.black,
             indent: 16,
             endIndent: 16,
