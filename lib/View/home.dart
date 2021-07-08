@@ -58,112 +58,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   Future<List<Stamp>> _getStamp;
   Future<List<List<dynamic>>> _TestStamp;
 
-  // 画面に表示するリストを定義
-  // final List<Stamp> stampList = [
-  //   new Stamp(uuid.v1(), "stamp1", 1, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp2", 2, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp3", 3, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp4", 4, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp5", 5, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp6", 6, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp7", 7, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp8", 8, now.toUtc().toIso8601String()),
-  //   new Stamp(uuid.v1(), "stamp9", 9, now.toUtc().toIso8601String()),
-  // ];
-
-  // final List<Stamp> stampList = [
-  //   new Stamp(
-  //     id: uuid.v1(),
-  //     data: "ok",
-  //     getDate: dateTime,
-  //     getTime: dateTime,
-  //     stampNum: '1',
-  //     deletedFlg: true,
-  //     createdAt: dateTime,
-  //     deletedAt: dateTime,
-  //   ),
-  //   new Stamp(
-  //     id: uuid.v1(),
-  //     data: "ok",
-  //     getDate: dateTime,
-  //     getTime: dateTime,
-  //     stampNum: '2',
-  //     deletedFlg: true,
-  //     createdAt: dateTime,
-  //     deletedAt: dateTime,
-  //   ),
-  //   new Stamp(
-  //     id: uuid.v1(),
-  //     data: "ok",
-  //     getDate: dateTime,
-  //     getTime: dateTime,
-  //     stampNum: '3',
-  //     deletedFlg: true,
-  //     createdAt: dateTime,
-  //     deletedAt: dateTime,
-  //   ),
-  //   new Stamp(
-  //     id: uuid.v1(),
-  //     data: "ok",
-  //     getDate: dateTime,
-  //     getTime: dateTime,
-  //     stampNum: '4',
-  //     deletedFlg: true,
-  //     createdAt: dateTime,
-  //     deletedAt: dateTime,
-  //   ),
-  //   new Stamp(
-  //     id: uuid.v1(),
-  //     data: "ok",
-  //     getDate: dateTime,
-  //     getTime: dateTime,
-  //     stampNum: '5',
-  //     deletedFlg: true,
-  //     createdAt: dateTime,
-  //     deletedAt: dateTime,
-  //   ),
-  //   new Stamp(
-  //     id: uuid.v1(),
-  //     data: "ok",
-  //     getDate: dateTime,
-  //     getTime: dateTime,
-  //     stampNum: '6',
-  //     deletedFlg: true,
-  //     createdAt: dateTime,
-  //     deletedAt: dateTime,
-  //   ),
-  //   new Stamp(
-  //     id: uuid.v1(),
-  //     data: "ok",
-  //     getDate: dateTime,
-  //     getTime: dateTime,
-  //     stampNum: '7',
-  //     deletedFlg: true,
-  //     createdAt: dateTime,
-  //     deletedAt: dateTime,
-  //   ),
-  //   new Stamp(
-  //     id: uuid.v1(),
-  //     data: "ok",
-  //     getDate: dateTime,
-  //     getTime: dateTime,
-  //     stampNum: '8',
-  //     deletedFlg: true,
-  //     createdAt: dateTime,
-  //     deletedAt: dateTime,
-  //   ),
-  //   new Stamp(
-  //     id: uuid.v1(),
-  //     data: "ok",
-  //     getDate: dateTime,
-  //     getTime: dateTime,
-  //     stampNum: '9',
-  //     deletedFlg: true,
-  //     createdAt: dateTime,
-  //     deletedAt: dateTime,
-  //   ),
-  // ];
-
   List<Stamp> stampList = [];
 
   static final String stampCheckString = CheckString.ok.checkStringValue;
@@ -225,7 +119,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       deletedAt: dateTime,
     );*/
 
-    await DbInterface.allDelete("Stamp", Stamp.database);
+    //await DbInterface.allDelete("Stamp", Stamp.database);
     //await DbInterface.insert('Stamp', Stamp.database, satamp1);
     //await DbInterface.insert('Stamp', Stamp.database, satamp2);
 
