@@ -203,9 +203,9 @@ Future<Map> _useStamp() async {
       id: maps[i]['id'],
       data: maps[i]['data'],
       getDate:
-          dateFormatParse(maps[i]['getdate'], enumDateType.date.toString()),
+          formatStringToDateTime(maps[i]['getdate'], enumDateType.date),
       getTime:
-          dateFormatParse(maps[i]['gettime'], enumDateType.time.toString()),
+          formatStringToDateTime(maps[i]['gettime'], enumDateType.time),
       stampNum: maps[i]['stampnum'],
       deletedFlg: true,
       createdAt: DateTime.parse(maps[i]['createdat']),
