@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       // 作成したページを呼び出す
       routes: <String, WidgetBuilder>{
-        // '/': (BuildContext context) => SamplePage(title: 'スタンプアプリ'),
         '/': (BuildContext context) => HomeSamplePage(title: 'スタンプアプリ'),
         '/Setting': (BuildContext context) => SettingPage(title: '設定'),
         '/history': (BuildContext context) => HistoryPage(title: '利用履歴'),
