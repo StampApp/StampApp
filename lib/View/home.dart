@@ -304,14 +304,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               child: Container(
             child: PageView(
               children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: PageView(
-                    controller: controller,
-                    children: <Widget>[
-                      _Slider(context, stampCheckString, deviceWidth)
-                    ],
-                  ),
+                PageView(
+                  controller: controller,
+                  children: <Widget>[
+                    _Slider(context, stampCheckString, deviceWidth)
+                  ],
                 ),
               ],
               controller: controller,
