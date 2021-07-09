@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Constants/version.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/models/stamp.dart';
@@ -99,15 +100,12 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          backgroundColor: HexColor('00C2FF'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
         body: ListView(children: [
           _menuItem("利用履歴", Icon(Icons.update), _historyNavigate),
@@ -121,6 +119,16 @@ class _SettingPageState extends State<SettingPage> {
               "スタンプ使用", Icon(Icons.shopping_bag_outlined), _useStampCheck),
         ]),
       ),
+
+      body: ListView(children: [
+        _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),
+        _menuItem("使い方", Icon(Icons.menu_book), _instructionsNavigate),
+        _menuItem(
+            "利用規約", Icon(Icons.verified_user_outlined), _termsNavigate),
+        _menuItem(
+            "プライバシーポリシー", Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
+        _menuItem("Version", Icon(Icons.system_update_alt_rounded)),
+      ]),
     );
   }
 
@@ -168,7 +176,7 @@ class _SettingPageState extends State<SettingPage> {
 Widget _version() {
   return GestureDetector(
     child: Text(
-      "0.1.0",
+      Version.value,
       style: TextStyle(
         color: Colors.grey,
         fontSize: 18.0,

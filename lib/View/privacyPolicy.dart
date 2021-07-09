@@ -24,15 +24,22 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
   @override
   Widget build(BuildContext context) {
     // Scaffoldは画面構成の基本Widget
+    //デバイスのサイズ取得
+    final double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         backgroundColor: HexColor('00C2FF'),
       ),
       body: ListView(
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 20,
+          right: 20,
+          bottom: 50,
+        ),
         children: <Widget>[
-          SizedBox(height: 25),
+          SizedBox(height: deviceHeight * 0.2),
 
           Text(
               'このプライバシーポリシー（以下、「本ポリシー」といいます。）は、＿＿＿＿＿（以下、「当社」といいます。）がこのアプリケーション上で提供するサービス（以下、「本サービス」といいます。）の利用条件を定めるものです。登録ユーザーの皆さま（以下、「ユーザー」といいます。）には、本ポリシーに従って、本サービスをご利用いただきます。'),

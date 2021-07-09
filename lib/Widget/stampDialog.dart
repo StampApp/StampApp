@@ -15,7 +15,7 @@ void stampDialog(BuildContext context, Stamp stamp) {
             children: <Widget>[
               ListTile(
                 title: Text("Image"),
-                subtitle: Image.asset('assets/images/other/my4.png',
+                subtitle: Image.asset(stamp.stampNum.toString(),
                     fit: BoxFit.fitWidth),
               ),
               ListTile(
