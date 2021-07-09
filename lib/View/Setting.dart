@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/Constants/version.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/dbInterface.dart';
+import 'package:stamp_app/models/stamp.dart';
+import 'package:stamp_app/Util/toDateOrTime.dart';
+import 'package:stamp_app/Util/enumDateType.dart';
+import 'package:stamp_app/Util/enumStampCount.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({Key key, this.title}) : super(key: key);
@@ -27,6 +32,72 @@ class _SettingPageState extends State<SettingPage> {
     Navigator.of(context).pushNamed('/instructions');
   }
 
+  Future<dynamic> _useStampCheck() {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("確認"),
+          content: Text("本当に利用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
+          actions: <Widget>[
+            // ボタン領域
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: Text("OK"),
+              onPressed: () => {Navigator.pop(context), _useStampDialog()},
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // スタンプを使用した結果を表示
+  Future<dynamic> _useStampDialog() async {
+    Map res = await _useStamp();
+
+    // スタンプが足りてない場合アラートを出して終了
+    if (!res['canUseStamp']) {
+      return showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text("スタンプ利用"),
+            content: Text("スタンプが溜まっていません"),
+            actions: <Widget>[
+              // ボタン領域
+              TextButton(
+                child: Text("OK"),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          );
+        }
+      );
+    }
+
+    String idsText = res['idsText'];
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("スタンプ利用"),
+          content: Text("スタンプを利用しました\n\n$idsText"),
+          actions: <Widget>[
+            // ボタン領域
+            TextButton(
+              child: Text("OK"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,20 +107,17 @@ class _SettingPageState extends State<SettingPage> {
           icon: new Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        backgroundColor: HexColor('00C2FF'),
-      ),
-      //デバック用ボタン配置
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.bug_report,
-          size: 30,
-        ),
-        backgroundColor: HexColor('00C2FF'),
-        onPressed: () {
-          print("debug!");
-        },
-        mini: false,
-        clipBehavior: Clip.antiAlias,
+        body: ListView(children: [
+          _menuItem("利用履歴", Icon(Icons.update), _historyNavigate),
+          _menuItem("使い方", Icon(Icons.phone_android), _instructionsNavigate),
+          _menuItem(
+              "利用規約", Icon(Icons.phonelink_setup_rounded), _termsNavigate),
+          _menuItem(
+              "プライバシーポリシー", Icon(Icons.visibility), _privacyPolicyNavigate),
+          _menuItem("Version", Icon(Icons.visibility)),
+          _menuItem(
+              "スタンプ使用", Icon(Icons.shopping_bag_outlined), _useStampCheck),
+        ]),
       ),
 
       body: ListView(children: [
@@ -115,4 +183,44 @@ Widget _version() {
       ),
     ),
   );
+}
+
+// スタンプ数を取得し規定数あった場合使用する
+Future<Map> _useStamp() async {
+  // deletedFlgがfalseのスタンプ数を取得
+  int count = await DbInterface.selectStampCount('Stamp', Stamp.database);
+  final int stampCheckString = StampCount.count.stampCount;
+
+  if (count < stampCheckString)
+    return {'idsText': null, 'canUseStamp': false};
+  // deletedFlgがfalseのスタンプを取得
+  List<Map<String, dynamic>> maps = await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
+
+  // 更新レコードを作成
+  DateTime nowDate = DateTime.now();
+  List<Stamp> stampList = List.generate(maps.length, (i) {
+    return Stamp(
+      id: maps[i]['id'],
+      data: maps[i]['data'],
+      getDate:
+          formatStringToDateTime(maps[i]['getdate'], EnumDateType.date),
+      getTime:
+          formatStringToDateTime(maps[i]['gettime'], EnumDateType.time),
+      stampNum: maps[i]['stampnum'],
+      deletedFlg: true,
+      createdAt: DateTime.parse(maps[i]['createdat']),
+      deletedAt: nowDate,
+    );
+  });
+
+  String idsText = '';
+  // スタンプ更新
+  for (var element in stampList) {
+    await DbInterface.update('Stamp', Stamp.database, element);
+    // 更新したIDを保持
+    String id = element.id;
+    idsText += '$id \n';
+  }
+
+  return {'idsText': idsText, 'canUseStamp': true};
 }
