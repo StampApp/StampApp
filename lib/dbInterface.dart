@@ -47,7 +47,7 @@ class DbInterface {
     return count;
   }
 
-  // deleteFlgが1のスタンプ数を取得する
+  // deleteFlgが1のスタンプを取得する
   static Future<List> selectDeleteFlg(String _tableName, var database) async {
     final int stampCheckString = StampCount.count.stampCount;
     final Database db = await database;

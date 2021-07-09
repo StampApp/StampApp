@@ -57,23 +57,25 @@ class _SettingPageState extends State<SettingPage> {
   // スタンプを使用した結果を表示
   Future<dynamic> _useStampDialog() async {
     Map res = await _useStamp();
+
     // スタンプが足りてない場合アラートを出して終了
     if (!res['canUseStamp']) {
       return showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(
-              title: Text("スタンプ利用"),
-              content: Text("スタンプが溜まっていません"),
-              actions: <Widget>[
-                // ボタン領域
-                TextButton(
-                  child: Text("OK"),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            );
-          });
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text("スタンプ利用"),
+            content: Text("スタンプが溜まっていません"),
+            actions: <Widget>[
+              // ボタン領域
+              TextButton(
+                child: Text("OK"),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          );
+        }
+      );
     }
 
     String idsText = res['idsText'];
@@ -184,8 +186,7 @@ Future<Map> _useStamp() async {
   if (count < stampCheckString)
     return {'idsText': null, 'canUseStamp': false};
   // deletedFlgがfalseのスタンプを取得
-  List<Map<String, dynamic>> maps =
-      await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
+  List<Map<String, dynamic>> maps = await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
 
   // 更新レコードを作成
   DateTime nowDate = DateTime.now();
@@ -199,8 +200,8 @@ Future<Map> _useStamp() async {
           dateFormatParse(maps[i]['gettime'], enumDateType.time.toString()),
       stampNum: maps[i]['stampnum'],
       deletedFlg: true,
-      createdAt: nowDate,
-      deletedAt: DateTime.parse(maps[i]['deletedat']),
+      createdAt: DateTime.parse(maps[i]['createdat']),
+      deletedAt: nowDate,
     );
   });
 
@@ -208,6 +209,7 @@ Future<Map> _useStamp() async {
   // スタンプ更新
   for (var element in stampList) {
     await DbInterface.update('Stamp', Stamp.database, element);
+    // 更新したIDを保持
     String id = element.id;
     idsText += '$id \n';
   }
