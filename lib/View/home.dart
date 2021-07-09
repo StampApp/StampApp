@@ -358,7 +358,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                             image: stamp.data ==
                                                     stampCheckString
                                                 ? AssetImage(
-                                                    'assets/images/stamp/flower-4.png')
+                                                    stamp.stampNum.toString())
                                                 : AssetImage(
                                                     'assets/images/stamp/none.png')),
                                       ),
