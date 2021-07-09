@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/Constants/version.dart';
-import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
@@ -107,19 +106,7 @@ class _SettingPageState extends State<SettingPage> {
           icon: new Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        body: ListView(children: [
-          _menuItem("利用履歴", Icon(Icons.update), _historyNavigate),
-          _menuItem("使い方", Icon(Icons.phone_android), _instructionsNavigate),
-          _menuItem(
-              "利用規約", Icon(Icons.phonelink_setup_rounded), _termsNavigate),
-          _menuItem(
-              "プライバシーポリシー", Icon(Icons.visibility), _privacyPolicyNavigate),
-          _menuItem("Version", Icon(Icons.visibility)),
-          _menuItem(
-              "スタンプ使用", Icon(Icons.shopping_bag_outlined), _useStampCheck),
-        ]),
       ),
-
       body: ListView(children: [
         _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),
         _menuItem("使い方", Icon(Icons.menu_book), _instructionsNavigate),
@@ -128,6 +115,7 @@ class _SettingPageState extends State<SettingPage> {
         _menuItem(
             "プライバシーポリシー", Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
         _menuItem("Version", Icon(Icons.system_update_alt_rounded)),
+        _menuItem("スタンプ使用", Icon(Icons.shopping_bag_outlined), _useStampCheck),
       ]),
     );
   }
