@@ -44,6 +44,7 @@ flutter_native_splash:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  sqflite_common_ffi:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
