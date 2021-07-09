@@ -245,7 +245,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                 fit: BoxFit.contain,
                 height: 50,
               ),
-              Container(padding: EdgeInsets.only(left: 150))
+              Container(padding: EdgeInsets.only(left: 190))
             ],
           ),
           actions: <Widget>[
@@ -255,8 +255,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                   color: Colors.white, size: deviceWidth * 0.07),
               onPressed: _settingNavigate,
             ),
-            //画面下ににスタンプカードが被らないように
-            Expanded(child: Container(padding: EdgeInsets.only(left: 200))),
           ],
           backgroundColor: HexColor('00C2FF'),
         ),
