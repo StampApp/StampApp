@@ -1,8 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:page_indicator/page_indicator.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:barcode_scan/barcode_scan.dart';
@@ -12,8 +9,6 @@ import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
-import 'package:page_indicator/page_indicator.dart';
-import 'package:page_view_indicators/circle_page_indicator.dart';
 import '../Util/checkIsMaxStamps.dart';
 import '../Util/enumCheckString.dart';
 
@@ -51,11 +46,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   //pageviewで使用する
   PageController controller;
-  PageController _pageController;
-  int _currentPage = 0;
 
   Future<List<Stamp>> _getStamp;
-  Future<List<List<dynamic>>> _TestStamp;
 
   List<Stamp> stampList = [];
 
@@ -63,34 +55,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
-  }
-
-  void _crudSample() async {
-    final DateTime dateTime = DateTime.now();
-    final update = new Stamp(
-      id: '4eef4900-c340-11eb-80aa-4babbebbda13',
-      data: stampCheckString,
-      getDate: dateTime,
-      getTime: dateTime,
-      stampNum: '10',
-      deletedFlg: true,
-      createdAt: dateTime,
-      deletedAt: dateTime,
-    );
-
-    /*
-    await DbInterface.insert('Stamp', Stamp.database, stampList[0]);
-
-    print(await DbInterface.select('Stamp', Stamp.database, 0));
-
-    await DbInterface.insert('Stamp', Stamp.database, stampList[1]);
-*/
-    await DbInterface.update('Stamp', Stamp.database, update);
-
-    print(await DbInterface.allSelect('Stamp', Stamp.database));
-/*
-    await DbInterface.delete('Stamp', Stamp.database, 0);
-    */
   }
 
   Future<List<Stamp>> asyncGetStampList() async {
@@ -280,7 +244,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                   child: PageView(
                     controller: controller,
                     children: <Widget>[
-                      _Slider(context, stampCheckString, deviceWidth)
+                      _slider(context, stampCheckString, deviceWidth)
                     ],
                   ),
                 ),
@@ -288,11 +252,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               controller: controller,
             ),
           )),
-          _TotalPoint(stampListLen, deviceWidth, deviceHeight)
+          _totalPoint(stampListLen, deviceWidth, deviceHeight)
         ]));
   }
 
-  Widget _Slider(
+  Widget _slider(
       BuildContext context, String stampCheckString, double deviceWidth) {
     return Container(
         color: HexColor('00C2FF').withOpacity(0.6),
@@ -300,10 +264,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
             deviceWidth / 20, deviceWidth / 7),
         width: deviceWidth / 4 - 4 * 1,
         height: deviceWidth / 4 - 4 * 1,
-        child: _Stampcard(context, stampCheckString, deviceWidth));
+        child: _stampCard(context, stampCheckString, deviceWidth));
   }
 
-  Widget _Stampcard(
+  Widget _stampCard(
       BuildContext context, String stampCheckString, double deviceWidth) {
     return SingleChildScrollView(
       child: Column(
@@ -395,7 +359,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     );
   }
 
-  Widget _TotalPoint(int point, double deviceWidth, double deviceHeight) {
+  Widget _totalPoint(int point, double deviceWidth, double deviceHeight) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
           margin:
