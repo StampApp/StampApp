@@ -39,7 +39,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           bottom: 50,
         ),
         children: <Widget>[
-          SizedBox(height: deviceHeight * 0.2),
+          SizedBox(height: deviceHeight * 0.04),
 
           Text(
               'このプライバシーポリシー（以下、「本ポリシー」といいます。）は、＿＿＿＿＿（以下、「当社」といいます。）がこのアプリケーション上で提供するサービス（以下、「本サービス」といいます。）の利用条件を定めるものです。登録ユーザーの皆さま（以下、「ユーザー」といいます。）には、本ポリシーに従って、本サービスをご利用いただきます。'),
