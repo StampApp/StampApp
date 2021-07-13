@@ -18,7 +18,7 @@ class DbInterface {
 
   /*
   @param _tableName テーブル名
-  @param database   DB 
+  @param database   DB
   @param nowDate 現在の日付
   @param pastMonths 何ヶ月かを指定
   */
@@ -42,12 +42,12 @@ class DbInterface {
     final List<Map<String, dynamic>> maps = await db.rawQuery(
         "SELECT count(*) as count " +
             "FROM $_tableName " +
-            "WHERE deletedflg = 1");
+            "WHERE deletedflg = 0");
     int count = maps[0]['count'];
     return count;
   }
 
-  // deleteFlgが1のスタンプを取得する
+  // deleteFlgが0のスタンプを取得する
   static Future<List> selectDeleteFlg(String _tableName, var database) async {
     final int stampCheckString = StampCount.count.stampCount;
     final Database db = await database;
@@ -55,7 +55,7 @@ class DbInterface {
         where: 'deletedflg = ?',
         limit: stampCheckString,
         orderBy: 'getdate asc, gettime asc',
-        whereArgs: [1]);
+        whereArgs: [0]);
     return maps;
   }
 
