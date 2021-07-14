@@ -63,6 +63,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     List<Map<String, dynamic>> maps =
         await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
 
+    stampListLen = maps.length;
+
     stampList = List.generate(maps.length, (i) {
       return Stamp(
         id: maps[i]['id'],
@@ -110,7 +112,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       if (result.format.name == "qr" &&
           resultJson["data"] == stampCheckString) {
         int maxStamp = 9; //上限無しの場合0を指定
-        int stampListLen = stampList.length;
+        int localListLen = stampList.length;
         int crossAxisCount = 3;
         int successStampLen = stampList
             .where((element) => element.data == stampCheckString)
@@ -136,8 +138,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             stampMaxDialogAlert(context, maxStamp);
           }
         } else {
-          if (stampListLen == successStampLen + 1) {
-            for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
+          if (localListLen == successStampLen + 1) {
+            for (int i = localListLen; i < localListLen + crossAxisCount; i++) {
               Stamp newStamp = new Stamp(
                   id: uuid.v1(),
                   data: "",
@@ -160,7 +162,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               createdAt: dateTime,
               deletedAt: dateTime);
           await DbInterface.insert('Stamp', Stamp.database, newStamp);
+          List<dynamic> countstamp = await DbInterface.allSelect('Stamp', Stamp.database);
           setState(() {
+            stampListLen = countstamp.length;
             stampList[successStampLen] = newStamp;
           });
         }
@@ -175,7 +179,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       String text = '不正なQRコードです\n${result.rawContent}';
       qrAlertDialog(context, title, text);
     }
-
+ 
     List<dynamic> countstamp =
         await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
     stampListLen = countstamp.length;
@@ -289,26 +293,37 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           onPressed: _qrScan,
           backgroundColor: HexColor('00C2FF'),
         ),
-        body: Column(children: [
-          Expanded(
-              child: Container(
-            child: PageView(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: PageView(
-                    controller: controller,
-                    children: <Widget>[
-                      _slider(context, stampCheckString, deviceWidth)
-                    ],
-                  ),
-                ),
-              ],
-              controller: controller,
-            ),
-          )),
-          _totalPoint(stampListLen, deviceWidth, deviceHeight)
-        ]));
+        body: FutureBuilder(
+            future: _getStamp,
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Stamp>> snapshot) {
+              Widget childWidget;
+              if (snapshot.connectionState == ConnectionState.done) {
+                childWidget = Column(children: [
+                  Expanded(
+                      child: Container(
+                    child: PageView(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: PageView(
+                            controller: controller,
+                            children: <Widget>[
+                              _slider(context, stampCheckString, deviceWidth)
+                            ],
+                          ),
+                        ),
+                      ],
+                      controller: controller,
+                    ),
+                  )),
+                  _totalPoint(stampListLen, deviceWidth, deviceHeight)
+                ]);
+              } else {
+                childWidget = const CircularProgressIndicator();
+              }
+              return childWidget;
+            }));
   }
 
   Widget _slider(
