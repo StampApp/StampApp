@@ -13,8 +13,10 @@ import '../Util/checkIsMaxStamps.dart';
 import '../Util/enumCheckString.dart';
 
 class HomeSamplePage extends StatefulWidget {
-  HomeSamplePage({Key key, this.title}) : super(key: key);
+  HomeSamplePage({Key key, this.title, this.routeObserver}) : super(key: key);
   final String title;
+  final RouteObserver<PageRoute> routeObserver;
+
   @override
   _HomeSamplePageState createState() => _HomeSamplePageState();
 }
@@ -29,7 +31,7 @@ class Stamp {
 }
 */
 
-class _HomeSamplePageState extends State<HomeSamplePage> {
+class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
 
@@ -59,7 +61,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   Future<List<Stamp>> asyncGetStampList() async {
     List<Map<String, dynamic>> maps =
-        await DbInterface.allSelect('Stamp', Stamp.database);
+        await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
 
     stampListLen = maps.length;
 
@@ -177,6 +179,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       String text = '不正なQRコードです\n${result.rawContent}';
       qrAlertDialog(context, title, text);
     }
+ 
+    List<dynamic> countstamp =
+        await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
+    stampListLen = countstamp.length;
   }
 
   @override
@@ -186,8 +192,61 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     _getStamp = asyncGetStampList();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    widget.routeObserver.subscribe(this, ModalRoute.of(context));
+  }
+
+  // @override
+  // void didPush() {
+  //   // 画面が初めて表示 (Push) される時にコールされます。
+  //   print("画面が初めて表示 (Push) される時にコールされます。");
+  // }
+
+  // @override
+  // void didPop() {
+  //   // この画面から別の画面に遷移する (Pop) 場合にコールされます。
+  //   print("この画面から別の画面に遷移する (Pop) 場合にコールされます。");
+  // }
+
+  // @override
+  // void didPushNext() {
+  //   // この画面から別の画面をPushする場合にコールされます (この画面はPopされずにそのまま残る場合)。
+  //   print("この画面から別の画面をPushする場合にコールされます (この画面はPopされずにそのまま残る場合)。");
+  // }
+
+  @override
+  Future<void> didPopNext() async {
+    // 一度、別の画面に遷移したあとで、再度この画面に戻ってきた時にコールされます。
+    // print("一度、別の画面に遷移したあとで、再度この画面に戻ってきた時にコールされます。");
+    int existStampNum =
+        await DbInterface.selectStampCount('Stamp', Stamp.database);
+    int thisExistStampNum =
+        stampList.where((element) => element.data == stampCheckString).length;
+    if (existStampNum == 0 && thisExistStampNum == stampListLen) {
+      List<Stamp> newStampList = [];
+      for (int i = 0; i < stampList.length; i++) {
+        Stamp newStamp = new Stamp(
+            id: uuid.v1(),
+            data: "",
+            getDate: dateTime,
+            getTime: dateTime,
+            stampNum: (i + 1).toString(),
+            deletedFlg: false,
+            createdAt: dateTime,
+            deletedAt: dateTime);
+        newStampList.add(newStamp);
+      }
+      setState(() {
+        stampList = newStampList;
+      });
+    }
+  }
+
   //pageviewで使用
   void dispose() {
+    widget.routeObserver.unsubscribe(this);
     controller.dispose();
     super.dispose();
   }
