@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 
 class InstructionsPage extends StatefulWidget {
@@ -19,7 +20,7 @@ class _InstructionsPageState extends State<InstructionsPage> {
           icon: new Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        backgroundColor: HexColor('00C2FF'),
+        backgroundColor: HexColor(Setting.APP_COLOR),
       ),
       body: Introduction(),
     );

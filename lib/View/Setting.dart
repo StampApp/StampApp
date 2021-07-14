@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stamp_app/Constants/version.dart';
+import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
@@ -106,7 +106,7 @@ class _SettingPageState extends State<SettingPage> {
           icon: new Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        backgroundColor: HexColor('00C2FF'),
+        backgroundColor: HexColor(Setting.APP_COLOR),
       ),
       body: ListView(children: [
         _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),
@@ -164,7 +164,7 @@ class _SettingPageState extends State<SettingPage> {
 Widget _version() {
   return GestureDetector(
     child: Text(
-      Version.value,
+      Setting.VERSION,
       style: TextStyle(
         color: Colors.grey,
         fontSize: 18.0,

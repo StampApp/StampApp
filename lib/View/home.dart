@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:barcode_scan/barcode_scan.dart';
@@ -162,7 +163,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               createdAt: dateTime,
               deletedAt: dateTime);
           await DbInterface.insert('Stamp', Stamp.database, newStamp);
-          List<dynamic> countstamp = await DbInterface.allSelect('Stamp', Stamp.database);
+          List<dynamic> countstamp =
+              await DbInterface.allSelect('Stamp', Stamp.database);
           setState(() {
             stampListLen = countstamp.length;
             stampList[successStampLen] = newStamp;
@@ -179,7 +181,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       String text = '不正なQRコードです\n${result.rawContent}';
       qrAlertDialog(context, title, text);
     }
- 
+
     List<dynamic> countstamp =
         await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
     stampListLen = countstamp.length;
@@ -264,7 +266,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               //ロゴを中央にしたい場合↓
               //padding: const EdgeInsets.all(8.0), child: Text('         ')),
               Image.asset(
-                "assets/images/other/logo_Contrast.png",
+                Setting.APP_LOGO,
                 fit: BoxFit.contain,
                 height: 50,
               ),
@@ -279,7 +281,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               onPressed: _settingNavigate,
             ),
           ],
-          backgroundColor: HexColor('00C2FF'),
+          backgroundColor: HexColor(Setting.APP_COLOR),
         ),
         // QRへ遷移
         floatingActionButton: FloatingActionButton.extended(
@@ -291,7 +293,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               )),
           icon: Icon(Icons.qr_code),
           onPressed: _qrScan,
-          backgroundColor: HexColor('00C2FF'),
+          backgroundColor: HexColor(Setting.APP_COLOR),
         ),
         body: FutureBuilder(
             future: _getStamp,
@@ -329,7 +331,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   Widget _slider(
       BuildContext context, String stampCheckString, double deviceWidth) {
     return Container(
-        color: HexColor('00C2FF').withOpacity(0.6),
+        color: HexColor(Setting.APP_COLOR).withOpacity(0.6),
         margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 7,
             deviceWidth / 20, deviceWidth / 7),
         width: deviceWidth / 4 - 4 * 1,
@@ -391,8 +393,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                     stampCheckString
                                                 ? AssetImage(
                                                     stamp.stampNum.toString())
-                                                : AssetImage(
-                                                    'assets/images/stamp/none.png')),
+                                                : AssetImage(Setting.NONE_IMG)),
                                       ),
                                       //円内の数字表示
                                       child: Align(
@@ -405,7 +406,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                   fontSize: 25.0,
                                                   fontStyle: FontStyle.normal,
                                                   letterSpacing: 4.0,
-                                                  color: HexColor('00C2FF'),
+                                                  color: HexColor(
+                                                      Setting.APP_COLOR),
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -438,7 +440,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           height: deviceHeight / 16 * 1,
           decoration: BoxDecoration(
             border: Border.all(
-                color: HexColor('00C2FF').withOpacity(0.6), width: 3),
+                color: HexColor(Setting.APP_COLOR).withOpacity(0.6), width: 3),
           ),
           child: Text(
             '合計スタンプ数: $point',
