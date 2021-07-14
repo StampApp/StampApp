@@ -1,5 +1,8 @@
 # stamp_app
 
+[![GitHub license](https://img.shields.io/github/license/RimlTempest/StampApp)](https://github.com/RimlTempest/StampApp/blob/develop/LICENSE)  
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/RimlTempest/StampApp)
+
 このアプリはスタンプラリーアプリのモックです。
 
 ## 概要

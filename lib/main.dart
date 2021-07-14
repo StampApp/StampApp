@@ -4,27 +4,43 @@
 * ページを追加する場合はimportしてroutesの中でルーティングパスとWidgetを定義する
 */
 import 'package:flutter/material.dart';
-import 'View/sample.dart';
+import 'View/home.dart';
+import 'View/terms.dart';
+import 'View/Setting.dart';
+import 'View/privacyPolicy.dart';
+import 'View/history.dart';
+import 'View/instructions.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  final RouteObserver<PageRoute> _routeObserver = RouteObserver<PageRoute>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Stampアプリのサンプルアプリ',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: ThemeData.light(), // ライト用テーマ
+      darkTheme: ThemeData.dark(), // ダーク用テーマ
+      themeMode: ThemeMode.system,
       // デフォルトルート
       initialRoute: '/',
       // 作成したページを呼び出す
-      routes: {
-        '/': (_) => SamplePage(title: 'スタンプアプリ'),
+      routes: <String, WidgetBuilder>{
+        '/': (BuildContext context) =>
+            HomeSamplePage(title: 'スタンプアプリ', routeObserver: _routeObserver),
+        '/Setting': (BuildContext context) => SettingPage(title: '設定'),
+        '/history': (BuildContext context) => HistoryPage(title: '利用履歴'),
+        '/terms': (BuildContext context) => TermsPage(title: '利用規約'),
+        '/instructions': (BuildContext context) =>
+            InstructionsPage(title: '使い方'),
+        '/privacyPolicy': (BuildContext context) =>
+            PrivacyPolicyPage(title: 'プライバシーポリシー'),
       },
+      navigatorObservers: [
+        _routeObserver,
+      ],
     );
   }
 }
