@@ -36,8 +36,6 @@ class DbInterface {
 
   // deleteflgがfalseのスタンプ数を取得する
   static Future<int> selectStampCount(String _tableName, var database) async {
-    final hoge = await getDatabasesPath();
-    print(hoge);
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.rawQuery(
         "SELECT count(*) as count " +
