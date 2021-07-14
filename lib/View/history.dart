@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Widget/stamp_icon_icons.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
@@ -95,7 +96,7 @@ class _HistoryPageState extends State<HistoryPage> {
             icon: new Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),
           ),
-          backgroundColor: HexColor('00C2FF'),
+          backgroundColor: HexColor(Setting.APP_COLOR),
         ),
 
         // リストの日付の処理が終わるまで読み込み中を表示する
@@ -115,8 +116,8 @@ class _HistoryPageState extends State<HistoryPage> {
                         decoration: BoxDecoration(
                           //枠線を丸くするかどうか
                           //borderRadius: BorderRadius.circular(10.0),
-                          border:
-                              Border.all(color: HexColor('00C2FF'), width: 1),
+                          border: Border.all(
+                              color: HexColor(Setting.APP_COLOR), width: 1),
                         ),
                         child: DropdownButton(
                           items: _items,
@@ -238,7 +239,7 @@ Widget _delimiter(String date) {
           date,
           style: TextStyle(fontSize: 20),
         ),
-        tileColor: HexColor("00C2FF"),
+        tileColor: HexColor(Setting.APP_COLOR),
       ),
     ),
   );
