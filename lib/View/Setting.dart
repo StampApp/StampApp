@@ -41,12 +41,24 @@ class _SettingPageState extends State<SettingPage> {
           content: Text("本当に利用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
           actions: <Widget>[
             // ボタン領域
-            TextButton(
-              child: Text("Cancel"),
+            OutlinedButton(
+              child: const Text('cancel'),
+              style: OutlinedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                side: const BorderSide(color: Colors.blue),
+              ),
               onPressed: () => Navigator.pop(context),
             ),
-            TextButton(
-              child: Text("OK"),
+
+            RaisedButton(
+              child: const Text('OK'),
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
               onPressed: () => {Navigator.pop(context), _useStampDialog()},
             ),
           ],
@@ -69,8 +81,12 @@ class _SettingPageState extends State<SettingPage> {
               content: Text("スタンプが溜まっていません"),
               actions: <Widget>[
                 // ボタン領域
-                TextButton(
-                  child: Text("OK"),
+                RaisedButton(
+                  child: const Text('OK'),
+                  color: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -87,8 +103,12 @@ class _SettingPageState extends State<SettingPage> {
           content: Text("スタンプを利用しました\n\n$idsText"),
           actions: <Widget>[
             // ボタン領域
-            TextButton(
-              child: Text("OK"),
+            RaisedButton(
+              child: const Text('OK'),
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
               onPressed: () => Navigator.pop(context),
             ),
           ],
