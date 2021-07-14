@@ -5,6 +5,7 @@ import 'package:stamp_app/models/stamp.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/enumDateType.dart';
 import 'package:stamp_app/Util/enumStampCount.dart';
+import 'package:stamp_app/Widget/HexColor.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({Key key, this.title}) : super(key: key);
@@ -61,21 +62,20 @@ class _SettingPageState extends State<SettingPage> {
     // スタンプが足りてない場合アラートを出して終了
     if (!res['canUseStamp']) {
       return showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text("スタンプ利用"),
-            content: Text("スタンプが溜まっていません"),
-            actions: <Widget>[
-              // ボタン領域
-              TextButton(
-                child: Text("OK"),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          );
-        }
-      );
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title: Text("スタンプ利用"),
+              content: Text("スタンプが溜まっていません"),
+              actions: <Widget>[
+                // ボタン領域
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            );
+          });
     }
 
     String idsText = res['idsText'];
@@ -106,14 +106,14 @@ class _SettingPageState extends State<SettingPage> {
           icon: new Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        backgroundColor: HexColor('00C2FF'),
       ),
       body: ListView(children: [
         _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),
         _menuItem("使い方", Icon(Icons.menu_book), _instructionsNavigate),
-        _menuItem(
-            "利用規約", Icon(Icons.verified_user_outlined), _termsNavigate),
-        _menuItem(
-            "プライバシーポリシー", Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
+        _menuItem("利用規約", Icon(Icons.verified_user_outlined), _termsNavigate),
+        _menuItem("プライバシーポリシー", Icon(Icons.privacy_tip_outlined),
+            _privacyPolicyNavigate),
         _menuItem("Version", Icon(Icons.system_update_alt_rounded)),
         _menuItem("スタンプ使用", Icon(Icons.shopping_bag_outlined), _useStampCheck),
       ]),
@@ -179,10 +179,10 @@ Future<Map> _useStamp() async {
   int count = await DbInterface.selectStampCount('Stamp', Stamp.database);
   final int stampCheckString = StampCount.count.stampCount;
 
-  if (count < stampCheckString)
-    return {'idsText': null, 'canUseStamp': false};
+  if (count < stampCheckString) return {'idsText': null, 'canUseStamp': false};
   // deletedFlgがfalseのスタンプを取得
-  List<Map<String, dynamic>> maps = await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
+  List<Map<String, dynamic>> maps =
+      await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
 
   // 更新レコードを作成
   DateTime nowDate = DateTime.now();
@@ -190,10 +190,8 @@ Future<Map> _useStamp() async {
     return Stamp(
       id: maps[i]['id'],
       data: maps[i]['data'],
-      getDate:
-          formatStringToDateTime(maps[i]['getdate'], EnumDateType.date),
-      getTime:
-          formatStringToDateTime(maps[i]['gettime'], EnumDateType.time),
+      getDate: formatStringToDateTime(maps[i]['getdate'], EnumDateType.date),
+      getTime: formatStringToDateTime(maps[i]['gettime'], EnumDateType.time),
       stampNum: maps[i]['stampnum'],
       deletedFlg: true,
       createdAt: DateTime.parse(maps[i]['createdat']),
