@@ -206,7 +206,6 @@ Widget _usestamp() {
         child: Text(
           "利用",
           style: TextStyle(
-            color: Colors.black,
             fontSize: 18.0,
           ),
         ))
@@ -223,7 +222,6 @@ Widget _getstamp() {
         child: Text(
           "スタンプゲット",
           style: TextStyle(
-            color: Colors.black,
             fontSize: 18.0,
           ),
         ))

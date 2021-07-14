@@ -161,7 +161,6 @@ class _SettingPageState extends State<SettingPage> {
                             child: Text(
                               title,
                               style: TextStyle(
-                                color: Colors.black,
                                 fontSize: 18.0,
                               ),
                             ))
