@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Widget/stamp_icon_icons.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
@@ -89,66 +90,65 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     final Size displaySize = MediaQuery.of(context).size;
     return Scaffold(
-            appBar: AppBar(
-              title: Text(widget.title),
-              leading: new IconButton(
-                icon: new Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              backgroundColor: HexColor('00C2FF'),
-            ),
+        appBar: AppBar(
+          title: Text(widget.title),
+          leading: new IconButton(
+            icon: new Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          backgroundColor: HexColor(Setting.APP_COLOR),
+        ),
 
-            // リストの日付の処理が終わるまで読み込み中を表示する
-            body: FutureBuilder(
-              future: getDateList(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                // getDateListの処理が終了した場合
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return ListView(children: <Widget>[
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          //ドロップダウンメニュー
-                          Container(
-                            padding: EdgeInsets.only(left: 15),
-                            margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
-                            decoration: BoxDecoration(
-                              //枠線を丸くするかどうか
-                              //borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(
-                                  color: HexColor('00C2FF'), width: 1),
-                            ),
-                            child: DropdownButton(
-                              items: _items,
-                              value: _selectItem,
-                              onChanged: (value) => {
-                                pastMonthChange(value),
-                                setState(() => _selectItem = value),
-                              },
-                            ),
-                          )
-                        ]),
-                    if (snapshot.data.length != 0)
-                      for (int i = 0; i < snapshot.data.length; i++)
-                        _line(snapshot.data[i], stampList)
-                    // データが存在しなかった場合
-                    else
+        // リストの日付の処理が終わるまで読み込み中を表示する
+        body: FutureBuilder(
+          future: getDateList(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            // getDateListの処理が終了した場合
+            if (snapshot.connectionState == ConnectionState.done) {
+              return ListView(children: <Widget>[
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      //ドロップダウンメニュー
                       Container(
-                        alignment: Alignment.center,
-                        height: displaySize.height * 0.6,
-                        child: Text("利用履歴がありません",
-                            style: TextStyle(fontSize: 20.0)),
+                        padding: EdgeInsets.only(left: 15),
+                        margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
+                        decoration: BoxDecoration(
+                          //枠線を丸くするかどうか
+                          //borderRadius: BorderRadius.circular(10.0),
+                          border: Border.all(
+                              color: HexColor(Setting.APP_COLOR), width: 1),
+                        ),
+                        child: DropdownButton(
+                          items: _items,
+                          value: _selectItem,
+                          onChanged: (value) => {
+                            pastMonthChange(value),
+                            setState(() => _selectItem = value),
+                          },
+                        ),
                       )
-                  ]);
-                } else {
-                  return Container(
+                    ]),
+                if (snapshot.data.length != 0)
+                  for (int i = 0; i < snapshot.data.length; i++)
+                    _line(snapshot.data[i], stampList)
+                // データが存在しなかった場合
+                else
+                  Container(
                     alignment: Alignment.center,
-                    height: displaySize.height,
-                    child: Text("読み込み中", style: TextStyle(fontSize: 20.0)),
-                  );
-                }
-              },
-            ));
+                    height: displaySize.height * 0.6,
+                    child: Text("利用履歴がありません", style: TextStyle(fontSize: 20.0)),
+                  )
+              ]);
+            } else {
+              return Container(
+                alignment: Alignment.center,
+                height: displaySize.height,
+                child: Text("読み込み中", style: TextStyle(fontSize: 20.0)),
+              );
+            }
+          },
+        ));
   }
 }
 
@@ -241,7 +241,7 @@ Widget _delimiter(String date) {
           date,
           style: TextStyle(fontSize: 20),
         ),
-        tileColor: HexColor("00C2FF"),
+        tileColor: HexColor(Setting.APP_COLOR),
       ),
     ),
   );
