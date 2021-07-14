@@ -61,6 +61,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     List<Map<String, dynamic>> maps =
         await DbInterface.allSelect('Stamp', Stamp.database);
 
+    stampListLen = maps.length;
+
     stampList = List.generate(maps.length, (i) {
       return Stamp(
         id: maps[i]['id'],
