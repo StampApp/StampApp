@@ -19,7 +19,10 @@ class _HistoryPageState extends State<HistoryPage> {
   int _selectItem = 0;
   List<Stamp> stampList = [];
   int pastMonth = 3;
-  int initCount = 0;
+  String _noHistory;
+  String _loading;
+  String _getStamp;
+  String _use;
 
   // DBから使用したスタンプを取得する
   getStampList() async {
@@ -65,7 +68,10 @@ class _HistoryPageState extends State<HistoryPage> {
     //super.initState();
     setItem();
     _selectItem = _items[0].value;
-    initCount += 1;
+    _noHistory = AppLocalizations.of(context).noUsageHistory;
+    _loading = AppLocalizations.of(context).loading;
+    _getStamp = AppLocalizations.of(context).gettingStamp;
+    _use = AppLocalizations.of(context).use;
   }
 
   //ドロップダウンの中身のアイテム
@@ -107,9 +113,7 @@ class _HistoryPageState extends State<HistoryPage> {
               future: getDateList(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 // getDateListの処理が終了した場合
-                if (initCount == 0) {
-                  init();
-                }
+                init();
                 if (snapshot.connectionState == ConnectionState.done) {
                   return ListView(children: <Widget>[
                     Row(
@@ -143,16 +147,15 @@ class _HistoryPageState extends State<HistoryPage> {
                       Container(
                         alignment: Alignment.center,
                         height: displaySize.height * 0.6,
-                        child: Text(AppLocalizations.of(context).noUsageHistory,
-                            style: TextStyle(fontSize: 20.0)),
+                        child:
+                            Text(_noHistory, style: TextStyle(fontSize: 20.0)),
                       )
                   ]);
                 } else {
                   return Container(
                     alignment: Alignment.center,
                     height: displaySize.height,
-                    child: Text(AppLocalizations.of(context).loading,
-                        style: TextStyle(fontSize: 20.0)),
+                    child: Text(_loading, style: TextStyle(fontSize: 20.0)),
                   );
                 }
               },
@@ -165,101 +168,101 @@ class _HistoryPageState extends State<HistoryPage> {
           GlobalCupertinoLocalizations.delegate,
         ]);
   }
-}
 
-Widget _line(String targetDate, List<Stamp> stampList, BuildContext context) {
-  return GestureDetector(
-      child: Column(
-    children: <Widget>[
-      // 日付表示
-      _delimiter(targetDate),
-      ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
-            Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: stampList
-                    .map((Stamp stamp) => Column(children: <Widget>[
-                          if (formatDateTimeToString(
-                                  stamp.getDate, EnumDateType.date) ==
-                              targetDate)
-                            _row(stamp, context)
-                        ]))
-                    .toList())
-          ]),
-    ],
-  ));
-}
+  Widget _line(String targetDate, List<Stamp> stampList, BuildContext context) {
+    return GestureDetector(
+        child: Column(
+      children: <Widget>[
+        // 日付表示
+        _delimiter(targetDate),
+        ListView(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            children: <Widget>[
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: stampList
+                      .map((Stamp stamp) => Column(children: <Widget>[
+                            if (formatDateTimeToString(
+                                    stamp.getDate, EnumDateType.date) ==
+                                targetDate)
+                              _row(stamp, context)
+                          ]))
+                      .toList())
+            ]),
+      ],
+    ));
+  }
 
 //List1行表示
-Widget _row(Stamp stamplist, BuildContext context) {
-  return GestureDetector(
-      child: Container(
-          padding: EdgeInsets.all(8.0),
-          decoration: new BoxDecoration(
-              border: new Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey))),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                //trueならスタンプ使用、それ以外ならスタンプゲットwidget呼び出し
-                (stamplist.deletedFlg)
-                    ? _usestamp(context)
-                    : _getstamp(context),
-                Container(
-                    child: Text(formatDateTimeToString(
-                        stamplist.getTime, EnumDateType.time)))
-              ])));
-}
+  Widget _row(Stamp stamplist, BuildContext context) {
+    return GestureDetector(
+        child: Container(
+            padding: EdgeInsets.all(8.0),
+            decoration: new BoxDecoration(
+                border: new Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey))),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  //trueならスタンプ使用、それ以外ならスタンプゲットwidget呼び出し
+                  (stamplist.deletedFlg)
+                      ? _usestamp(context)
+                      : _getstamp(context),
+                  Container(
+                      child: Text(formatDateTimeToString(
+                          stamplist.getTime, EnumDateType.time)))
+                ])));
+  }
 
 //スタンプ使用時
-Widget _usestamp(BuildContext context) {
-  return GestureDetector(
-      child: Row(children: <Widget>[
-    Icon(Icons.android),
-    Container(
-        margin: const EdgeInsets.only(left: 10),
-        child: Text(
-          AppLocalizations.of(context).use,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18.0,
-          ),
-        ))
-  ]));
-}
+  Widget _usestamp(BuildContext context) {
+    return GestureDetector(
+        child: Row(children: <Widget>[
+      Icon(Icons.android),
+      Container(
+          margin: const EdgeInsets.only(left: 10),
+          child: Text(
+            _use,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18.0,
+            ),
+          ))
+    ]));
+  }
 
 //スタンプ取得
-Widget _getstamp(BuildContext context) {
-  return GestureDetector(
-      child: Row(children: <Widget>[
-    Icon(Icons.ac_unit_sharp),
-    Container(
-        margin: const EdgeInsets.only(left: 10),
-        child: Text(
-          AppLocalizations.of(context).gettingStamp,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18.0,
-          ),
-        ))
-  ]));
-}
+  Widget _getstamp(BuildContext context) {
+    return GestureDetector(
+        child: Row(children: <Widget>[
+      Icon(Icons.ac_unit_sharp),
+      Container(
+          margin: const EdgeInsets.only(left: 10),
+          child: Text(
+            _getStamp,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18.0,
+            ),
+          ))
+    ]));
+  }
 
 //日付の一行
-Widget _delimiter(String date) {
-  //年月日、色コード
-  return GestureDetector(
-    child: Container(
-      child: ListTile(
-        title: Text(
-          //スタンプ取得、交換日を受け取る
-          date,
-          style: TextStyle(fontSize: 20),
+  Widget _delimiter(String date) {
+    //年月日、色コード
+    return GestureDetector(
+      child: Container(
+        child: ListTile(
+          title: Text(
+            //スタンプ取得、交換日を受け取る
+            date,
+            style: TextStyle(fontSize: 20),
+          ),
+          tileColor: HexColor("00C2FF"),
         ),
-        tileColor: HexColor("00C2FF"),
       ),
-    ),
-  );
+    );
+  }
 }
