@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Constants/setting.dart';
 import '../Widget/HexColor.dart';
 
 class TermsPage extends StatefulWidget {
@@ -13,7 +14,7 @@ class _TermsPageState extends State<TermsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        backgroundColor: HexColor('00C2FF'),
+        backgroundColor: HexColor(Setting.APP_COLOR),
       ),
       body: ListView(
         padding: const EdgeInsets.only(

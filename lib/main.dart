@@ -16,6 +16,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final RouteObserver<PageRoute> _routeObserver = RouteObserver<PageRoute>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       // 作成したページを呼び出す
       routes: <String, WidgetBuilder>{
-        '/': (BuildContext context) => HomeSamplePage(title: 'スタンプアプリ'),
+        '/': (BuildContext context) =>
+            HomeSamplePage(title: 'スタンプアプリ', routeObserver: _routeObserver),
         '/Setting': (BuildContext context) => SettingPage(title: '設定'),
         '/history': (BuildContext context) => HistoryPage(title: '利用履歴'),
         '/terms': (BuildContext context) => TermsPage(title: '利用規約'),
@@ -36,6 +38,9 @@ class MyApp extends StatelessWidget {
         '/privacyPolicy': (BuildContext context) =>
             PrivacyPolicyPage(title: 'プライバシーポリシー'),
       },
+      navigatorObservers: [
+        _routeObserver,
+      ],
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:barcode_scan/barcode_scan.dart';
@@ -13,8 +14,10 @@ import '../Util/checkIsMaxStamps.dart';
 import '../Util/enumCheckString.dart';
 
 class HomeSamplePage extends StatefulWidget {
-  HomeSamplePage({Key key, this.title}) : super(key: key);
+  HomeSamplePage({Key key, this.title, this.routeObserver}) : super(key: key);
   final String title;
+  final RouteObserver<PageRoute> routeObserver;
+
   @override
   _HomeSamplePageState createState() => _HomeSamplePageState();
 }
@@ -29,7 +32,7 @@ class Stamp {
 }
 */
 
-class _HomeSamplePageState extends State<HomeSamplePage> {
+class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
 
@@ -59,7 +62,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
 
   Future<List<Stamp>> asyncGetStampList() async {
     List<Map<String, dynamic>> maps =
-        await DbInterface.allSelect('Stamp', Stamp.database);
+        await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
 
     stampListLen = maps.length;
 
@@ -110,7 +113,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
       if (result.format.name == "qr" &&
           resultJson["data"] == stampCheckString) {
         int maxStamp = 9; //上限無しの場合0を指定
-        int stampListLen = stampList.length;
+        int localListLen = stampList.length;
         int crossAxisCount = 3;
         int successStampLen = stampList
             .where((element) => element.data == stampCheckString)
@@ -136,8 +139,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
             stampMaxDialogAlert(context, maxStamp);
           }
         } else {
-          if (stampListLen == successStampLen + 1) {
-            for (int i = stampListLen; i < stampListLen + crossAxisCount; i++) {
+          if (localListLen == successStampLen + 1) {
+            for (int i = localListLen; i < localListLen + crossAxisCount; i++) {
               Stamp newStamp = new Stamp(
                   id: uuid.v1(),
                   data: "",
@@ -160,7 +163,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               createdAt: dateTime,
               deletedAt: dateTime);
           await DbInterface.insert('Stamp', Stamp.database, newStamp);
+          List<dynamic> countstamp =
+              await DbInterface.allSelect('Stamp', Stamp.database);
           setState(() {
+            stampListLen = countstamp.length;
             stampList[successStampLen] = newStamp;
           });
         }
@@ -177,7 +183,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     }
 
     List<dynamic> countstamp =
-        await DbInterface.allSelect('Stamp', Stamp.database);
+        await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
     stampListLen = countstamp.length;
   }
 
@@ -188,8 +194,61 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
     _getStamp = asyncGetStampList();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    widget.routeObserver.subscribe(this, ModalRoute.of(context));
+  }
+
+  // @override
+  // void didPush() {
+  //   // 画面が初めて表示 (Push) される時にコールされます。
+  //   print("画面が初めて表示 (Push) される時にコールされます。");
+  // }
+
+  // @override
+  // void didPop() {
+  //   // この画面から別の画面に遷移する (Pop) 場合にコールされます。
+  //   print("この画面から別の画面に遷移する (Pop) 場合にコールされます。");
+  // }
+
+  // @override
+  // void didPushNext() {
+  //   // この画面から別の画面をPushする場合にコールされます (この画面はPopされずにそのまま残る場合)。
+  //   print("この画面から別の画面をPushする場合にコールされます (この画面はPopされずにそのまま残る場合)。");
+  // }
+
+  @override
+  Future<void> didPopNext() async {
+    // 一度、別の画面に遷移したあとで、再度この画面に戻ってきた時にコールされます。
+    // print("一度、別の画面に遷移したあとで、再度この画面に戻ってきた時にコールされます。");
+    int existStampNum =
+        await DbInterface.selectStampCount('Stamp', Stamp.database);
+    int thisExistStampNum =
+        stampList.where((element) => element.data == stampCheckString).length;
+    if (existStampNum == 0 && thisExistStampNum == stampListLen) {
+      List<Stamp> newStampList = [];
+      for (int i = 0; i < stampList.length; i++) {
+        Stamp newStamp = new Stamp(
+            id: uuid.v1(),
+            data: "",
+            getDate: dateTime,
+            getTime: dateTime,
+            stampNum: (i + 1).toString(),
+            deletedFlg: false,
+            createdAt: dateTime,
+            deletedAt: dateTime);
+        newStampList.add(newStamp);
+      }
+      setState(() {
+        stampList = newStampList;
+      });
+    }
+  }
+
   //pageviewで使用
   void dispose() {
+    widget.routeObserver.unsubscribe(this);
     controller.dispose();
     super.dispose();
   }
@@ -207,7 +266,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               //ロゴを中央にしたい場合↓
               //padding: const EdgeInsets.all(8.0), child: Text('         ')),
               Image.asset(
-                "assets/images/other/logo_Contrast.png",
+                Setting.APP_LOGO,
                 fit: BoxFit.contain,
                 height: 50,
               ),
@@ -222,7 +281,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               onPressed: _settingNavigate,
             ),
           ],
-          backgroundColor: HexColor('00C2FF'),
+          backgroundColor: HexColor(Setting.APP_COLOR),
         ),
         // QRへ遷移
         floatingActionButton: FloatingActionButton.extended(
@@ -234,31 +293,45 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               )),
           icon: Icon(Icons.qr_code),
           onPressed: _qrScan,
-          backgroundColor: HexColor('00C2FF'),
+          backgroundColor: HexColor(Setting.APP_COLOR),
         ),
-        body: Column(children: [
-          Expanded(
-              child: Container(
-            child: PageView(
-              children: <Widget>[
-                PageView(
-                  controller: controller,
-                  children: <Widget>[
-                    _slider(context, stampCheckString, deviceWidth)
-                  ],
-                ),
-              ],
-              controller: controller,
-            ),
-          )),
-          _totalPoint(stampListLen, deviceWidth, deviceHeight)
-        ]));
+        body: FutureBuilder(
+            future: _getStamp,
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Stamp>> snapshot) {
+              Widget childWidget;
+              if (snapshot.connectionState == ConnectionState.done) {
+                childWidget = Column(children: [
+                  Expanded(
+                      child: Container(
+                    child: PageView(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: PageView(
+                            controller: controller,
+                            children: <Widget>[
+                              _slider(context, stampCheckString, deviceWidth)
+                            ],
+                          ),
+                        ),
+                      ],
+                      controller: controller,
+                    ),
+                  )),
+                  _totalPoint(stampListLen, deviceWidth, deviceHeight)
+                ]);
+              } else {
+                childWidget = const CircularProgressIndicator();
+              }
+              return childWidget;
+            }));
   }
 
   Widget _slider(
       BuildContext context, String stampCheckString, double deviceWidth) {
     return Container(
-        color: HexColor('00C2FF').withOpacity(0.6),
+        color: HexColor(Setting.APP_COLOR).withOpacity(0.6),
         margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 7,
             deviceWidth / 20, deviceWidth / 7),
         width: deviceWidth / 4 - 4 * 1,
@@ -320,8 +393,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                                     stampCheckString
                                                 ? AssetImage(
                                                     stamp.stampNum.toString())
-                                                : AssetImage(
-                                                    'assets/images/stamp/none.png')),
+                                                : AssetImage(Setting.NONE_IMG)),
                                       ),
                                       //円内の数字表示
                                       child: Align(
@@ -334,7 +406,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
                                                   fontSize: 25.0,
                                                   fontStyle: FontStyle.normal,
                                                   letterSpacing: 4.0,
-                                                  color: HexColor('00C2FF'),
+                                                  color: HexColor(
+                                                      Setting.APP_COLOR),
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -367,7 +440,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           height: deviceHeight / 16 * 1,
           decoration: BoxDecoration(
             border: Border.all(
-                color: HexColor('00C2FF').withOpacity(0.6), width: 3),
+                color: HexColor(Setting.APP_COLOR).withOpacity(0.6), width: 3),
           ),
           child: Text(
             '合計スタンプ数: $point',

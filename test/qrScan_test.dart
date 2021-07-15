@@ -1,14 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Util/enumCheckString.dart';
 import 'package:stamp_app/Util/validation.dart';
 
 void main() {
   group('QRコードのContentのValidation Test: ', () {
     final String stampCheckString = CheckString.ok.checkStringValue;
-    final List<String> imagePaths = [
-      "assets/images/stamp/flower-4.png",
-      "assets/images/stamp/none.png"
-    ];
+    final List<String> imagePaths = [Setting.STAMP_FLOWER, Setting.NONE_IMG];
     //QRの日付が今の日付より前
     test('QRの日付が今の日付より前 -> true', () {
       expect(Validation.dateCheck('2021/06/11 12:00:00'), true);
@@ -44,9 +42,7 @@ void main() {
     });
     // ファイルが存在する
     test('ファイルが存在する -> true', () {
-      expect(
-          Validation.pathCheck("assets/images/stamp/flower-4.png", imagePaths),
-          true);
+      expect(Validation.pathCheck(Setting.STAMP_FLOWER, imagePaths), true);
     });
     // ファイルが存在しない
     test('ファイルが存在しない -> false', () {
