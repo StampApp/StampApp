@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'package:stamp_app/Constants/setting.dart';
+import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
-import 'package:stamp_app/Util/enumDateType.dart';
-import 'package:stamp_app/Util/enumStampCount.dart';
+import 'package:stamp_app/Util/Enums/enumDateType.dart';
+import 'package:stamp_app/Util/Enums/enumStampCount.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/models/stampLogs.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({Key key, this.title}) : super(key: key);
@@ -195,13 +198,15 @@ Widget _version() {
 // スタンプ数を取得し規定数あった場合使用する
 Future<Map> _useStamp() async {
   // deletedFlgがfalseのスタンプ数を取得
-  int count = await DbInterface.selectStampCount('Stamp', Stamp.database);
+  int count = await DbInterface.selectStampCount('Stamp', DBHelper.databese());
   final int stampCheckString = StampCount.count.stampCount;
+  // uuid
+  final uuid = Uuid();
 
   if (count < stampCheckString) return {'idsText': null, 'canUseStamp': false};
   // deletedFlgがfalseのスタンプを取得
   List<Map<String, dynamic>> maps =
-      await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
+      await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
   // 更新レコードを作成
   DateTime nowDate = DateTime.now();
@@ -218,13 +223,30 @@ Future<Map> _useStamp() async {
     );
   });
 
+  // LOG 記録
+  List<StampLogs> logList = List.generate(maps.length, (i) {
+    return StampLogs(
+      id: uuid.v1(),
+      stampId: maps[i]['id'],
+      getDate: nowDate,
+      getTime: nowDate,
+      useFlg: true,
+      createdAt: nowDate,
+    );
+  });
+
   String idsText = '';
   // スタンプ更新
   for (var element in stampList) {
-    await DbInterface.update('Stamp', Stamp.database, element);
+    await DbInterface.update('Stamp', DBHelper.databese(), element);
     // 更新したIDを保持
     String id = element.id;
     idsText += '$id \n';
+  }
+
+  // LOG 記録
+  for (var log in logList) {
+    await DbInterface.insert('StampLogs', DBHelper.databese(), log);
   }
 
   return {'idsText': idsText, 'canUseStamp': true};
