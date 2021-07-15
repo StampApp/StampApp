@@ -7,6 +7,7 @@
 * Propsとは親から子に値を受け渡すための値
 */
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Constants/setting.dart';
 import '../Widget/HexColor.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -25,15 +26,24 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
   @override
   Widget build(BuildContext context) {
     // Scaffoldは画面構成の基本Widget
+    //デバイスのサイズ取得
+    final double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).privacyPolicy),
-        backgroundColor: HexColor('00C2FF'),
+        title: Text(
+          AppLocalizations.of(context).privacyPolicy
+        ),
+        backgroundColor: HexColor(Setting.APP_COLOR),
       ),
       body: ListView(
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 20,
+          right: 20,
+          bottom: 50,
+        ),
         children: <Widget>[
-          SizedBox(height: 25),
+          SizedBox(height: deviceHeight * 0.04),
 
           Text(
               'このプライバシーポリシー（以下、「本ポリシー」といいます。）は、＿＿＿＿＿（以下、「当社」といいます。）がこのアプリケーション上で提供するサービス（以下、「本サービス」といいます。）の利用条件を定めるものです。登録ユーザーの皆さま（以下、「ユーザー」といいます。）には、本ポリシーに従って、本サービスをご利用いただきます。'),

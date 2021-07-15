@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Constants/setting.dart';
 import '../Widget/HexColor.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -13,11 +14,18 @@ class _TermsPageState extends State<TermsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).termsOfUse),
-        backgroundColor: HexColor('00C2FF'),
+        title: Text(
+          AppLocalizations.of(context).termsOfUse
+        ),
+        backgroundColor: HexColor(Setting.APP_COLOR),
       ),
       body: ListView(
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 20,
+          right: 20,
+          bottom: 50,
+        ),
         children: <Widget>[
           SizedBox(height: 25),
 

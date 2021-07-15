@@ -18,9 +18,11 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final RouteObserver<PageRoute> _routeObserver = RouteObserver<PageRoute>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // TODO: i18n対応
       title: 'Stampアプリのサンプルアプリ',
       theme: ThemeData.light(), // ライト用テーマ
       darkTheme: ThemeData.dark(), // ダーク用テーマ
@@ -29,8 +31,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       // 作成したページを呼び出す
       routes: <String, WidgetBuilder>{
-        // '/': (BuildContext context) => SamplePage(title: 'スタンプアプリ'),
-        '/': (BuildContext context) => HomeSamplePage(title: 'スタンプアプリ'),
+        // TODO: i18n対応　titleはi18n対応したものを渡せば各ページでタイトルの文をページごとに定義しなくていいのでは？
+        '/': (BuildContext context) =>
+            HomeSamplePage(title: 'スタンプアプリ', routeObserver: _routeObserver),
         '/Setting': (BuildContext context) => SettingPage(title: '設定'),
         '/history': (BuildContext context) => HistoryPage(title: '利用履歴'),
         '/terms': (BuildContext context) => TermsPage(title: '利用規約'),
@@ -49,6 +52,8 @@ class MyApp extends StatelessWidget {
       supportedLocales: [
         const Locale('en', ''), // 英語
         const Locale('ja', ''), // 日本語
+      navigatorObservers: [
+        _routeObserver,
       ],
     );
   }

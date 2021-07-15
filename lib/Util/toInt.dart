@@ -1,15 +1,15 @@
 int parseBooleanToInt(bool deletedFlg) {
   var ret = 0;
-  if (!deletedFlg) {
+  if (deletedFlg) {
     ret = 1;
   }
   return ret;
 }
 
 bool parseIntToBoolean(int deletedFlg) {
-  var ret = true;
-  if (deletedFlg != 0) {
-    ret = false;
+  var ret = false;
+  if (deletedFlg == 1) {
+    ret = true;
   }
   return ret;
 }
