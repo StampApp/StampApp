@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:stamp_app/Util/enumDateType.dart';
+import 'package:stamp_app/Util/Enums/enumDateType.dart';
 
 // datetime からstringへの変換
 String formatDateTimeToString(DateTime datetime, EnumDateType dateType) {
