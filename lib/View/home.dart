@@ -434,6 +434,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   Widget _totalPoint(int point, double deviceWidth, double deviceHeight) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
+          alignment: Alignment.center,
           margin:
               EdgeInsets.fromLTRB(deviceWidth / 20, deviceHeight / 85, 0, 25),
           width: deviceWidth / 2 * 1,
