@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // 読み込み結果を表示するダイアログ
-void qrDialog (BuildContext context, ScanResult scanResult) {
-    showDialog(
+void qrDialog(BuildContext context, ScanResult scanResult) {
+  showDialog(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('読み込み結果'),
+        title: Text(AppLocalizations.of(context).readResult),
         content: Container(
           height: 320,
-            child: Column(
+          child: Column(
             children: <Widget>[
               ListTile(
                 title: Text("Result Type"),

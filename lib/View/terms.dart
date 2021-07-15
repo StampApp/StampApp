@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Widget/HexColor.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TermsPage extends StatefulWidget {
   TermsPage({Key key, this.title}) : super(key: key);
@@ -12,7 +13,7 @@ class _TermsPageState extends State<TermsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(AppLocalizations.of(context).termsOfUse),
         backgroundColor: HexColor('00C2FF'),
       ),
       body: ListView(

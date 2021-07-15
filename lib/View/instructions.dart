@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InstructionsPage extends StatefulWidget {
   InstructionsPage({Key key, this.title}) : super(key: key);
@@ -15,7 +16,7 @@ class _InstructionsPageState extends State<InstructionsPage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(AppLocalizations.of(context).usage),
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),

@@ -5,5 +5,31 @@
     "termsOfUse":"Terms Of Use",
     "privacyPolicy":"Privacy Policy",
     "version":"Version",
-    "settings":"Settings"
+    "settings":"Settings",
+    "noUsageHistory":"No usage history.",
+    "last3Months":"Last 3 months",
+    "last6Months":"Last 6 months",
+    "last9Months":"Last 9 months",
+    "last12Months":"Last 12 months",
+    "loading":"Loading.",
+    "earnedStamps":"Earned Stamps",
+    "dataIsIncorrect":"Data is incorrect.",
+    "error":"error",
+    "notQRCode":"It's not a QR code.",
+    "invalidQRCode":"This QR code is invalid.",
+    "illegalQRCode":"Illegal QR code.",
+    "yes":"yes",
+    "gettingStamp":"getting a stamp",
+    "use":"use",
+    "notAccessCamera":"Access to the camera is not allowed.",
+    "stampCollected":"Stamps have been collected.",
+    "readResult":"Read results",
+    "maxStamp":"I have accumulated {maxStamp} stamps.",
+    "@maxStamp": {
+        "placeholders": {
+            "maxStamp": {}
+        }
+    },
+    "pleaseExchange":"Please exchange.",
+    "noMoreStamps":"No more stamps will be loaded."
 }

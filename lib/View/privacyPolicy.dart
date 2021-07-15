@@ -8,6 +8,7 @@
 */
 import 'package:flutter/material.dart';
 import '../Widget/HexColor.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PrivacyPolicyPage extends StatefulWidget {
   // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
@@ -26,7 +27,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
     // Scaffoldは画面構成の基本Widget
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(AppLocalizations.of(context).privacyPolicy),
         backgroundColor: HexColor('00C2FF'),
       ),
       body: ListView(

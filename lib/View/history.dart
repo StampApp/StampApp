@@ -4,6 +4,8 @@ import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/enumDateType.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class HistoryPage extends StatefulWidget {
   HistoryPage({Key key, this.title}) : super(key: key);
@@ -17,6 +19,7 @@ class _HistoryPageState extends State<HistoryPage> {
   int _selectItem = 0;
   List<Stamp> stampList = [];
   int pastMonth = 3;
+  int initCount = 0;
 
   // DBから使用したスタンプを取得する
   getStampList() async {
@@ -58,20 +61,20 @@ class _HistoryPageState extends State<HistoryPage> {
     pastMonth = pastMonthArr[dropDownValue];
   }
 
-  @override
-  void initState() {
-    super.initState();
+  void init() {
+    //super.initState();
     setItem();
     _selectItem = _items[0].value;
+    initCount += 1;
   }
 
   //ドロップダウンの中身のアイテム
   void setItem() {
     List<Map> dropdownItem = [
-      {'text': '過去3ヶ月', 'value': 0},
-      {'text': '過去6ヶ月', 'value': 1},
-      {'text': '過去9ヶ月', 'value': 2},
-      {'text': '過去12ヶ月', 'value': 3},
+      {'text': AppLocalizations.of(context).last3Months, 'value': 0},
+      {'text': AppLocalizations.of(context).last6Months, 'value': 1},
+      {'text': AppLocalizations.of(context).last9Months, 'value': 2},
+      {'text': AppLocalizations.of(context).last12Months, 'value': 3},
     ];
     _items = dropdownItem.map<DropdownMenuItem<int>>((Map maps) {
       return DropdownMenuItem<int>(
@@ -87,10 +90,11 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     final Size displaySize = MediaQuery.of(context).size;
+
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
-              title: Text(widget.title),
+              title: Text(AppLocalizations.of(context).usageHistory),
               leading: new IconButton(
                 icon: new Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () => Navigator.of(context).pop(),
@@ -103,6 +107,9 @@ class _HistoryPageState extends State<HistoryPage> {
               future: getDateList(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 // getDateListの処理が終了した場合
+                if (initCount == 0) {
+                  init();
+                }
                 if (snapshot.connectionState == ConnectionState.done) {
                   return ListView(children: <Widget>[
                     Row(
@@ -130,13 +137,13 @@ class _HistoryPageState extends State<HistoryPage> {
                         ]),
                     if (snapshot.data.length != 0)
                       for (int i = 0; i < snapshot.data.length; i++)
-                        _line(snapshot.data[i], stampList)
+                        _line(snapshot.data[i], stampList, context)
                     // データが存在しなかった場合
                     else
                       Container(
                         alignment: Alignment.center,
                         height: displaySize.height * 0.6,
-                        child: Text("利用履歴がありません",
+                        child: Text(AppLocalizations.of(context).noUsageHistory,
                             style: TextStyle(fontSize: 20.0)),
                       )
                   ]);
@@ -144,15 +151,23 @@ class _HistoryPageState extends State<HistoryPage> {
                   return Container(
                     alignment: Alignment.center,
                     height: displaySize.height,
-                    child: Text("読み込み中", style: TextStyle(fontSize: 20.0)),
+                    child: Text(AppLocalizations.of(context).loading,
+                        style: TextStyle(fontSize: 20.0)),
                   );
                 }
               },
-            )));
+            )),
+        localizationsDelegates: [
+          // localizations delegateを追加
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ]);
   }
 }
 
-Widget _line(String targetDate, List<Stamp> stampList) {
+Widget _line(String targetDate, List<Stamp> stampList, BuildContext context) {
   return GestureDetector(
       child: Column(
     children: <Widget>[
@@ -169,7 +184,7 @@ Widget _line(String targetDate, List<Stamp> stampList) {
                           if (formatDateTimeToString(
                                   stamp.getDate, EnumDateType.date) ==
                               targetDate)
-                            _row(stamp)
+                            _row(stamp, context)
                         ]))
                     .toList())
           ]),
@@ -178,7 +193,7 @@ Widget _line(String targetDate, List<Stamp> stampList) {
 }
 
 //List1行表示
-Widget _row(Stamp stamplist) {
+Widget _row(Stamp stamplist, BuildContext context) {
   return GestureDetector(
       child: Container(
           padding: EdgeInsets.all(8.0),
@@ -189,7 +204,9 @@ Widget _row(Stamp stamplist) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 //trueならスタンプ使用、それ以外ならスタンプゲットwidget呼び出し
-                (stamplist.deletedFlg) ? _usestamp() : _getstamp(),
+                (stamplist.deletedFlg)
+                    ? _usestamp(context)
+                    : _getstamp(context),
                 Container(
                     child: Text(formatDateTimeToString(
                         stamplist.getTime, EnumDateType.time)))
@@ -197,14 +214,14 @@ Widget _row(Stamp stamplist) {
 }
 
 //スタンプ使用時
-Widget _usestamp() {
+Widget _usestamp(BuildContext context) {
   return GestureDetector(
       child: Row(children: <Widget>[
     Icon(Icons.android),
     Container(
         margin: const EdgeInsets.only(left: 10),
         child: Text(
-          "利用",
+          AppLocalizations.of(context).use,
           style: TextStyle(
             color: Colors.black,
             fontSize: 18.0,
@@ -214,14 +231,14 @@ Widget _usestamp() {
 }
 
 //スタンプ取得
-Widget _getstamp() {
+Widget _getstamp(BuildContext context) {
   return GestureDetector(
       child: Row(children: <Widget>[
     Icon(Icons.ac_unit_sharp),
     Container(
         margin: const EdgeInsets.only(left: 10),
         child: Text(
-          "スタンプゲット",
+          AppLocalizations.of(context).gettingStamp,
           style: TextStyle(
             color: Colors.black,
             fontSize: 18.0,

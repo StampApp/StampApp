@@ -11,6 +11,7 @@ import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../Util/checkIsMaxStamps.dart';
 import '../Util/enumCheckString.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title}) : super(key: key);
@@ -242,10 +243,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
   }
 
   Future<void> _qrScan() async {
-    ScanResult result = await qrScan();
+    ScanResult result = await qrScan(context);
     final DateTime dateTime = DateTime.now();
 
-    if (result.rawContent != "データが不正です" &&
+    if (result.rawContent != AppLocalizations.of(context).dataIsIncorrect &&
         result.type.name != "Error" &&
         result.type.name != "Cancelled") {
       dynamic resultJson = json.decode(result.rawContent);
@@ -308,14 +309,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
           });
         }
       } else {
-        String title = "エラー";
-        String text =
-            result.format.name != "qr" ? "これはQRコードではありません" : "このQRコードは無効です";
+        String title = AppLocalizations.of(context).error;
+        String text = result.format.name != "qr"
+            ? AppLocalizations.of(context).notQRCode
+            : AppLocalizations.of(context).invalidQRCode;
         qrAlertDialog(context, title, text);
       }
     } else if (result.type.name != "Cancelled") {
-      String title = "エラー";
-      String text = '不正なQRコードです\n${result.rawContent}';
+      String title = AppLocalizations.of(context).error;
+      String text = AppLocalizations.of(context).dataIsIncorrect +
+          '\n${result.rawContent}';
       qrAlertDialog(context, title, text);
     }
   }
@@ -432,7 +435,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> {
               height: 30,
             ),
             Text(
-              '獲得スタンプ',
+              AppLocalizations.of(context).earnedStamps,
               style: TextStyle(
                 fontSize: 32.0,
                 fontStyle: FontStyle.normal,

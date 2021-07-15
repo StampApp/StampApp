@@ -5,5 +5,31 @@
     "termsOfUse":"利用規約",
     "privacyPolicy":"プライバシーポリシー",
     "version":"Version",
-    "settings":"設定"
+    "settings":"設定",
+    "noUsageHistory":"利用履歴がありません",
+    "last3Months":"過去３カ月",
+    "last6Months":"過去６カ月",
+    "last9Months":"過去９カ月",
+    "last12Months":"過去１２カ月",
+    "loading":"読み込み中",
+    "earnedStamps":"獲得スタンプ",
+    "dataIsIincorrect":"データが不正です",
+    "error":"エラー",
+    "notQRCode":"これはQRコードではありません",
+    "invalidQRCode":"このQRコードは無効です",
+    "illegalQRCode":"不正なQRコードです",
+    "yes":"はい",
+    "gettingStamp":"スタンプゲット",
+    "use":"利用",
+    "notAccessCamera":"カメラへのアクセスが許可されていません",
+    "stampCollected":"スタンプが貯まりました",
+    "readResult":"読み込み結果",
+    "maxStamp":"スタンプが{maxStamp}個貯まりました。",
+    "@maxStamp": {
+        "placeholders": {
+            "maxStamp": {}
+        }
+    },
+    "pleaseExchange":"交換してください。",
+    "noMoreStamps":"これ以上スタンプを読み込んでも増えません。"
 }
