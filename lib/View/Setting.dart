@@ -58,11 +58,13 @@ class _SettingPageState extends State<SettingPage> {
               onPressed: () => Navigator.pop(context),
             ),
 
-            RaisedButton(
+            ElevatedButton(
               child: const Text('OK'),
-              color: Colors.blue,
+        style:ElevatedButton.styleFrom(
+              primary: Colors.blue,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
+              ),
               ),
               onPressed: () => {Navigator.pop(context), _useStampDialog()},
             ),
@@ -86,11 +88,13 @@ class _SettingPageState extends State<SettingPage> {
               content: Text("スタンプが$exchange_spnum個溜まっていません"),
               actions: <Widget>[
                 // ボタン領域
-                RaisedButton(
+                ElevatedButton(
                   child: const Text('OK'),
-                  color: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                  style:ElevatedButton.styleFrom(
+                    primary: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   onPressed: () => Navigator.pop(context),
                 ),
@@ -108,11 +112,13 @@ class _SettingPageState extends State<SettingPage> {
           content: Text("スタンプを利用しました\n\n$idsText"),
           actions: <Widget>[
             // ボタン領域
-            RaisedButton(
+            ElevatedButton(
               child: const Text('OK'),
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+              style:ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               onPressed: () => Navigator.pop(context),
             ),
