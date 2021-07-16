@@ -2,16 +2,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
+import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:stamp_app/Widget/qrScan.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/models/stampLogs.dart';
 import 'package:uuid/uuid.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../Util/checkIsMaxStamps.dart';
-import '../Util/enumCheckString.dart';
+import '../Util/Enums/enumCheckString.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title, this.routeObserver}) : super(key: key);
@@ -62,7 +64,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
 
   Future<List<Stamp>> asyncGetStampList() async {
     List<Map<String, dynamic>> maps =
-        await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
+        await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
     stampListLen = maps.length;
 
@@ -132,7 +134,21 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                 deletedFlg: false,
                 createdAt: dateTime,
                 deletedAt: dateTime);
-            await DbInterface.insert('Stamp', Stamp.database, newStamp);
+            await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
+
+            // LOG 記録
+            StampLogs newLogs = new StampLogs(
+              id: uuid.v1(),
+              stampId: newStamp.id,
+              getDate: dateTime,
+              getTime: dateTime,
+              useFlg: false,
+              createdAt: dateTime,
+            );
+            
+            await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
+            print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
+
             setState(() {
               stampList[successStampLen] = newStamp;
             });
@@ -162,9 +178,22 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               deletedFlg: false,
               createdAt: dateTime,
               deletedAt: dateTime);
-          await DbInterface.insert('Stamp', Stamp.database, newStamp);
+          await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
+
+          // LOG 記録
+            StampLogs newLogs = new StampLogs(
+              id: uuid.v1(),
+              stampId: newStamp.id,
+              getDate: dateTime,
+              getTime: dateTime,
+              useFlg: false,
+              createdAt: dateTime,
+            );
+            await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
+            print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
+
           List<dynamic> countstamp =
-              await DbInterface.allSelect('Stamp', Stamp.database);
+              await DbInterface.allSelect('Stamp', DBHelper.databese());
           setState(() {
             stampListLen = countstamp.length;
             stampList[successStampLen] = newStamp;
@@ -183,7 +212,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     }
 
     List<dynamic> countstamp =
-        await DbInterface.selectDeleteFlg('Stamp', Stamp.database);
+        await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
     stampListLen = countstamp.length;
   }
 
@@ -223,7 +252,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     // 一度、別の画面に遷移したあとで、再度この画面に戻ってきた時にコールされます。
     // print("一度、別の画面に遷移したあとで、再度この画面に戻ってきた時にコールされます。");
     int existStampNum =
-        await DbInterface.selectStampCount('Stamp', Stamp.database);
+        await DbInterface.selectStampCount('Stamp', DBHelper.databese());
     int thisExistStampNum =
         stampList.where((element) => element.data == stampCheckString).length;
     if (existStampNum == 0 && thisExistStampNum == stampListLen) {

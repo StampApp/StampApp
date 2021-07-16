@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/Constants/setting.dart';
+import 'package:stamp_app/Util/toInt.dart';
 import 'package:stamp_app/Widget/stamp_icon_icons.dart';
+import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
-import 'package:stamp_app/Util/enumDateType.dart';
-import 'package:stamp_app/models/stamp.dart';
+import 'package:stamp_app/Util/Enums/enumDateType.dart';
+// import 'package:stamp_app/models/stamp.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/models/stampLogs.dart';
 
 class HistoryPage extends StatefulWidget {
   HistoryPage({Key key, this.title}) : super(key: key);
@@ -17,22 +20,43 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   List<DropdownMenuItem<int>> _items = [];
   int _selectItem = 0;
-  List<Stamp> stampList = [];
+  List<StampLogs> stampList = [];
   int pastMonth = 3;
 
   // DBから使用したスタンプを取得する
+  /*
+    getStampList() async {
+      List<Map<String, dynamic>> maps = await DbInterface.selectDateDesc(
+          'Stamp', DBHelper.databese(), DateTime.now(), pastMonth);
+
+      print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
+
+      // mapからstamp型への変換
+      return List.generate(maps.length, (i) {
+        return Stamp(
+          id: maps[i]['id'],
+          data: maps[i]['data'],
+          getDate: formatStringToDateTime(maps[i]['getdate'], EnumDateType.date),
+          getTime: formatStringToDateTime(maps[i]['gettime'], EnumDateType.time),
+          deletedFlg: maps[i]['deletedflg'] == 0,
+        );
+      });
+    }
+   */
   getStampList() async {
-    List<Map<String, dynamic>> maps = await DbInterface.selectDateDesc(
-        'Stamp', Stamp.database, DateTime.now(), pastMonth);
+    List<Map<String, dynamic>> maps = await DbInterface.selectDateDescLogs(
+        'StampLogs', DBHelper.databese(), DateTime.now(), pastMonth);
+
+    // print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
 
     // mapからstamp型への変換
     return List.generate(maps.length, (i) {
-      return Stamp(
+      return StampLogs(
         id: maps[i]['id'],
-        data: maps[i]['data'],
-        getDate: formatStringToDateTime(maps[i]['getdate'], EnumDateType.date),
-        getTime: formatStringToDateTime(maps[i]['gettime'], EnumDateType.time),
-        deletedFlg: maps[i]['deletedflg'] == 0,
+        stampId: maps[i]['stamp_id'],
+        getDate: formatStringToDateTime(maps[i]['stamp_date'], EnumDateType.date),
+        getTime: formatStringToDateTime(maps[i]['stamp_time'], EnumDateType.time),
+        useFlg: parseIntToBoolean(maps[i]['useflg']),
       );
     });
   }
@@ -152,7 +176,7 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 }
 
-Widget _line(String targetDate, List<Stamp> stampList) {
+Widget _line(String targetDate, List<StampLogs> stampList) {
   return GestureDetector(
       child: Column(
     children: <Widget>[
@@ -165,7 +189,7 @@ Widget _line(String targetDate, List<Stamp> stampList) {
             Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: stampList
-                    .map((Stamp stamp) => Column(children: <Widget>[
+                    .map((StampLogs stamp) => Column(children: <Widget>[
                           if (formatDateTimeToString(
                                   stamp.getDate, EnumDateType.date) ==
                               targetDate)
@@ -178,7 +202,7 @@ Widget _line(String targetDate, List<Stamp> stampList) {
 }
 
 //List1行表示
-Widget _row(Stamp stamplist) {
+Widget _row(StampLogs stamplist) {
   return GestureDetector(
       child: Container(
           padding: EdgeInsets.all(8.0),
@@ -189,7 +213,7 @@ Widget _row(Stamp stamplist) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 //trueならスタンプ使用、それ以外ならスタンプゲットwidget呼び出し
-                (stamplist.deletedFlg) ? _usestamp() : _getstamp(),
+                (stamplist.useFlg) ? _usestamp() : _getstamp(),
                 Container(
                     child: Text(formatDateTimeToString(
                         stamplist.getTime, EnumDateType.time)))

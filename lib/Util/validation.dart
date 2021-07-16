@@ -1,6 +1,6 @@
 // 読み込んだQRを検証するクラス
 import 'package:intl/intl.dart';
-import 'package:stamp_app/Util/enumCheckString.dart';
+import 'package:stamp_app/Util/Enums/enumCheckString.dart';
 
 class Validation {
   static final String stampCheckString = CheckString.ok.checkStringValue;

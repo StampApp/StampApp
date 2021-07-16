@@ -1,12 +1,9 @@
-import 'dart:async';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/toInt.dart';
-import 'package:stamp_app/Util/enumDateType.dart';
+import 'package:stamp_app/Util/Enums/enumDateType.dart';
 
 class Stamp {
-  static final _tableName = 'Stamp'; // テーブル名
+  // static final _tableName = 'Stamp'; // テーブル名
 
   // モデル定義
   final String id;
@@ -53,23 +50,23 @@ class Stamp {
 
   // テーブル作成
   // join関数でデータベースのパスを設定
-  static Future<Database> get database async {
-    final Future<Database> _database = openDatabase(
-      join(await getDatabasesPath(), 'stamp_database.db'),
-      onCreate: (db, version) {
-        return db.execute("CREATE TABLE $_tableName ("
-            "id TEXT PRIMARY KEY,"
-            "data TEXT,"
-            "getdate TEXT,"
-            "gettime TEXT,"
-            "stampnum TEXT,"
-            "deletedflg INTEGER,"
-            "createdat TEXT,"
-            "deletedat TEXT"
-            ")");
-      },
-      version: 1,
-    );
-    return _database;
-  }
+  // static Future<Database> get database async {
+  //   final Future<Database> _database = openDatabase(
+  //     join(await getDatabasesPath(), 'stamp_database.db'),
+  //     onCreate: (db, version) {
+  //       return db.execute("CREATE TABLE $_tableName ("
+  //           "id TEXT PRIMARY KEY,"
+  //           "data TEXT,"
+  //           "getdate TEXT,"
+  //           "gettime TEXT,"
+  //           "stampnum TEXT,"
+  //           "deletedflg INTEGER,"
+  //           "createdat TEXT,"
+  //           "deletedat TEXT"
+  //           ")");
+  //     },
+  //     version: 1,
+  //   );
+  //   return _database;
+  // }
 }
