@@ -25,6 +25,13 @@ void stampMaxDialogAlert(BuildContext context, int maxStamp) {
         actions: <Widget>[
           TextButton(
             child: Text(AppLocalizations.of(context).yes),
+            style: OutlinedButton.styleFrom(
+              primary: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              side: const BorderSide(color: Colors.blue),
+            ),
             onPressed: () => Navigator.of(context).pop(1),
           ),
         ],
