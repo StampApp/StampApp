@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stamp_app/Constants/setting.dart';
-import 'package:stamp_app/Util/enumCheckString.dart';
+import 'package:stamp_app/Util/Enums/enumCheckString.dart';
 import 'package:stamp_app/Util/validation.dart';
 
 void main() {

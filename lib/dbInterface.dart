@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:sqflite/sqflite.dart';
-import 'package:stamp_app/Util/enumStampCount.dart';
+import 'package:stamp_app/Util/Enums/enumStampCount.dart';
 
 class DbInterface {
   /*
@@ -31,6 +31,17 @@ class DbInterface {
         "WHERE datetime('$nowDate', '-$pastMonths months') " +
         "< getdate " +
         "order by getdate desc, gettime desc");
+    return maps;
+  }
+
+  static Future<List> selectDateDescLogs(
+      String _tableName, var database, DateTime nowDate, int pastMonths) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.rawQuery("SELECT * " +
+        "FROM $_tableName " +
+        "WHERE datetime('$nowDate', '-$pastMonths months') " +
+        "< stamp_date " +
+        "order by stamp_date desc, stamp_time desc");
     return maps;
   }
 
