@@ -37,8 +37,9 @@ class _SettingPageState extends State<SettingPage> {
       context: context,
       builder: (_) {
         return AlertDialog(
+          contentPadding: EdgeInsets.fromLTRB(10, 30, 10, 30),
           title: Text("確認"),
-          content: Text("本当に利用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
+          content: Text("スタンプを9個集めると交換できます。\n本当に利用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
@@ -78,7 +79,7 @@ class _SettingPageState extends State<SettingPage> {
           builder: (_) {
             return AlertDialog(
               title: Text("スタンプ利用"),
-              content: Text("スタンプが溜まっていません"),
+              content: Text("スタンプが9個溜まっていません"),
               actions: <Widget>[
                 // ボタン領域
                 RaisedButton(
