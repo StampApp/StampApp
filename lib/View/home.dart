@@ -74,8 +74,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
         data: maps[i]['data'],
         getDate: dateTime,
         getTime: dateTime,
-        stampNum: maps[i]['stampnum'],
-        deletedFlg: maps[i]['deleteflg'] == 0 ? true : false,
+        stampNum: maps[i]['stamp_num'],
+        useFlg: maps[i]['useflg'] == 0 ? true : false,
         createdAt: dateTime,
         deletedAt: dateTime,
       );
@@ -94,7 +94,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           getDate: dateTime,
           getTime: dateTime,
           stampNum: (i).toString(),
-          deletedFlg: false,
+          useFlg: false,
           createdAt: dateTime,
           deletedAt: dateTime);
       stampList.add(newStamp);
@@ -131,7 +131,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                 getDate: dateTime,
                 getTime: dateTime,
                 stampNum: resultJson["stampNum"],
-                deletedFlg: false,
+                useFlg: false,
                 createdAt: dateTime,
                 deletedAt: dateTime);
             await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
@@ -145,9 +145,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               useFlg: false,
               createdAt: dateTime,
             );
-            
+
             await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
-            print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
+            print(
+                await DbInterface.allSelect('StampLogs', DBHelper.databese()));
 
             setState(() {
               stampList[successStampLen] = newStamp;
@@ -163,7 +164,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                   getDate: dateTime,
                   getTime: dateTime,
                   stampNum: "",
-                  deletedFlg: false,
+                  useFlg: false,
                   createdAt: dateTime,
                   deletedAt: dateTime);
               stampList.add(newStamp);
@@ -175,22 +176,22 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               getDate: dateTime,
               getTime: dateTime,
               stampNum: resultJson["stampNum"],
-              deletedFlg: false,
+              useFlg: false,
               createdAt: dateTime,
               deletedAt: dateTime);
           await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
 
           // LOG 記録
-            StampLogs newLogs = new StampLogs(
-              id: uuid.v1(),
-              stampId: newStamp.id,
-              getDate: dateTime,
-              getTime: dateTime,
-              useFlg: false,
-              createdAt: dateTime,
-            );
-            await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
-            print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
+          StampLogs newLogs = new StampLogs(
+            id: uuid.v1(),
+            stampId: newStamp.id,
+            getDate: dateTime,
+            getTime: dateTime,
+            useFlg: false,
+            createdAt: dateTime,
+          );
+          await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
+          print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
 
           List<dynamic> countstamp =
               await DbInterface.allSelect('Stamp', DBHelper.databese());
@@ -264,7 +265,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             getDate: dateTime,
             getTime: dateTime,
             stampNum: (i + 1).toString(),
-            deletedFlg: false,
+            useFlg: false,
             createdAt: dateTime,
             deletedAt: dateTime);
         newStampList.add(newStamp);

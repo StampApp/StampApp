@@ -8,33 +8,26 @@ class DBHelper {
 
   static Future<Database> databese() async {
     final dbPath = await getDatabasesPath();
-    return openDatabase(
-      join(dbPath, Setting.DB_PATH),
-      onCreate: (db, version) async {
-        await db.execute(
-          "CREATE TABLE $_stampTable ("
+    return openDatabase(join(dbPath, Setting.DB_PATH),
+        onCreate: (db, version) async {
+      await db.execute("CREATE TABLE $_stampTable ("
           "id TEXT PRIMARY KEY,"
           "data TEXT,"
-          "getdate TEXT,"
-          "gettime TEXT,"
-          "stampnum TEXT,"
-          "deletedflg INTEGER,"
-          "createdat TEXT,"
-          "deletedat TEXT"
-          ")"
-        );
-        await db.execute(
-          "CREATE TABLE $_stampLogsTable ("
+          "stamp_date TEXT,"
+          "stamp_time TEXT,"
+          "stamp_num TEXT,"
+          "useflg INTEGER,"
+          "created_at TEXT,"
+          "deleted_at TEXT"
+          ")");
+      await db.execute("CREATE TABLE $_stampLogsTable ("
           "id TEXT PRIMARY KEY,"
           "stamp_id TEXT,"
           "stamp_date TEXT,"
           "stamp_time TEXT,"
           "useflg INTEGER,"
           "created_at TEXT"
-          ")"
-        );
-      }, 
-      version: 1
-    );
+          ")");
+    }, version: 1);
   }
 }
