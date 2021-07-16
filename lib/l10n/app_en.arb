@@ -1,0 +1,54 @@
+{
+    "@@locale":"en",
+    "usageHistory":"Usage History",
+    "usage":"Usage",
+    "termsOfUse":"Terms Of Use",
+    "privacyPolicy":"Privacy Policy",
+    "version":"Version",
+    "settings":"Settings",
+    "noUsageHistory":"No usage history.",
+    "last3Months":"Last 3 months",
+    "last6Months":"Last 6 months",
+    "last9Months":"Last 9 months",
+    "last12Months":"Last 12 months",
+    "loading":"Loading.",
+    "earnedStamps":"Earned Stamps",
+    "dataIsIncorrect":"Data is incorrect.",
+    "error":"error",
+    "notQRCode":"It's not a QR code.",
+    "invalidQRCode":"This QR code is invalid.",
+    "illegalQRCode":"Illegal QR code.",
+    "yes":"yes",
+    "gettingStamp":"getting a stamp",
+    "use":"use",
+    "notAccessCamera":"Access to the camera is not allowed.",
+    "stampCollected":"Stamps have been collected.",
+    "readResult":"Read results",
+    "maxStamp":"I have accumulated {maxStamp} stamps.",
+    "@maxStamp": {
+        "placeholders": {
+            "maxStamp": {}
+        }
+    },
+    "pleaseExchange":"Please exchange.",
+    "noMoreStamps":"No more stamps will be loaded.",
+    "stampApp":"stamp app",
+    "stampUse":"Stamp Use",
+    "totalStamps":"Stamp total",
+    "confirmation":"Confirmation",
+    "exchangeStamps":"You can exchange them by collecting {exchange_spnum} stamps.",
+    "@exchangeStamps":{
+        "placeholders": {
+            "exchange_spnum": {}
+        }
+    },
+    "reallyUseStamps":"Do you really want to use it?",
+    "disappearStamps":"If you use them, the stamps you have accumulated will disappear.",
+    "littleStamps":"You haven't collected {exchange_spnum} stamps yet.",
+    "@littleStamps":{
+        "placeholders": {
+            "exchange_spnum": {}
+        }
+    },
+    "usedStamps":"I used a stamp."
+}
