@@ -4,7 +4,7 @@ import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 
 class InstructionsPage extends StatefulWidget {
-  InstructionsPage({Key key, this.title}) : super(key: key);
+  InstructionsPage({Key? key, required this.title}) : super(key: key);
   final String title;
   @override
   _InstructionsPageState createState() => _InstructionsPageState();
@@ -54,7 +54,7 @@ class _IntroductionState extends State<Introduction> {
     super.initState();
     // ページコントローラのページ遷移を監視しページ数を丸める
     controller.addListener(() {
-      int next = controller.page.round();
+      int next = controller.page!.round();
       if (_currentPageNotifier.value != next) {
         setState(() {
           _currentPageNotifier.value = next;

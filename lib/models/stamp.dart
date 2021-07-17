@@ -12,18 +12,19 @@ class Stamp {
   final DateTime getTime; // 取得時間
   final String stampNum; // スタンプの数
   final bool useFlg; // 使用済みフラグ
-  final DateTime createdAt; // スタンプが押された時間
-  final DateTime deletedAt; // 削除日時
+  final DateTime? createdAt; // スタンプが押された時間
+  final DateTime? deletedAt; // 削除日時
 
-  Stamp(
-      {this.id,
-      this.data,
-      this.getDate,
-      this.getTime,
-      this.stampNum,
-      this.useFlg,
-      this.createdAt,
-      this.deletedAt});
+  Stamp({
+    required this.id,
+    required this.data,
+    required this.getDate,
+    required this.getTime,
+    required this.stampNum,
+    required this.useFlg,
+    this.createdAt,
+    this.deletedAt
+  });
 
   // StampからMap型に変換
   // カラム名に対応する必要あり

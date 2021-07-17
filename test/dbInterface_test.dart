@@ -10,9 +10,9 @@ class Test {
   final int flg;
 
   Test({
-    this.id,
-    this.title,
-    this.flg,
+    required this.id,
+    required this.title,
+    required this.flg,
   });
 
   Map<String, dynamic> toMap() {
@@ -109,9 +109,9 @@ void main() {
       var maps = await db.query('Test');
       var list = List.generate(maps.length, (i) {
         return Test(
-          id: maps[i]['id'],
-          title: maps[i]['title'],
-          flg: maps[i]['flg'],
+          id: maps[i]['id'] as String,
+          title: maps[i]['title'] as String,
+          flg: maps[i]['flg'] as int,
         );
       });
       await db.close();
@@ -138,9 +138,9 @@ void main() {
       var maps = await db.query('Test');
       var list = List.generate(maps.length, (i) {
         return Test(
-          id: maps[i]['id'],
-          title: maps[i]['title'],
-          flg: maps[i]['flg'],
+          id: maps[i]['id'] as String,
+          title: maps[i]['title'] as String,
+          flg: maps[i]['flg'] as int,
         );
       });
       await db.close();
@@ -168,9 +168,9 @@ void main() {
       var maps = await db.query('Test');
       var list = List.generate(maps.length, (i) {
         return Test(
-          id: maps[i]['id'],
-          title: maps[i]['title'],
-          flg: maps[i]['flg'],
+          id: maps[i]['id'] as String,
+          title: maps[i]['title'] as String,
+          flg: maps[i]['flg'] as int,
         );
       });
       await db.close();

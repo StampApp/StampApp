@@ -11,7 +11,7 @@ import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
 
 class SettingPage extends StatefulWidget {
-  SettingPage({Key key, this.title}) : super(key: key);
+  SettingPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -19,7 +19,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  final int exchange_spnum = StampCount.count.stampCount; //スタンプを交換する際に必要な数
+  final int exchangeSpnum = StampCount.count.stampCount!; //スタンプを交換する際に必要な数
   void _termsNavigate() {
     Navigator.of(context).pushNamed('/terms');
   }
@@ -43,7 +43,7 @@ class _SettingPageState extends State<SettingPage> {
         return AlertDialog(
           contentPadding: EdgeInsets.fromLTRB(10, 30, 10, 30),
           title: Text("確認"),
-          content: Text("スタンプを$exchange_spnum個集めると交換できます。\n本当に利用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
+          content: Text("スタンプを$exchangeSpnum個集めると交換できます。\n本当に利用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
@@ -85,7 +85,7 @@ class _SettingPageState extends State<SettingPage> {
           builder: (_) {
             return AlertDialog(
               title: Text("スタンプ利用"),
-              content: Text("スタンプが$exchange_spnum個溜まっていません"),
+              content: Text("スタンプが$exchangeSpnum個溜まっていません"),
               actions: <Widget>[
                 // ボタン領域
                 ElevatedButton(
@@ -151,7 +151,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget _menuItem(String title, Icon icon, [VoidCallback tap]) {
+  Widget _menuItem(String title, Icon icon, [VoidCallback? tap]) {
     return GestureDetector(
       child: Container(
           padding: EdgeInsets.all(8.0),
@@ -207,13 +207,13 @@ Widget _version() {
 Future<Map> _useStamp() async {
   // useflgがfalseのスタンプ数を取得
   int count = await DbInterface.selectStampCount('Stamp', DBHelper.databese());
-  final int stampCheckString = StampCount.count.stampCount;
+  final int stampCheckString = StampCount.count.stampCount!;
   // uuid
   final uuid = Uuid();
 
   if (count < stampCheckString) return {'idsText': null, 'canUseStamp': false};
   // useflgがfalseのスタンプを取得
-  List<Map<String, dynamic>> maps =
+  List maps =
       await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
   // 更新レコードを作成

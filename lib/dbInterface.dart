@@ -56,7 +56,7 @@ class DbInterface {
 
   // deleteFlgが0のスタンプを取得する
   static Future<List> selectDeleteFlg(String _tableName, var database) async {
-    final int stampCheckString = StampCount.count.stampCount;
+    final int stampCheckString = StampCount.count.stampCount!;
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query('$_tableName',
         where: 'useFlg = ?',

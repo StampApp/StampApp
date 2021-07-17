@@ -11,15 +11,16 @@ class StampLogs {
   final DateTime getDate; // 取得日
   final DateTime getTime; // 取得時間
   final bool useFlg; // 使用済みフラグ
-  final DateTime createdAt; // スタンプが押された時間
+  final DateTime? createdAt; // スタンプが押された時間
 
-  StampLogs(
-      {this.id,
-      this.stampId,
-      this.getDate,
-      this.getTime,
-      this.useFlg,
-      this.createdAt});
+  StampLogs({
+    required this.id,
+    required this.stampId,
+    required this.getDate,
+    required this.getTime,
+    required this.useFlg,
+    this.createdAt
+  });
 
   Map<String, dynamic> toMap() {
     String toDate = formatDateTimeToString(getDate, EnumDateType.date);

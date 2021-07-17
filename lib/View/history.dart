@@ -11,7 +11,7 @@ import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
 
 class HistoryPage extends StatefulWidget {
-  HistoryPage({Key key, this.title}) : super(key: key);
+  HistoryPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   _HistoryPageState createState() => _HistoryPageState();
@@ -44,7 +44,7 @@ class _HistoryPageState extends State<HistoryPage> {
     }
    */
   getStampList() async {
-    List<Map<String, dynamic>> maps = await DbInterface.selectDateDescLogs(
+    List maps = await DbInterface.selectDateDescLogs(
         'StampLogs', DBHelper.databese(), DateTime.now(), pastMonth);
 
     // print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
@@ -88,7 +88,7 @@ class _HistoryPageState extends State<HistoryPage> {
   void initState() {
     super.initState();
     setItem();
-    _selectItem = _items[0].value;
+    _selectItem = _items[0].value!;
   }
 
   //ドロップダウンの中身のアイテム
@@ -147,7 +147,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           items: _items,
                           value: _selectItem,
                           onChanged: (value) => {
-                            pastMonthChange(value),
+                            pastMonthChange(value as int),
                             setState(() => _selectItem = value),
                           },
                         ),
