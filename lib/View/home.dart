@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/models/stamp.dart';
-import 'package:barcode_scan/barcode_scan.dart';
-import 'package:stamp_app/Widget/qrScan.dart';
+// import 'package:barcode_scan/barcode_scan.dart';
+// import 'package:stamp_app/Widget/qrScan.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
@@ -16,7 +17,7 @@ import '../Util/checkIsMaxStamps.dart';
 import '../Util/Enums/enumCheckString.dart';
 
 class HomeSamplePage extends StatefulWidget {
-  HomeSamplePage({Key key, this.title, this.routeObserver}) : super(key: key);
+  HomeSamplePage({Key? key, required this.title, required this.routeObserver}) : super(key: key);
   final String title;
   final RouteObserver<PageRoute> routeObserver;
 
@@ -50,20 +51,20 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   List<List<Stamp>> cardList = [];
 
   //pageviewで使用する
-  PageController controller;
+  late PageController controller;
 
-  Future<List<Stamp>> _getStamp;
+  late Future<List<Stamp>> _getStamp;
 
   List<Stamp> stampList = [];
 
-  static final String stampCheckString = CheckString.ok.checkStringValue;
+  static final String stampCheckString = CheckString.ok.checkStringValue!;
 
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
   }
 
   Future<List<Stamp>> asyncGetStampList() async {
-    List<Map<String, dynamic>> maps =
+    List maps =
         await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
     stampListLen = maps.length;
@@ -103,7 +104,13 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     return stampList;
   }
 
+  // TODO: Barcode_Scanが使用できないのでロジックから修正
   Future<void> _qrScan() async {
+    if (await Permission.camera.request().isGranted) {
+      Navigator.pushNamed(context, '/qrScan');
+    } else {
+      await showRequestPermissionDialog(context);
+    }
     ScanResult result = await qrScan();
     final DateTime dateTime = DateTime.now();
 
@@ -227,7 +234,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    widget.routeObserver.subscribe(this, ModalRoute.of(context));
+    widget.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
   }
 
   // @override
@@ -482,5 +489,29 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             ),
           ))
     ]);
+  }
+
+  Future<void> showRequestPermissionDialog(BuildContext context) async {
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('カメラを許可してください'),
+          content: const Text('QRコードを読み取る為にカメラを利用します'),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('キャンセル'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                openAppSettings();
+              },
+              child: const Text('設定'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
