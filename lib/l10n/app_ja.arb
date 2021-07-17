@@ -20,7 +20,7 @@
     "illegalQRCode":"不正なQRコードです",
     "yes":"はい",
     "gettingStamp":"スタンプゲット",
-    "use":"利用",
+    "useStamp":"スタンプ使用",
     "notAccessCamera":"カメラへのアクセスが許可されていません",
     "stampCollected":"スタンプが貯まりました",
     "readResult":"読み込み結果",

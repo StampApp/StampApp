@@ -10,7 +10,6 @@ import 'package:stamp_app/Util/Enums/enumDateType.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 class HistoryPage extends StatefulWidget {
   HistoryPage({Key key, this.title}) : super(key: key);
@@ -27,7 +26,7 @@ class _HistoryPageState extends State<HistoryPage> {
   String _noHistory;
   String _loading;
   String _getStamp;
-  String _use;
+  String _useStamp;
 
   // DBから使用したスタンプを取得する
   /*
@@ -98,7 +97,7 @@ class _HistoryPageState extends State<HistoryPage> {
     _noHistory = AppLocalizations.of(context).noUsageHistory;
     _loading = AppLocalizations.of(context).loading;
     _getStamp = AppLocalizations.of(context).gettingStamp;
-    _use = AppLocalizations.of(context).use;
+    _useStamp = AppLocalizations.of(context).useStamp;
   }
 
   //ドロップダウンの中身のアイテム
@@ -123,76 +122,65 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     final Size displaySize = MediaQuery.of(context).size;
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          backgroundColor: HexColor(Setting.APP_COLOR),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-
-        // リストの日付の処理が終わるまで読み込み中を表示する
-        body: FutureBuilder(
-          future: getDateList(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            init();
-            // getDateListの処理が終了した場合
-            if (snapshot.connectionState == ConnectionState.done) {
-              return ListView(children: <Widget>[
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      //ドロップダウンメニュー
-                      Container(
-                        padding: EdgeInsets.only(left: 15),
-                        margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
-                        decoration: BoxDecoration(
-                          //枠線を丸くするかどうか
-                          //borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(
-                              color: HexColor(Setting.APP_COLOR), width: 1),
-                        ),
-                        child: DropdownButton(
-                          items: _items,
-                          value: _selectItem,
-                          onChanged: (value) => {
-                            pastMonthChange(value),
-                            setState(() => _selectItem = value),
-                          },
-                        ),
-                      )
-                    ]),
-                if (snapshot.data.length != 0)
-                  for (int i = 0; i < snapshot.data.length; i++)
-                    _line(snapshot.data[i], stampList)
-                // データが存在しなかった場合
-                else
-                  Container(
-                    alignment: Alignment.center,
-                    height: displaySize.height * 0.6,
-                    child: Text(_noHistory, style: TextStyle(fontSize: 20.0)),
-                  )
-              ]);
-            } else {
-              return Container(
-                alignment: Alignment.center,
-                height: displaySize.height,
-                child: Text(_loading, style: TextStyle(fontSize: 20.0)),
-              );
-            }
-          },
-        ),
+        backgroundColor: HexColor(Setting.APP_COLOR),
       ),
-      localizationsDelegates: [
-        // localizations delegateを追加
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+
+      // リストの日付の処理が終わるまで読み込み中を表示する
+      body: FutureBuilder(
+        future: getDateList(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          init();
+          // getDateListの処理が終了した場合
+          if (snapshot.connectionState == ConnectionState.done) {
+            return ListView(children: <Widget>[
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+                //ドロップダウンメニュー
+                Container(
+                  padding: EdgeInsets.only(left: 15),
+                  margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
+                  decoration: BoxDecoration(
+                    //枠線を丸くするかどうか
+                    //borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(
+                        color: HexColor(Setting.APP_COLOR), width: 1),
+                  ),
+                  child: DropdownButton(
+                    items: _items,
+                    value: _selectItem,
+                    onChanged: (value) => {
+                      pastMonthChange(value),
+                      setState(() => _selectItem = value),
+                    },
+                  ),
+                )
+              ]),
+              if (snapshot.data.length != 0)
+                for (int i = 0; i < snapshot.data.length; i++)
+                  _line(snapshot.data[i], stampList)
+              // データが存在しなかった場合
+              else
+                Container(
+                  alignment: Alignment.center,
+                  height: displaySize.height * 0.6,
+                  child: Text(_noHistory, style: TextStyle(fontSize: 20.0)),
+                )
+            ]);
+          } else {
+            return Container(
+              alignment: Alignment.center,
+              height: displaySize.height,
+              child: Text(_loading, style: TextStyle(fontSize: 20.0)),
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -248,7 +236,7 @@ class _HistoryPageState extends State<HistoryPage> {
       Container(
           margin: const EdgeInsets.only(left: 10),
           child: Text(
-            _use,
+            _useStamp,
             style: TextStyle(
               fontSize: 18.0,
             ),
