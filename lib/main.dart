@@ -4,6 +4,7 @@
 * ページを追加する場合はimportしてroutesの中でルーティングパスとWidgetを定義する
 */
 import 'package:flutter/material.dart';
+import 'package:stamp_app/View/qrScan.dart';
 import 'View/home.dart';
 import 'View/terms.dart';
 import 'View/Setting.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) =>
             HomeSamplePage(title: 'スタンプアプリ', routeObserver: _routeObserver),
+        '/qrScan': (BuildContext context) => QRCodeScanner(title: 'QR読み取り'),
         '/Setting': (BuildContext context) => SettingPage(title: '設定'),
         '/history': (BuildContext context) => HistoryPage(title: '利用履歴'),
         '/terms': (BuildContext context) => TermsPage(title: '利用規約'),
