@@ -36,18 +36,18 @@
     "stampUse":"Stamp Use",
     "totalStamps":"Total",
     "confirmation":"Confirmation",
-    "exchangeStamps":"You can exchange them by collecting {exchange_spnum} stamps.",
+    "exchangeStamps":"You can exchange them by collecting {exchangeSpnum} stamps.",
     "@exchangeStamps":{
         "placeholders": {
-            "exchange_spnum": {}
+            "exchangeSpnum": {}
         }
     },
     "reallyUseStamps":"Do you really want to use it?",
     "disappearStamps":"If you use them, the stamps you have accumulated will disappear.",
-    "littleStamps":"You haven't collected {exchange_spnum} stamps yet.",
+    "littleStamps":"You haven't collected {exchangeSpnum} stamps yet.",
     "@littleStamps":{
         "placeholders": {
-            "exchange_spnum": {}
+            "exchangeSpnum": {}
         }
     },
     "usedStamps":"I used a stamp."

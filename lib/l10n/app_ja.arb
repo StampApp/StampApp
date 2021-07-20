@@ -36,18 +36,18 @@
     "stampUse":"スタンプ使用",
     "totalStamps":"スタンプ合計",
     "confirmation":"確認",
-    "exchangeStamps":"スタンプを{exchange_spnum}個集めると交換できます。",
+    "exchangeStamps":"スタンプを{exchangeSpnum}個集めると交換できます。",
     "@exchangeStamps":{
         "placeholders": {
-            "exchange_spnum": {}
+            "exchangeSpnum": {}
         }
     },
     "reallyUseStamps":"本当に使用しますか？",
     "disappearStamps":"使用した場合溜まっていたスタンプは消えてしまいます。",
-    "littleStamps":"スタンプが{exchange_spnum}個溜まっていません",
+    "littleStamps":"スタンプが{exchangeSpnum}個溜まっていません",
     "@littleStamps":{
         "placeholders": {
-            "exchange_spnum": {}
+            "exchangeSpnum": {}
         }
     },
     "usedStamps":"スタンプを使用しました"

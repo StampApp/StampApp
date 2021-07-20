@@ -10,7 +10,6 @@ import 'package:stamp_app/Util/Enums/enumStampCount.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({Key key, this.title}) : super(key: key);
@@ -21,7 +20,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  final int exchange_spnum = StampCount.count.stampCount; //スタンプを交換する際に必要な数
+  final int exchangeSpnum = StampCount.count.stampCount; //スタンプを交換する際に必要な数
   void _termsNavigate() {
     Navigator.of(context).pushNamed('/terms');
   }
@@ -46,7 +45,7 @@ class _SettingPageState extends State<SettingPage> {
           contentPadding: EdgeInsets.fromLTRB(10, 30, 10, 30),
           title: Text(AppLocalizations.of(context).confirmation),
           content: Text(
-              AppLocalizations.of(context).exchangeStamps(exchange_spnum) +
+              AppLocalizations.of(context).exchangeStamps(exchangeSpnum) +
                   "\n" +
                   AppLocalizations.of(context).reallyUseStamps +
                   "\n" +
@@ -67,11 +66,11 @@ class _SettingPageState extends State<SettingPage> {
 
             ElevatedButton(
               child: const Text('OK'),
-        style:ElevatedButton.styleFrom(
-              primary: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               onPressed: () => {Navigator.pop(context), _useStampDialog()},
             ),
@@ -93,12 +92,12 @@ class _SettingPageState extends State<SettingPage> {
             return AlertDialog(
               title: Text(AppLocalizations.of(context).stampUse),
               content: Text(
-                  AppLocalizations.of(context).littleStamps(exchange_spnum)),
+                  AppLocalizations.of(context).littleStamps(exchangeSpnum)),
               actions: <Widget>[
                 // ボタン領域
                 ElevatedButton(
                   child: const Text('OK'),
-                  style:ElevatedButton.styleFrom(
+                  style: ElevatedButton.styleFrom(
                     primary: Colors.blue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -123,7 +122,7 @@ class _SettingPageState extends State<SettingPage> {
             // ボタン領域
             ElevatedButton(
               child: const Text('OK'),
-              style:ElevatedButton.styleFrom(
+              style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
