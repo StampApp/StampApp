@@ -19,16 +19,19 @@ void stampDialog(BuildContext context, Stamp stamp) {
                     fit: BoxFit.fitWidth),
               ),
               ListTile(
-                title: Text("stampNum"),
-                subtitle: Text(stamp.stampNum.toString()),
-              ),
-              ListTile(
-                title: Text("data"),
-                subtitle: Text(stamp.data),
-              ),
-              ListTile(
-                title: Text("createAt"),
-                subtitle: Text(stamp.createdAt.toString()),
+                title: Text("スタンプ読み込み日時"),
+                subtitle: Text(stamp.createdAt.year.toString() +
+                    "年" +
+                    stamp.createdAt.month.toString() +
+                    "月" +
+                    stamp.createdAt.day.toString() +
+                    "日 " +
+                    stamp.createdAt.hour.toString() +
+                    "時" +
+                    stamp.createdAt.minute.toString() +
+                    "分" +
+                    stamp.createdAt.second.toString() +
+                    "秒"),
               ),
             ],
           ),
