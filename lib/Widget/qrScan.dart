@@ -25,7 +25,7 @@ Future<ScanResult> qrScan(BuildContext context) async {
     if (!Validation.dateCheck(rowContent['createdAt']) ||
         !Validation.strCheck(rowContent['data']) ||
         !Validation.pathCheck(rowContent['stampNum'], imagePaths)) {
-      result.rawContent = AppLocalizations.of(context).dataIsIncorrect;
+      result.rawContent = AppLocalizations.of(context).incorrectData;
     }
     return result;
   } on PlatformException catch (e) {

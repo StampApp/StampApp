@@ -108,7 +108,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     ScanResult result = await qrScan(context);
     final DateTime dateTime = DateTime.now();
 
-    if (result.rawContent != AppLocalizations.of(context).dataIsIncorrect &&
+    if (result.rawContent != AppLocalizations.of(context).incorrectData &&
         result.type.name != "Error" &&
         result.type.name != "Cancelled") {
       dynamic resultJson = json.decode(result.rawContent);
@@ -210,8 +210,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       }
     } else if (result.type.name != "Cancelled") {
       String title = AppLocalizations.of(context).error;
-      String text = AppLocalizations.of(context).dataIsIncorrect +
-          '\n${result.rawContent}';
+      String text =
+          AppLocalizations.of(context).incorrectData + '\n${result.rawContent}';
       qrAlertDialog(context, title, text);
     }
 
