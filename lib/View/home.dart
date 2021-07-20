@@ -14,6 +14,7 @@ import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../Util/checkIsMaxStamps.dart';
 import '../Util/Enums/enumCheckString.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title, this.routeObserver}) : super(key: key);
@@ -104,10 +105,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   }
 
   Future<void> _qrScan() async {
-    ScanResult result = await qrScan();
+    ScanResult result = await qrScan(context);
     final DateTime dateTime = DateTime.now();
 
-    if (result.rawContent != "データが不正です" &&
+    if (result.rawContent != AppLocalizations.of(context).incorrectData &&
         result.type.name != "Error" &&
         result.type.name != "Cancelled") {
       dynamic resultJson = json.decode(result.rawContent);
@@ -201,14 +202,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           });
         }
       } else {
-        String title = "エラー";
-        String text =
-            result.format.name != "qr" ? "これはQRコードではありません" : "このQRコードは無効です";
+        String title = AppLocalizations.of(context).error;
+        String text = result.format.name != "qr"
+            ? AppLocalizations.of(context).notQRCode
+            : AppLocalizations.of(context).invalidQRCode;
         qrAlertDialog(context, title, text);
       }
     } else if (result.type.name != "Cancelled") {
-      String title = "エラー";
-      String text = '不正なQRコードです\n${result.rawContent}';
+      String title = AppLocalizations.of(context).error;
+      String text =
+          AppLocalizations.of(context).incorrectData + '\n${result.rawContent}';
       qrAlertDialog(context, title, text);
     }
 
@@ -474,7 +477,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                 color: HexColor(Setting.APP_COLOR).withOpacity(0.6), width: 3),
           ),
           child: Text(
-            '合計スタンプ数: $point',
+            AppLocalizations.of(context).totalStamps + ': $point',
             style: TextStyle(
               fontSize: deviceHeight * 0.026,
               fontStyle: FontStyle.normal,
