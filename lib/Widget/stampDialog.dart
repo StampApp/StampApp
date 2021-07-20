@@ -39,6 +39,7 @@ void stampDialog(BuildContext context, Stamp stamp) {
 }
 
 String dateFormat(createdAt) {
+  //createdAtを「yyyy年MM月DD日(E)　hh:mm:ss」という表記に変更する関数
   initializeDateFormatting('ja');
   String data = DateFormat.yMMMEd('ja').format(createdAt).toString() + "　";
   data += DateFormat.jms('ja').format(createdAt).toString();
