@@ -58,11 +58,13 @@ class _SettingPageState extends State<SettingPage> {
               onPressed: () => Navigator.pop(context),
             ),
 
-            RaisedButton(
+            ElevatedButton(
               child: const Text('OK'),
-              color: Colors.blue,
+        style:ElevatedButton.styleFrom(
+              primary: Colors.blue,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
+              ),
               ),
               onPressed: () => {Navigator.pop(context), _useStampDialog()},
             ),
@@ -86,11 +88,13 @@ class _SettingPageState extends State<SettingPage> {
               content: Text("スタンプが$exchange_spnum個溜まっていません"),
               actions: <Widget>[
                 // ボタン領域
-                RaisedButton(
+                ElevatedButton(
                   child: const Text('OK'),
-                  color: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                  style:ElevatedButton.styleFrom(
+                    primary: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   onPressed: () => Navigator.pop(context),
                 ),
@@ -108,11 +112,13 @@ class _SettingPageState extends State<SettingPage> {
           content: Text("スタンプを利用しました\n\n$idsText"),
           actions: <Widget>[
             // ボタン領域
-            RaisedButton(
+            ElevatedButton(
               child: const Text('OK'),
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+              style:ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               onPressed: () => Navigator.pop(context),
             ),
@@ -199,14 +205,14 @@ Widget _version() {
 
 // スタンプ数を取得し規定数あった場合使用する
 Future<Map> _useStamp() async {
-  // deletedFlgがfalseのスタンプ数を取得
+  // useflgがfalseのスタンプ数を取得
   int count = await DbInterface.selectStampCount('Stamp', DBHelper.databese());
   final int stampCheckString = StampCount.count.stampCount;
   // uuid
   final uuid = Uuid();
 
   if (count < stampCheckString) return {'idsText': null, 'canUseStamp': false};
-  // deletedFlgがfalseのスタンプを取得
+  // useflgがfalseのスタンプを取得
   List<Map<String, dynamic>> maps =
       await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
@@ -216,11 +222,11 @@ Future<Map> _useStamp() async {
     return Stamp(
       id: maps[i]['id'],
       data: maps[i]['data'],
-      getDate: formatStringToDateTime(maps[i]['getdate'], EnumDateType.date),
-      getTime: formatStringToDateTime(maps[i]['gettime'], EnumDateType.time),
-      stampNum: maps[i]['stampnum'],
-      deletedFlg: true,
-      createdAt: DateTime.parse(maps[i]['createdat']),
+      getDate: formatStringToDateTime(maps[i]['stamp_date'], EnumDateType.date),
+      getTime: formatStringToDateTime(maps[i]['stamp_time'], EnumDateType.time),
+      stampNum: maps[i]['stamp_num'],
+      useFlg: true,
+      createdAt: DateTime.parse(maps[i]['created_at']),
       deletedAt: nowDate,
     );
   });

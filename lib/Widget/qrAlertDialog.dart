@@ -19,6 +19,13 @@ void qrAlertDialog(BuildContext context, String title, String text) {
         actions: <Widget>[
           TextButton(
             child: Text('はい'),
+            style: OutlinedButton.styleFrom(
+              primary: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              side: const BorderSide(color: Colors.blue),
+            ),
             onPressed: () => Navigator.of(context).pop(1),
           ),
         ],
