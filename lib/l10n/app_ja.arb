@@ -13,7 +13,7 @@
     "last12Months":"過去１２カ月",
     "loading":"読み込み中",
     "earnedStamps":"獲得スタンプ",
-    "dataIsIncorrect":"データが不正です",
+    "incorrectData":"データが不正です",
     "error":"エラー",
     "notQRCode":"これはQRコードではありません",
     "invalidQRCode":"このQRコードは無効です",

@@ -13,7 +13,7 @@
     "last12Months":"Last 12 months",
     "loading":"Loading.",
     "earnedStamps":"Earned Stamps",
-    "dataIsIncorrect":"Data is incorrect.",
+    "incorrectData":"Incorrect Data.",
     "error":"Error",
     "notQRCode":"It's not a QR code.",
     "invalidQRCode":"This QR code is invalid.",
