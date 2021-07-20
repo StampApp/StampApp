@@ -56,6 +56,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
 
   List<Stamp> stampList = [];
 
+  GlobalKey _key;
+
   static final String stampCheckString = CheckString.ok.checkStringValue;
 
   void _settingNavigate() {
@@ -145,9 +147,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               useFlg: false,
               createdAt: dateTime,
             );
-            
+
             await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
-            print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
+            print(
+                await DbInterface.allSelect('StampLogs', DBHelper.databese()));
 
             setState(() {
               stampList[successStampLen] = newStamp;
@@ -181,16 +184,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
 
           // LOG 記録
-            StampLogs newLogs = new StampLogs(
-              id: uuid.v1(),
-              stampId: newStamp.id,
-              getDate: dateTime,
-              getTime: dateTime,
-              useFlg: false,
-              createdAt: dateTime,
-            );
-            await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
-            print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
+          StampLogs newLogs = new StampLogs(
+            id: uuid.v1(),
+            stampId: newStamp.id,
+            getDate: dateTime,
+            getTime: dateTime,
+            useFlg: false,
+            createdAt: dateTime,
+          );
+          await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
+          print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
 
           List<dynamic> countstamp =
               await DbInterface.allSelect('Stamp', DBHelper.databese());
@@ -299,7 +302,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                 fit: BoxFit.contain,
                 height: 50,
               ),
-              Container(padding: EdgeInsets.only(left: 190))
+              //Container(padding: EdgeInsets.only(left: 190))
             ],
           ),
           actions: <Widget>[
@@ -331,24 +334,23 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               Widget childWidget;
               if (snapshot.connectionState == ConnectionState.done) {
                 childWidget = Column(children: [
+                  _slider(context, stampCheckString, deviceWidth)
+                  /*
                   Expanded(
                       child: Container(
                     child: PageView(
                       children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: PageView(
-                            controller: controller,
-                            children: <Widget>[
-                              _slider(context, stampCheckString, deviceWidth)
-                            ],
-                          ),
+                        PageView(
+                          controller: controller,
+                          children: <Widget>[
+                            _slider(context, stampCheckString, deviceWidth)
+                          ],
                         ),
                       ],
                       controller: controller,
                     ),
                   )),
-                  _totalPoint(stampListLen, deviceWidth, deviceHeight)
+                  //_totalPoint(stampListLen, deviceWidth, deviceHeight)*/
                 ]);
               } else {
                 childWidget = const CircularProgressIndicator();
@@ -361,10 +363,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       BuildContext context, String stampCheckString, double deviceWidth) {
     return Container(
         color: HexColor(Setting.APP_COLOR).withOpacity(0.6),
-        margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 7,
-            deviceWidth / 20, deviceWidth / 7),
-        width: deviceWidth / 4 - 4 * 1,
-        height: deviceWidth / 4 - 4 * 1,
+        margin: EdgeInsets.fromLTRB(deviceWidth / 20,
+            MediaQuery.of(context).size.height * 0.07, deviceWidth / 20, 10),
+        height: MediaQuery.of(context).size.height * 0.73,
         child: _stampCard(context, stampCheckString, deviceWidth));
   }
 
@@ -375,7 +376,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           SizedBox(
-            height: MediaQuery.of(context).size.width,
             child: FutureBuilder(
                 future: _getStamp,
                 builder: (BuildContext context,
@@ -388,7 +388,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                       physics: ClampingScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       padding: EdgeInsets.fromLTRB(
-                          10, deviceWidth / 7, 10, deviceWidth / 7),
+                          0, MediaQuery.of(context).size.height * 0.01, 0, 10),
+
                       // スタンプをListの数だけ生成する
                       children: stampList
                           .map(
@@ -405,11 +406,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                       //padding: const EdgeInsets.all(11.0),
                                       width: MediaQuery.of(context).size.width /
                                               4 -
-                                          4 * 1,
+                                          5 * 1,
                                       height:
                                           MediaQuery.of(context).size.width /
                                                   4 -
-                                              4 * 1,
+                                              5 * 1,
                                       // 円を生成
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
