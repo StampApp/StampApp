@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/models/stamp.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 // 読み込み結果を表示するダイアログ
 void stampDialog(BuildContext context, Stamp stamp) {
@@ -14,21 +16,12 @@ void stampDialog(BuildContext context, Stamp stamp) {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                title: Text("Image"),
                 subtitle: Image.asset(stamp.stampNum.toString(),
                     fit: BoxFit.fitWidth),
               ),
               ListTile(
-                title: Text("stampNum"),
-                subtitle: Text(stamp.stampNum.toString()),
-              ),
-              ListTile(
-                title: Text("data"),
-                subtitle: Text(stamp.data),
-              ),
-              ListTile(
-                title: Text("createAt"),
-                subtitle: Text(stamp.createdAt.toString()),
+                title: Text("スタンプ読み込み日時"),
+                subtitle: Text(dateFormat(stamp.createdAt)),
               ),
             ],
           ),
@@ -42,4 +35,12 @@ void stampDialog(BuildContext context, Stamp stamp) {
       );
     },
   );
+}
+
+String dateFormat(createdAt) {
+  //createdAtを「yyyy年MM月DD日(E)　hh:mm:ss」という表記に変更する関数
+  initializeDateFormatting('ja');
+  String data = DateFormat.yMMMEd('ja').format(createdAt).toString() + "　";
+  data += DateFormat.jms('ja').format(createdAt).toString();
+  return data;
 }

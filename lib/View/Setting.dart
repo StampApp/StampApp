@@ -9,6 +9,7 @@ import 'package:stamp_app/Util/Enums/enumDateType.dart';
 import 'package:stamp_app/Util/Enums/enumStampCount.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({Key key, this.title}) : super(key: key);
@@ -19,7 +20,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  final int exchange_spnum = StampCount.count.stampCount; //スタンプを交換する際に必要な数
+  final int exchangeSpnum = StampCount.count.stampCount; //スタンプを交換する際に必要な数
   void _termsNavigate() {
     Navigator.of(context).pushNamed('/terms');
   }
@@ -42,8 +43,13 @@ class _SettingPageState extends State<SettingPage> {
       builder: (_) {
         return AlertDialog(
           contentPadding: EdgeInsets.fromLTRB(10, 30, 10, 30),
-          title: Text("確認"),
-          content: Text("スタンプを$exchange_spnum個集めると交換できます。\n本当に利用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
+          title: Text(AppLocalizations.of(context).confirmation),
+          content: Text(
+              AppLocalizations.of(context).exchangeStamps(exchangeSpnum) +
+                  "\n" +
+                  AppLocalizations.of(context).reallyUseStamps +
+                  "\n" +
+                  AppLocalizations.of(context).disappearStamps),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
@@ -60,11 +66,11 @@ class _SettingPageState extends State<SettingPage> {
 
             ElevatedButton(
               child: const Text('OK'),
-        style:ElevatedButton.styleFrom(
-              primary: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               onPressed: () => {Navigator.pop(context), _useStampDialog()},
             ),
@@ -84,13 +90,14 @@ class _SettingPageState extends State<SettingPage> {
           context: context,
           builder: (_) {
             return AlertDialog(
-              title: Text("スタンプ利用"),
-              content: Text("スタンプが$exchange_spnum個溜まっていません"),
+              title: Text(AppLocalizations.of(context).stampUse),
+              content: Text(
+                  AppLocalizations.of(context).littleStamps(exchangeSpnum)),
               actions: <Widget>[
                 // ボタン領域
                 ElevatedButton(
                   child: const Text('OK'),
-                  style:ElevatedButton.styleFrom(
+                  style: ElevatedButton.styleFrom(
                     primary: Colors.blue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -108,13 +115,14 @@ class _SettingPageState extends State<SettingPage> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text("スタンプ利用"),
-          content: Text("スタンプを利用しました\n\n$idsText"),
+          title: Text(AppLocalizations.of(context).usedStamps),
+          content:
+              Text(AppLocalizations.of(context).usedStamps + "\n\n$idsText"),
           actions: <Widget>[
             // ボタン領域
             ElevatedButton(
               child: const Text('OK'),
-              style:ElevatedButton.styleFrom(
+              style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -140,13 +148,18 @@ class _SettingPageState extends State<SettingPage> {
         backgroundColor: HexColor(Setting.APP_COLOR),
       ),
       body: ListView(children: [
-        _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),
-        _menuItem("使い方", Icon(Icons.menu_book), _instructionsNavigate),
-        _menuItem("利用規約", Icon(Icons.verified_user_outlined), _termsNavigate),
-        _menuItem("プライバシーポリシー", Icon(Icons.privacy_tip_outlined),
-            _privacyPolicyNavigate),
-        _menuItem("Version", Icon(Icons.system_update_alt_rounded)),
-        _menuItem("スタンプ使用", Icon(Icons.shopping_bag_outlined), _useStampCheck),
+        _menuItem(AppLocalizations.of(context).usageHistory,
+            Icon(Icons.format_list_bulleted), _historyNavigate),
+        _menuItem(AppLocalizations.of(context).usage, Icon(Icons.menu_book),
+            _instructionsNavigate),
+        _menuItem(AppLocalizations.of(context).termsOfUse,
+            Icon(Icons.verified_user_outlined), _termsNavigate),
+        _menuItem(AppLocalizations.of(context).privacyPolicy,
+            Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
+        _menuItem(AppLocalizations.of(context).version,
+            Icon(Icons.system_update_alt_rounded)),
+        _menuItem(AppLocalizations.of(context).stampUse,
+            Icon(Icons.shopping_bag_outlined), _useStampCheck),
       ]),
     );
   }

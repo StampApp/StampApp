@@ -10,6 +10,8 @@ import 'View/Setting.dart';
 import 'View/privacyPolicy.dart';
 import 'View/history.dart';
 import 'View/instructions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -28,16 +30,31 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       // 作成したページを呼び出す
       routes: <String, WidgetBuilder>{
-        '/': (BuildContext context) =>
-            HomeSamplePage(title: 'スタンプアプリ', routeObserver: _routeObserver),
-        '/Setting': (BuildContext context) => SettingPage(title: '設定'),
-        '/history': (BuildContext context) => HistoryPage(title: '利用履歴'),
-        '/terms': (BuildContext context) => TermsPage(title: '利用規約'),
+        '/': (BuildContext context) => HomeSamplePage(
+            title: AppLocalizations.of(context).stampApp,
+            routeObserver: _routeObserver),
+        '/Setting': (BuildContext context) =>
+            SettingPage(title: AppLocalizations.of(context).settings),
+        '/history': (BuildContext context) =>
+            HistoryPage(title: AppLocalizations.of(context).usageHistory),
+        '/terms': (BuildContext context) =>
+            TermsPage(title: AppLocalizations.of(context).termsOfUse),
         '/instructions': (BuildContext context) =>
-            InstructionsPage(title: '使い方'),
-        '/privacyPolicy': (BuildContext context) =>
-            PrivacyPolicyPage(title: 'プライバシーポリシー'),
+            InstructionsPage(title: AppLocalizations.of(context).usage),
+        '/privacyPolicy': (BuildContext context) => PrivacyPolicyPage(
+            title: AppLocalizations.of(context).privacyPolicy),
       },
+      localizationsDelegates: [
+        // localizations delegateを追加
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', ''), // 英語
+        const Locale('ja', ''), // 日本語
+      ],
       navigatorObservers: [
         _routeObserver,
       ],
