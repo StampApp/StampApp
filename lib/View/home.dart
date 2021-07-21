@@ -56,8 +56,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
 
   List<Stamp> stampList = [];
 
-  GlobalKey _key;
-
   static final String stampCheckString = CheckString.ok.checkStringValue;
 
   void _settingNavigate() {
@@ -302,7 +300,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                 fit: BoxFit.contain,
                 height: 50,
               ),
-              //Container(padding: EdgeInsets.only(left: 190))
+              Container(padding: EdgeInsets.only(left: 190))
             ],
           ),
           actions: <Widget>[
