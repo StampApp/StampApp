@@ -163,7 +163,7 @@ class _SettingPageState extends State<SettingPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                side: const BorderSide(color: Colors.blue),
+                side: BorderSide(color: HexColor(Setting.APP_COLOR)),
               ),
               onPressed: () => _useStampCheck(),
             )),
