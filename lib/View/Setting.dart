@@ -43,7 +43,8 @@ class _SettingPageState extends State<SettingPage> {
         return AlertDialog(
           contentPadding: EdgeInsets.fromLTRB(10, 30, 10, 30),
           title: Text("確認"),
-          content: Text("スタンプを$exchange_spnum個集めると交換できます。\n本当に利用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
+          content: Text(
+              "スタンプを$exchange_spnum個集めると交換できます。\n本当に利用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
@@ -60,11 +61,11 @@ class _SettingPageState extends State<SettingPage> {
 
             ElevatedButton(
               child: const Text('OK'),
-        style:ElevatedButton.styleFrom(
-              primary: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               onPressed: () => {Navigator.pop(context), _useStampDialog()},
             ),
@@ -90,7 +91,7 @@ class _SettingPageState extends State<SettingPage> {
                 // ボタン領域
                 ElevatedButton(
                   child: const Text('OK'),
-                  style:ElevatedButton.styleFrom(
+                  style: ElevatedButton.styleFrom(
                     primary: Colors.blue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -114,7 +115,7 @@ class _SettingPageState extends State<SettingPage> {
             // ボタン領域
             ElevatedButton(
               child: const Text('OK'),
-              style:ElevatedButton.styleFrom(
+              style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -139,14 +140,33 @@ class _SettingPageState extends State<SettingPage> {
         ),
         backgroundColor: HexColor(Setting.APP_COLOR),
       ),
-      body: ListView(children: [
-        _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),
-        _menuItem("使い方", Icon(Icons.menu_book), _instructionsNavigate),
-        _menuItem("利用規約", Icon(Icons.verified_user_outlined), _termsNavigate),
-        _menuItem("プライバシーポリシー", Icon(Icons.privacy_tip_outlined),
-            _privacyPolicyNavigate),
-        _menuItem("Version", Icon(Icons.system_update_alt_rounded)),
-        _menuItem("スタンプ使用", Icon(Icons.shopping_bag_outlined), _useStampCheck),
+      body: Column(children: <Widget>[
+        Expanded(
+            child: ListView(children: [
+          _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),
+          _menuItem("使い方", Icon(Icons.menu_book), _instructionsNavigate),
+          _menuItem("利用規約", Icon(Icons.verified_user_outlined), _termsNavigate),
+          _menuItem("プライバシーポリシー", Icon(Icons.privacy_tip_outlined),
+              _privacyPolicyNavigate),
+          _menuItem("Version", Icon(Icons.system_update_alt_rounded)),
+        ])),
+        Padding(
+            padding: const EdgeInsets.all(40),
+            child: OutlinedButton.icon(
+              icon: const Icon(
+                Icons.shopping_bag_outlined,
+                size: 30,
+              ),
+              label: const Text('スタンプ使用', style: TextStyle(fontSize: 18)),
+              style: OutlinedButton.styleFrom(
+                minimumSize: Size(220, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                side: const BorderSide(color: Colors.blue),
+              ),
+              onPressed: () => _useStampCheck(),
+            )),
       ]),
     );
   }
