@@ -35,6 +35,7 @@ dependencies:
   barcode_scan: any
   flutter_native_splash: ^1.1.8+4
   uuid: ^3.0.4
+  google_fonts: ^2.1.0
 
   page_indicator: ^0.3.0
 
