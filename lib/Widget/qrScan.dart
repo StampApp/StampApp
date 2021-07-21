@@ -1,5 +1,4 @@
 // import 'dart:convert';
-
 // // import 'package:barcode_scan/barcode_scan.dart';
 // import 'package:flutter/services.dart';
 // import 'package:stamp_app/Util/validation.dart';
@@ -11,7 +10,6 @@
 //     if (result.type.name == "Cancelled") {
 //       return result;
 //     }
-
 //     var manifestContent = await rootBundle.loadString('AssetManifest.json');
 //     Map<String, dynamic> manifestMap = json.decode(manifestContent);
 //     List<String> imagePaths = manifestMap.keys
@@ -19,7 +17,6 @@
 //         .toList();
 
 //     Map<String, dynamic> rowContent = json.decode(result.rawContent);
-
 //     if (!Validation.dateCheck(rowContent['createdAt']) ||
 //         !Validation.strCheck(rowContent['data']) ||
 //         !Validation.pathCheck(rowContent['stampNum'], imagePaths)) {

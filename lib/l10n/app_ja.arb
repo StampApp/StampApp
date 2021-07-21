@@ -1,0 +1,68 @@
+{
+    "@@locale": "ja",
+    "usageHistory":"利用履歴",
+    "usage":"使い方",
+    "termsOfUse":"利用規約",
+    "privacyPolicy":"プライバシーポリシー",
+    "version":"Version",
+    "settings":"設定",
+    "noUsageHistory":"利用履歴がありません",
+    "last3Months":"過去３カ月",
+    "last6Months":"過去６カ月",
+    "last9Months":"過去９カ月",
+    "last12Months":"過去１２カ月",
+    "loading":"読み込み中",
+    "earnedStamps":"獲得スタンプ",
+    "incorrectData":"データが不正です",
+    "error":"エラー",
+    "notQRCode":"これはQRコードではありません",
+    "invalidQRCode":"このQRコードは無効です",
+    "illegalQRCode":"不正なQRコードです",
+    "yes":"はい",
+    "gettingStamp":"スタンプゲット",
+    "useStamp":"スタンプ使用",
+    "notAccessCamera":"カメラへのアクセスが許可されていません",
+    "stampCollected":"スタンプが貯まりました",
+    "readResult":"読み込み結果",
+    "maxStamp":"スタンプが{maxStamp}個貯まりました。",
+    "@maxStamp": {
+        "placeholders": {
+            "maxStamp": {}
+        }
+    },
+    "pleaseExchange":"交換してください。",
+    "noMoreStamps":"これ以上スタンプを読み込んでも増えません。",
+    "stampApp":"スタンプアプリ",
+    "stampUse":"スタンプ使用",
+    "totalStamps":"スタンプ合計",
+    "confirmation":"確認",
+    "exchangeStamps":"スタンプを{exchangeSpnum}個集めると交換できます。",
+    "@exchangeStamps":{
+        "placeholders": {
+            "exchangeSpnum": {}
+        }
+    },
+    "reallyUseStamps":"本当に使用しますか？",
+    "disappearStamps":"使用した場合溜まっていたスタンプは消えてしまいます。",
+    "littleStamps":"スタンプが{exchangeSpnum}個溜まっていません",
+    "@littleStamps":{
+        "placeholders": {
+            "exchangeSpnum": {}
+        }
+    },
+    "usedStamps":"スタンプを使用しました",
+    "goToSetting":"設定画面へ遷移",
+    "showHaveStamp":"所持しているスタンプの表示",
+    "goToScanning":"QR読み取り画面へ遷移",
+    "goToPrevious":"前の画面へ遷移",
+    "goToHistory":"利用履歴へ遷移",
+    "currentScreen":"現在の画面",
+    "goToUse":"利用規約へ遷移",
+    "jumpPrivacyPolicy":"プライバシーポリシーへ遷移",
+    "useAccumulatedStamps":"貯まったスタンプを使用する",
+    "sortTimeOfUse":"利用時期のソート",
+    "displaysUsageHistory":"その日付の利用履歴が表示",
+    "descriptionHome":"ホーム画面の説明",
+    "explanationSetting":"設定画面の説明",
+    "explanationUsageHistory":"利用履歴の説明"
+}

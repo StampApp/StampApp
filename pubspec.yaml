@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   dependencies:
   page_view_indicators: ^2.0.0
@@ -40,6 +42,7 @@ dependencies:
   permission_handler: ^8.1.2
   flutter_native_splash: ^1.2.0
   uuid: ^3.0.4
+  google_fonts: ^2.1.0
 
   page_indicator: ^0.4.1
 
@@ -61,6 +64,7 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
+  generate: true
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
