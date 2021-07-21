@@ -37,8 +37,6 @@ class Stamp {
 class AppBackground extends StatelessWidget {
  @override
  Widget build(BuildContext context) {
-   final double deviceHeight = MediaQuery.of(context).size.height;
-    final double deviceWidth = MediaQuery.of(context).size.width;
    return LayoutBuilder(builder: (context, contraint) {
      final height = contraint.maxHeight;
      final width = contraint.maxWidth;
