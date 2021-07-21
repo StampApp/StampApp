@@ -23,10 +23,10 @@ class _HistoryPageState extends State<HistoryPage> {
   int _selectItem = 0;
   List<StampLogs> stampList = [];
   int pastMonth = 3;
-  String _noHistory;
-  String _loading;
-  String _getStamp;
-  String _useStamp;
+  String? _noHistory;
+  String? _loading;
+  String? _getStamp;
+  String? _useStamp;
 
   // DBから使用したスタンプを取得する
   /*
@@ -93,20 +93,20 @@ class _HistoryPageState extends State<HistoryPage> {
 
   void init() {
     setItem();
-    _selectItem = _items[0].value;
-    _noHistory = AppLocalizations.of(context).noUsageHistory;
-    _loading = AppLocalizations.of(context).loading;
-    _getStamp = AppLocalizations.of(context).gettingStamp;
-    _useStamp = AppLocalizations.of(context).useStamp;
+    _selectItem = _items[0].value!;
+    _noHistory = AppLocalizations.of(context)!.noUsageHistory;
+    _loading = AppLocalizations.of(context)!.loading;
+    _getStamp = AppLocalizations.of(context)!.gettingStamp;
+    _useStamp = AppLocalizations.of(context)!.useStamp;
   }
 
   //ドロップダウンの中身のアイテム
   void setItem() {
     List<Map> dropdownItem = [
-      {'text': AppLocalizations.of(context).last3Months, 'value': 0},
-      {'text': AppLocalizations.of(context).last6Months, 'value': 1},
-      {'text': AppLocalizations.of(context).last9Months, 'value': 2},
-      {'text': AppLocalizations.of(context).last12Months, 'value': 3},
+      {'text': AppLocalizations.of(context)!.last3Months, 'value': 0},
+      {'text': AppLocalizations.of(context)!.last6Months, 'value': 1},
+      {'text': AppLocalizations.of(context)!.last9Months, 'value': 2},
+      {'text': AppLocalizations.of(context)!.last12Months, 'value': 3},
     ];
     _items = dropdownItem.map<DropdownMenuItem<int>>((Map maps) {
       return DropdownMenuItem<int>(
@@ -155,7 +155,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     items: _items,
                     value: _selectItem,
                     onChanged: (value) => {
-                      pastMonthChange(value),
+                      pastMonthChange(value as int),
                       setState(() => _selectItem = value),
                     },
                   ),
@@ -169,14 +169,14 @@ class _HistoryPageState extends State<HistoryPage> {
                 Container(
                   alignment: Alignment.center,
                   height: displaySize.height * 0.6,
-                  child: Text(_noHistory, style: TextStyle(fontSize: 20.0)),
+                  child: Text(_noHistory!, style: TextStyle(fontSize: 20.0)),
                 )
             ]);
           } else {
             return Container(
               alignment: Alignment.center,
               height: displaySize.height,
-              child: Text(_loading, style: TextStyle(fontSize: 20.0)),
+              child: Text(_loading!, style: TextStyle(fontSize: 20.0)),
             );
           }
         },
@@ -236,7 +236,7 @@ class _HistoryPageState extends State<HistoryPage> {
       Container(
           margin: const EdgeInsets.only(left: 10),
           child: Text(
-            _useStamp,
+            _useStamp!,
             style: TextStyle(
               fontSize: 18.0,
             ),
@@ -252,7 +252,7 @@ class _HistoryPageState extends State<HistoryPage> {
       Container(
           margin: const EdgeInsets.only(left: 10),
           child: Text(
-            _getStamp,
+            _getStamp!,
             style: TextStyle(
               fontSize: 18.0,
             ),

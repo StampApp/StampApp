@@ -19,7 +19,7 @@ void qrAlertDialog(BuildContext context, String title, String text) {
         ),
         actions: <Widget>[
           TextButton(
-            child: Text(AppLocalizations.of(context).yes),
+            child: Text(AppLocalizations.of(context)!.yes),
             style: OutlinedButton.styleFrom(
               primary: Colors.blue,
               shape: RoundedRectangleBorder(

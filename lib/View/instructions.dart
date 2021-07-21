@@ -89,37 +89,37 @@ class _IntroductionState extends State<Introduction> {
     //説明文
     List<String> _explanatoryNote = [
       "①" +
-          AppLocalizations.of(context).goToSetting +
+          AppLocalizations.of(context)!.goToSetting +
           "\n②" +
-          AppLocalizations.of(context).showHaveStamp +
+          AppLocalizations.of(context)!.showHaveStamp +
           "\n③" +
-          AppLocalizations.of(context).goToScanning,
+          AppLocalizations.of(context)!.goToScanning,
       "①" +
-          AppLocalizations.of(context).goToPrevious +
+          AppLocalizations.of(context)!.goToPrevious +
           "\n②" +
-          AppLocalizations.of(context).goToHistory +
+          AppLocalizations.of(context)!.goToHistory +
           "\n③" +
-          AppLocalizations.of(context).currentScreen +
+          AppLocalizations.of(context)!.currentScreen +
           "\n④" +
-          AppLocalizations.of(context).goToUse +
+          AppLocalizations.of(context)!.goToUse +
           "\n⑤" +
-          AppLocalizations.of(context).jumpPrivacyPolicy +
+          AppLocalizations.of(context)!.jumpPrivacyPolicy +
           "\n⑥" +
-          AppLocalizations.of(context).version +
+          AppLocalizations.of(context)!.version +
           "\n⑦" +
-          AppLocalizations.of(context).useAccumulatedStamps,
+          AppLocalizations.of(context)!.useAccumulatedStamps,
       "①" +
-          AppLocalizations.of(context).goToPrevious +
+          AppLocalizations.of(context)!.goToPrevious +
           "\n②" +
-          AppLocalizations.of(context).sortTimeOfUse +
+          AppLocalizations.of(context)!.sortTimeOfUse +
           "\n③" +
-          AppLocalizations.of(context).displaysUsageHistory,
+          AppLocalizations.of(context)!.displaysUsageHistory,
     ];
     // 表示するテキスト
     List<String> _textList = [
-      AppLocalizations.of(context).descriptionHome,
-      AppLocalizations.of(context).explanationSetting,
-      AppLocalizations.of(context).explanationUsageHistory,
+      AppLocalizations.of(context)!.descriptionHome,
+      AppLocalizations.of(context)!.explanationSetting,
+      AppLocalizations.of(context)!.explanationUsageHistory,
     ];
     return SafeArea(
       child: Column(

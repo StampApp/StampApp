@@ -41,42 +41,40 @@ class Stamp {
 }
 */
 class AppBackground extends StatelessWidget {
- @override
- Widget build(BuildContext context) {
-   return LayoutBuilder(builder: (context, contraint) {
-     final height = contraint.maxHeight;
-     final width = contraint.maxWidth;
-     return Stack(
-       children: <Widget>[
-         Container(
-           color: HexColor("e0ffff")
-         ),
-         Positioned(
-           top: height * 0.20,
-           left: height * 0.35,
-           child: Container(
-             height: height,
-             width: width,
-             decoration: BoxDecoration(
-                 shape: BoxShape.circle, color: HexColor(
-                                                      Setting.APP_COLOR).withAlpha(70)),
-           ),
-         ),
-         Positioned(
-           top: -height * 0.10,
-           left: -height * 0.39,
-           child: Container(
-             height: height,
-             width: width,
-             decoration: BoxDecoration(
-                 shape: BoxShape.circle, color: HexColor(
-                                                      Setting.APP_COLOR).withAlpha(50)),
-           ),
-         ),
-       ],
-     );
-   });
- }
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, contraint) {
+      final height = contraint.maxHeight;
+      final width = contraint.maxWidth;
+      return Stack(
+        children: <Widget>[
+          Container(color: HexColor("e0ffff")),
+          Positioned(
+            top: height * 0.20,
+            left: height * 0.35,
+            child: Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: HexColor(Setting.APP_COLOR).withAlpha(70)),
+            ),
+          ),
+          Positioned(
+            top: -height * 0.10,
+            left: -height * 0.39,
+            child: Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: HexColor(Setting.APP_COLOR).withAlpha(50)),
+            ),
+          ),
+        ],
+      );
+    });
+  }
 }
 
 class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
@@ -287,70 +285,75 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           backgroundColor: HexColor(Setting.APP_COLOR),
         ),
         // QRへ遷移
-        floatingActionButton:Container(
-          margin:EdgeInsets.fromLTRB(0,0,deviceWidth/90,deviceWidth/30),
-          child:FloatingActionButton.extended(
-          label: Text('QR',
-              style: TextStyle(
-                fontSize: deviceWidth * 0.06,
-                fontStyle: FontStyle.normal,
-                letterSpacing: 4.0,
-              )),
-          icon: Icon(Icons.qr_code),
-          onPressed: _qrScan,
-          backgroundColor: HexColor(Setting.APP_COLOR),
-        )),
-        body:Stack(children:[AppBackground(),
-            FutureBuilder(
-            future: _getStamp,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<Stamp>> snapshot) {
-              Widget childWidget;
-              if (snapshot.connectionState == ConnectionState.done) {
-                childWidget = Column(children: [
-                  Expanded(
-                      child: Container(
-                    child: PageView(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: PageView(
-                            controller: controller,
-                            children: <Widget>[
-                              _slider(context, stampCheckString, deviceWidth,deviceHeight)
-                            ],
-                          ),
-                        ),
-                      ],
-                      controller: controller,
-                    ),
+        floatingActionButton: Container(
+            margin:
+                EdgeInsets.fromLTRB(0, 0, deviceWidth / 90, deviceWidth / 30),
+            child: FloatingActionButton.extended(
+              label: Text('QR',
+                  style: TextStyle(
+                    fontSize: deviceWidth * 0.06,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 4.0,
                   )),
-                ]);
-              } else {
-                childWidget = const CircularProgressIndicator();
-              }
-              return childWidget;
-            })]));
+              icon: Icon(Icons.qr_code),
+              onPressed: _qrScan,
+              backgroundColor: HexColor(Setting.APP_COLOR),
+            )),
+        body: Stack(children: [
+          AppBackground(),
+          FutureBuilder(
+              future: _getStamp,
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Stamp>> snapshot) {
+                Widget childWidget;
+                if (snapshot.connectionState == ConnectionState.done) {
+                  childWidget = Column(children: [
+                    Expanded(
+                        child: Container(
+                      child: PageView(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: PageView(
+                              controller: controller,
+                              children: <Widget>[
+                                _slider(context, stampCheckString, deviceWidth,
+                                    deviceHeight)
+                              ],
+                            ),
+                          ),
+                        ],
+                        controller: controller,
+                      ),
+                    )),
+                  ]);
+                } else {
+                  childWidget = const CircularProgressIndicator();
+                }
+                return childWidget;
+              })
+        ]));
   }
 
-  Widget _slider(
-      BuildContext context, String stampCheckString, double deviceWidth,double deviceHeight) {
+  Widget _slider(BuildContext context, String stampCheckString,
+      double deviceWidth, double deviceHeight) {
     return Container(
-        color : Colors.white70,
+        color: Colors.white70,
         margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 7,
             deviceWidth / 20, deviceHeight / 8.5),
         width: deviceWidth / 4 - 4 * 1,
         height: deviceWidth / 4 - 4 * 1,
-        child: _stampCard(context, stampCheckString, deviceWidth,deviceHeight));
+        child:
+            _stampCard(context, stampCheckString, deviceWidth, deviceHeight));
   }
 
-  Widget _stampCard(
-      BuildContext context, String stampCheckString, double deviceWidth,double deviceHeight) {
+  Widget _stampCard(BuildContext context, String stampCheckString,
+      double deviceWidth, double deviceHeight) {
     return SingleChildScrollView(
       child: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Center(child:_totalPoint(stampListLen, deviceWidth, deviceHeight)),
+          Center(child: _totalPoint(stampListLen, deviceWidth, deviceHeight)),
           SizedBox(
             height: MediaQuery.of(context).size.width,
             child: FutureBuilder(
@@ -364,8 +367,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                       crossAxisCount: 3,
                       physics: ClampingScrollPhysics(),
                       scrollDirection: Axis.vertical,
-                      padding: EdgeInsets.fromLTRB(
-                          10, deviceWidth / 40, 10, 0),
+                      padding: EdgeInsets.fromLTRB(10, deviceWidth / 40, 10, 0),
                       // スタンプをListの数だけ生成する
                       children: stampList
                           .map(
@@ -388,10 +390,13 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                   4 -
                                               4 * 1,
                                       // 円を生成
-                                      
+
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        border: Border.all(color: HexColor(Setting.APP_COLOR).withOpacity(0.6), width: 3),  
+                                        border: Border.all(
+                                            color: HexColor(Setting.APP_COLOR)
+                                                .withOpacity(0.6),
+                                            width: 3),
                                         image: DecorationImage(
                                             fit: BoxFit.fill,
                                             image: stamp.data ==
@@ -400,7 +405,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                     stamp.stampNum.toString())
                                                 : AssetImage(Setting.NONE_IMG)),
                                       ),
-                                       
+
                                       //円内の数字表示
                                       child: Align(
                                         alignment: Alignment.center,
@@ -410,7 +415,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                 stamp.stampNum.toString(),
                                                 style: GoogleFonts.prompt(
                                                   //color: HexColor('00C2FF').withOpacity(0.6),
-                                                  fontSize: deviceWidth*0.09,
+                                                  fontSize: deviceWidth * 0.09,
                                                   //太字にしたい場合
                                                   //fontWeight: FontWeight.w700,
                                                 ),
@@ -440,8 +445,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
           alignment: Alignment.center,
-          margin:
-              EdgeInsets.fromLTRB(deviceWidth / 8, deviceWidth/20, 0, deviceWidth/50),
+          margin: EdgeInsets.fromLTRB(
+              deviceWidth / 8, deviceWidth / 20, 0, deviceWidth / 50),
           width: deviceWidth / 2 * 1.3,
           height: deviceHeight / 16 * 1.2,
           /*decoration: BoxDecoration(
@@ -449,9 +454,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                 color: HexColor(Setting.APP_COLOR).withOpacity(0.6), width: 3),
           ),*/
           child: Text(
-            AppLocalizations.of(context).totalStamps + ': $point',
+            AppLocalizations.of(context)!.totalStamps + ': $point',
             style: GoogleFonts.ubuntu(
-              fontSize: deviceWidth*0.07,
+              fontSize: deviceWidth * 0.07,
               fontWeight: FontWeight.w500,
             ),
           ))
