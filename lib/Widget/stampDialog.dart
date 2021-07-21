@@ -16,7 +16,6 @@ void stampDialog(BuildContext context, Stamp stamp) {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                title: Text("Image"),
                 subtitle: Image.asset(stamp.stampNum.toString(),
                     fit: BoxFit.fitWidth),
               ),
