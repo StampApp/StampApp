@@ -12,7 +12,8 @@ import 'package:stamp_app/Widget/HexColor.dart';
 
 @immutable
 class ConfirmArguments {
-  const ConfirmArguments({required this.type, required this.format, required this.data});
+  const ConfirmArguments(
+      {required this.type, required this.format, required this.data});
   final String type;
   final String format;
   final String data;
@@ -26,9 +27,9 @@ class ScanResult {
     this.type = "",
     this.rawContent = "",
     this.format = BarcodeFormat.unknown,
-  }) : assert(rawContent != null),
-      assert(format != null),
-      assert(type != null);
+  })  : assert(rawContent != null),
+        assert(format != null),
+        assert(type != null);
 }
 
 class QRCodeScanner extends StatefulWidget {
@@ -62,100 +63,107 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: HexColor(Setting.APP_COLOR),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 4,
-            // child: _buildPermissionState(context),
-            child: _buildQRView(context),
+    return WillPopScope(
+        onWillPop: () {
+          ConfirmArguments none =
+              new ConfirmArguments(type: "backButton", format: "", data: "");
+          Navigator.of(context).pop(none);
+          return Future.value(false);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+            backgroundColor: HexColor(Setting.APP_COLOR),
           ),
-          Expanded(
-            flex: 1,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  const Text('カメラ設定'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await _qrController?.toggleFlash();
-                            setState(() {});
-                          },
-                          child: FutureBuilder(
-                            future: _qrController?.getFlashStatus(),
-                            builder: (context, snapshot) =>
-                                Text('フラッシュ: ${snapshot.data}'),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await _qrController?.flipCamera();
-                            setState(() {});
-                          },
-                          child: FutureBuilder(
-                            future: _qrController?.getCameraInfo(),
-                            builder: (context, snapshot) => snapshot.data !=
-                                    null
-                                ? Text(
-                                    'カメラ切り替え: ${describeEnum(snapshot.data!)}')
-                                : const Text('loading'),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await _qrController?.pauseCamera();
-                          },
-                          child: const Text(
-                            'カメラを停止',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await _qrController?.resumeCamera();
-                          },
-                          child: const Text(
-                            'カメラを動かす',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+          body: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 4,
+                // child: _buildPermissionState(context),
+                child: _buildQRView(context),
               ),
-            ),
+              Expanded(
+                flex: 1,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      const Text('カメラ設定'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                await _qrController?.toggleFlash();
+                                setState(() {});
+                              },
+                              child: FutureBuilder(
+                                future: _qrController?.getFlashStatus(),
+                                builder: (context, snapshot) =>
+                                    Text('フラッシュ: ${snapshot.data}'),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                await _qrController?.flipCamera();
+                                setState(() {});
+                              },
+                              child: FutureBuilder(
+                                future: _qrController?.getCameraInfo(),
+                                builder: (context, snapshot) => snapshot.data !=
+                                        null
+                                    ? Text(
+                                        'カメラ切り替え: ${describeEnum(snapshot.data!)}')
+                                    : const Text('loading'),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                await _qrController?.pauseCamera();
+                              },
+                              child: const Text(
+                                'カメラを停止',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                await _qrController?.resumeCamera();
+                              },
+                              child: const Text(
+                                'カメラを動かす',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 
   Widget _buildQRView(BuildContext context) {
@@ -188,29 +196,33 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
       }
       final data = await scanValidation(scanData);
       _stampSet(data);
-      _transitionToNextScreen('', describeEnum(data.format as BarcodeFormat), data.rawContent as String);
+      _transitionToNextScreen('', describeEnum(data.format as BarcodeFormat),
+          data.rawContent as String);
     });
   }
 
-  // 次の画面へ遷移
-  Future<void> _transitionToNextScreen(String type, String format, String data) async {
+  // 元の画面へ遷移
+  Future<void> _transitionToNextScreen(
+      String type, String format, String data) async {
     if (!_isQRScanned) {
       // カメラを一時停止
       _qrController?.pauseCamera();
       _isQRScanned = true;
-      
-      // 次の画面へ遷移
-      await Navigator.pushNamed(
-        context,
-        "/",
-        arguments: ConfirmArguments(type: type, format: format, data: data),
-      ).then(
-        // 遷移先画面から戻った場合カメラを再開
-        (value) {
-          _qrController?.resumeCamera();
-          _isQRScanned = false;
-        },
-      );
+
+      // 元の画面へ遷移
+      Navigator.of(context)
+          .pop(ConfirmArguments(type: type, format: format, data: data));
+      // await Navigator.pushNamed(
+      //   context,
+      //   "/",
+      //   arguments: ConfirmArguments(type: type, format: format, data: data),
+      // ).then(
+      //   // 遷移先画面から戻った場合カメラを再開
+      //   (value) {
+      //     _qrController?.resumeCamera();
+      //     _isQRScanned = false;
+      //   },
+      // );
     }
   }
 
@@ -230,26 +242,24 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
           .where((String key) => key.contains('images/'))
           .toList();
 
-      Map<String, dynamic> rowContent = json.decode(result.rawContent!);
+      Map<String, dynamic> rowContent = json.decode(scanData.code!);
 
       if (!Validation.dateCheck(rowContent['createdAt']) ||
           !Validation.strCheck(rowContent['data']) ||
           !Validation.pathCheck(rowContent['stampNum'], imagePaths)) {
         result.rawContent = 'データが不正です';
+      } else {
+        result.rawContent = scanData.code;
       }
       return result;
     } on PlatformException catch (e) {
-      var result = ScanResult(
-        format: BarcodeFormat.unknown,
-        rawContent: 'データが不正です'
-      );
+      var result =
+          ScanResult(format: BarcodeFormat.unknown, rawContent: 'データが不正です');
       result.rawContent = 'エラー: ${e.message}';
       return result;
     } on FormatException catch (e) {
-      var result = ScanResult(
-        format: BarcodeFormat.unknown,
-        rawContent: 'データが不正です'
-      );
+      var result =
+          ScanResult(format: BarcodeFormat.unknown, rawContent: 'データが不正です');
       result.rawContent = 'エラー: ${e.message}';
       return result;
     }
@@ -258,6 +268,5 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
   Future<void> _stampSet(ScanResult data) async {
     ScanResult result = data;
     final DateTime dateTime = DateTime.now();
-
   }
 }

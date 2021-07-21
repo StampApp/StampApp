@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:stamp_app/Constants/setting.dart';
+import 'package:stamp_app/View/qrScan.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/models/stamp.dart';
@@ -17,7 +19,8 @@ import '../Util/checkIsMaxStamps.dart';
 import '../Util/Enums/enumCheckString.dart';
 
 class HomeSamplePage extends StatefulWidget {
-  HomeSamplePage({Key? key, required this.title, required this.routeObserver}) : super(key: key);
+  HomeSamplePage({Key? key, required this.title, required this.routeObserver})
+      : super(key: key);
   final String title;
   final RouteObserver<PageRoute> routeObserver;
 
@@ -51,9 +54,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   List<List<Stamp>> cardList = [];
 
   //pageviewで使用する
-  late PageController controller;
+  PageController? controller;
 
-  late Future<List<Stamp>> _getStamp;
+  Future<List<Stamp>>? _getStamp;
 
   List<Stamp> stampList = [];
 
@@ -64,8 +67,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   }
 
   Future<List<Stamp>> asyncGetStampList() async {
-    List maps =
-        await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
+    List maps = await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
     stampListLen = maps.length;
 
@@ -76,7 +78,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
         getDate: dateTime,
         getTime: dateTime,
         stampNum: maps[i]['stamp_num'],
-        useFlg: maps[i]['useflg'] == 0 ? true : false,
+        useFlg: maps[i]['useflg'] == 0 ? false : true,
         createdAt: dateTime,
         deletedAt: dateTime,
       );
@@ -84,7 +86,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
 
     //GridViewのcrossAxisCountの値
     int crossAxisCount = 3;
-    int listRow = stampListLen ~/ crossAxisCount + 1;
+    int listRow = stampListLen ~/ crossAxisCount;
     if (!(crossAxisCount < listRow)) {
       listRow = 3;
     }
@@ -104,34 +106,84 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     return stampList;
   }
 
-  // TODO: Barcode_Scanが使用できないのでロジックから修正
   Future<void> _qrScan() async {
-    if (await Permission.camera.request().isGranted) {
-      Navigator.pushNamed(context, '/qrScan');
-    } else {
-      await showRequestPermissionDialog(context);
+    int existStampNum =
+        await DbInterface.selectStampCount('Stamp', DBHelper.databese());
+    if (existStampNum == 9) {
+      stampMaxDialogAlert(context, existStampNum);
+      return;
     }
-    ScanResult result = await qrScan();
-    final DateTime dateTime = DateTime.now();
 
-    if (result.rawContent != "データが不正です" &&
-        result.type.name != "Error" &&
-        result.type.name != "Cancelled") {
-      dynamic resultJson = json.decode(result.rawContent);
+    if (await Permission.camera.request().isGranted) {
+      ConfirmArguments result =
+          await Navigator.pushNamed(context, '/qrScan') as ConfirmArguments;
 
-      if (result.format.name == "qr" &&
-          resultJson["data"] == stampCheckString) {
-        int maxStamp = 9; //上限無しの場合0を指定
-        int localListLen = stampList.length;
-        int crossAxisCount = 3;
-        int successStampLen = stampList
-            .where((element) => element.data == stampCheckString)
-            .length;
+      if (result.data != "データが不正です" &&
+          result.format != "unknown" &&
+          result.type != "backButton") {
+        dynamic resultJson = json.decode(result.data);
 
-        if (checkIsMaxStamps(successStampLen, maxStamp)) {
-          if (successStampLen >= maxStamp) {
-            stampMaxDialogAlert(context, maxStamp);
+        if (result.format == "qrcode" &&
+            resultJson["data"] == stampCheckString) {
+          int maxStamp = 9; //上限無しの場合0を指定
+          int localListLen = stampList.length;
+          int crossAxisCount = 3;
+          int successStampLen = stampList
+              .where((element) => element.data == stampCheckString)
+              .length;
+
+          if (checkIsMaxStamps(successStampLen, maxStamp)) {
+            if (successStampLen >= maxStamp) {
+              stampMaxDialogAlert(context, maxStamp);
+            } else {
+              Stamp newStamp = new Stamp(
+                  id: uuid.v1(),
+                  data: stampCheckString,
+                  getDate: dateTime,
+                  getTime: dateTime,
+                  stampNum: resultJson["stampNum"],
+                  useFlg: false,
+                  createdAt: dateTime,
+                  deletedAt: dateTime);
+              await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
+
+              // LOG 記録
+              StampLogs newLogs = new StampLogs(
+                id: uuid.v1(),
+                stampId: newStamp.id,
+                getDate: dateTime,
+                getTime: dateTime,
+                useFlg: false,
+                createdAt: dateTime,
+              );
+
+              await DbInterface.insert(
+                  'StampLogs', DBHelper.databese(), newLogs);
+              print(await DbInterface.allSelect(
+                  'StampLogs', DBHelper.databese()));
+
+              setState(() {
+                stampList[successStampLen] = newStamp;
+              });
+              stampMaxDialogAlert(context, maxStamp);
+            }
           } else {
+            if (localListLen == successStampLen + 1) {
+              for (int i = localListLen;
+                  i < localListLen + crossAxisCount;
+                  i++) {
+                Stamp newStamp = new Stamp(
+                    id: uuid.v1(),
+                    data: "",
+                    getDate: dateTime,
+                    getTime: dateTime,
+                    stampNum: "",
+                    useFlg: false,
+                    createdAt: dateTime,
+                    deletedAt: dateTime);
+                stampList.add(newStamp);
+              }
+            }
             Stamp newStamp = new Stamp(
                 id: uuid.v1(),
                 data: stampCheckString,
@@ -152,77 +204,156 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               useFlg: false,
               createdAt: dateTime,
             );
-
             await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
             print(
                 await DbInterface.allSelect('StampLogs', DBHelper.databese()));
 
+            List<dynamic> countstamp =
+                await DbInterface.allSelect('Stamp', DBHelper.databese());
             setState(() {
+              stampListLen = countstamp.length;
               stampList[successStampLen] = newStamp;
             });
-            stampMaxDialogAlert(context, maxStamp);
           }
         } else {
-          if (localListLen == successStampLen + 1) {
-            for (int i = localListLen; i < localListLen + crossAxisCount; i++) {
-              Stamp newStamp = new Stamp(
-                  id: uuid.v1(),
-                  data: "",
-                  getDate: dateTime,
-                  getTime: dateTime,
-                  stampNum: "",
-                  useFlg: false,
-                  createdAt: dateTime,
-                  deletedAt: dateTime);
-              stampList.add(newStamp);
-            }
-          }
-          Stamp newStamp = new Stamp(
-              id: uuid.v1(),
-              data: stampCheckString,
-              getDate: dateTime,
-              getTime: dateTime,
-              stampNum: resultJson["stampNum"],
-              useFlg: false,
-              createdAt: dateTime,
-              deletedAt: dateTime);
-          await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
-
-          // LOG 記録
-          StampLogs newLogs = new StampLogs(
-            id: uuid.v1(),
-            stampId: newStamp.id,
-            getDate: dateTime,
-            getTime: dateTime,
-            useFlg: false,
-            createdAt: dateTime,
-          );
-          await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
-          print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
-
-          List<dynamic> countstamp =
-              await DbInterface.allSelect('Stamp', DBHelper.databese());
-          setState(() {
-            stampListLen = countstamp.length;
-            stampList[successStampLen] = newStamp;
-          });
+          String title = "エラー";
+          String text =
+              result.format != "qrcode" ? "これはQRコードではありません" : "このQRコードは無効です";
+          qrAlertDialog(context, title, text);
         }
-      } else {
+      } else if (result.type != "backButton") {
         String title = "エラー";
-        String text =
-            result.format.name != "qr" ? "これはQRコードではありません" : "このQRコードは無効です";
+        String text = '不正なQRコードです\n${result.data}';
         qrAlertDialog(context, title, text);
       }
-    } else if (result.type.name != "Cancelled") {
-      String title = "エラー";
-      String text = '不正なQRコードです\n${result.rawContent}';
-      qrAlertDialog(context, title, text);
-    }
 
-    List<dynamic> countstamp =
-        await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
-    stampListLen = countstamp.length;
+      List<dynamic> countstamp =
+          await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
+      stampListLen = countstamp.length;
+    } else {
+      await showRequestPermissionDialog(context);
+    }
   }
+
+  // TODO: Barcode_Scanが使用できないのでロジックから修正
+  // Future<void> _qrScan() async {
+  //   if (await Permission.camera.request().isGranted) {
+  //     Navigator.pushNamed(context, '/qrScan');
+  //   } else {
+  //     await showRequestPermissionDialog(context);
+  //   }
+  //   ScanResult result = await qrScan();
+  //   final DateTime dateTime = DateTime.now();
+
+  //   if (result.rawContent != "データが不正です" &&
+  //       result.type.name != "Error" &&
+  //       result.type.name != "Cancelled") {
+  //     dynamic resultJson = json.decode(result.rawContent);
+
+  //     if (result.format.name == "qr" &&
+  //         resultJson["data"] == stampCheckString) {
+  //       int maxStamp = 9; //上限無しの場合0を指定
+  //       int localListLen = stampList.length;
+  //       int crossAxisCount = 3;
+  //       int successStampLen = stampList
+  //           .where((element) => element.data == stampCheckString)
+  //           .length;
+
+  //       if (checkIsMaxStamps(successStampLen, maxStamp)) {
+  //         if (successStampLen >= maxStamp) {
+  //           stampMaxDialogAlert(context, maxStamp);
+  //         } else {
+  //           Stamp newStamp = new Stamp(
+  //               id: uuid.v1(),
+  //               data: stampCheckString,
+  //               getDate: dateTime,
+  //               getTime: dateTime,
+  //               stampNum: resultJson["stampNum"],
+  //               useFlg: false,
+  //               createdAt: dateTime,
+  //               deletedAt: dateTime);
+  //           await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
+
+  //           // LOG 記録
+  //           StampLogs newLogs = new StampLogs(
+  //             id: uuid.v1(),
+  //             stampId: newStamp.id,
+  //             getDate: dateTime,
+  //             getTime: dateTime,
+  //             useFlg: false,
+  //             createdAt: dateTime,
+  //           );
+
+  //           await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
+  //           print(
+  //               await DbInterface.allSelect('StampLogs', DBHelper.databese()));
+
+  //           setState(() {
+  //             stampList[successStampLen] = newStamp;
+  //           });
+  //           stampMaxDialogAlert(context, maxStamp);
+  //         }
+  //       } else {
+  //         if (localListLen == successStampLen + 1) {
+  //           for (int i = localListLen; i < localListLen + crossAxisCount; i++) {
+  //             Stamp newStamp = new Stamp(
+  //                 id: uuid.v1(),
+  //                 data: "",
+  //                 getDate: dateTime,
+  //                 getTime: dateTime,
+  //                 stampNum: "",
+  //                 useFlg: false,
+  //                 createdAt: dateTime,
+  //                 deletedAt: dateTime);
+  //             stampList.add(newStamp);
+  //           }
+  //         }
+  //         Stamp newStamp = new Stamp(
+  //             id: uuid.v1(),
+  //             data: stampCheckString,
+  //             getDate: dateTime,
+  //             getTime: dateTime,
+  //             stampNum: resultJson["stampNum"],
+  //             useFlg: false,
+  //             createdAt: dateTime,
+  //             deletedAt: dateTime);
+  //         await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
+
+  //         // LOG 記録
+  //         StampLogs newLogs = new StampLogs(
+  //           id: uuid.v1(),
+  //           stampId: newStamp.id,
+  //           getDate: dateTime,
+  //           getTime: dateTime,
+  //           useFlg: false,
+  //           createdAt: dateTime,
+  //         );
+  //         await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
+  //         print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
+
+  //         List<dynamic> countstamp =
+  //             await DbInterface.allSelect('Stamp', DBHelper.databese());
+  //         setState(() {
+  //           stampListLen = countstamp.length;
+  //           stampList[successStampLen] = newStamp;
+  //         });
+  //       }
+  //     } else {
+  //       String title = "エラー";
+  //       String text =
+  //           result.format.name != "qr" ? "これはQRコードではありません" : "このQRコードは無効です";
+  //       qrAlertDialog(context, title, text);
+  //     }
+  //   } else if (result.type.name != "Cancelled") {
+  //     String title = "エラー";
+  //     String text = '不正なQRコードです\n${result.rawContent}';
+  //     qrAlertDialog(context, title, text);
+  //   }
+
+  //   List<dynamic> countstamp =
+  //       await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
+  //   stampListLen = countstamp.length;
+  // }
 
   @override
   void initState() {
@@ -234,7 +365,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    widget.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
+    widget.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
   }
 
   // @override
@@ -286,7 +418,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   //pageviewで使用
   void dispose() {
     widget.routeObserver.unsubscribe(this);
-    controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
