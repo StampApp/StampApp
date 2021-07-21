@@ -288,6 +288,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     // Scaffoldは画面構成の基本Widget
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
         appBar: AppBar(
           title: Row(
@@ -388,6 +389,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                       crossAxisCount: 3,
                       physics: ClampingScrollPhysics(),
                       scrollDirection: Axis.vertical,
+                      childAspectRatio: MediaQuery.of(context).size.width > 600
+                          ? (MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width *
+                              0.9)
+                          : 1,
                       padding: EdgeInsets.fromLTRB(
                           0, MediaQuery.of(context).size.height * 0.01, 0, 10),
 
@@ -400,51 +406,53 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   GestureDetector(
-                                    onTap: () => stamp.data == stampCheckString
-                                        ? stampDialog(context, stamp)
-                                        : (context),
-                                    child: Container(
-                                      //padding: const EdgeInsets.all(11.0),
-                                      width: MediaQuery.of(context).size.width /
-                                              4 -
-                                          5 * 1,
-                                      height:
-                                          MediaQuery.of(context).size.width /
-                                                  4 -
-                                              5 * 1,
-                                      // 円を生成
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        //border: Border.all(
-                                        //  color: HexColor("00FFFF"), width: 3),
-                                        color: HexColor('FFFFFF'),
-                                        image: DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: stamp.data ==
-                                                    stampCheckString
-                                                ? AssetImage(
-                                                    stamp.stampNum.toString())
-                                                : AssetImage(Setting.NONE_IMG)),
-                                      ),
-                                      //円内の数字表示
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: stamp.data == stampCheckString
-                                            ? Text("")
-                                            : Text(
-                                                stamp.stampNum.toString(),
-                                                style: TextStyle(
-                                                  fontSize: 25.0,
-                                                  fontStyle: FontStyle.normal,
-                                                  letterSpacing: 4.0,
-                                                  color: HexColor(
-                                                      Setting.APP_COLOR),
+                                      onTap: () =>
+                                          stamp.data == stampCheckString
+                                              ? stampDialog(context, stamp)
+                                              : (context),
+                                      child: Container(
+                                        //padding: const EdgeInsets.all(10.0),
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                    4 -
+                                                4 * 1,
+                                        height:
+                                            MediaQuery.of(context).size.width /
+                                                    4 -
+                                                4 * 1,
+                                        // 円を生成
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          //border: Border.all(
+                                          //  color: HexColor("00FFFF"), width: 3),
+                                          color: HexColor('FFFFFF'),
+                                          image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: stamp.data ==
+                                                      stampCheckString
+                                                  ? AssetImage(
+                                                      stamp.stampNum.toString())
+                                                  : AssetImage(
+                                                      Setting.NONE_IMG)),
+                                        ),
+                                        //円内の数字表示
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: stamp.data == stampCheckString
+                                              ? Text("")
+                                              : Text(
+                                                  stamp.stampNum.toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 25.0,
+                                                    fontStyle: FontStyle.normal,
+                                                    letterSpacing: 4.0,
+                                                    color: HexColor(
+                                                        Setting.APP_COLOR),
+                                                  ),
+                                                  textAlign: TextAlign.center,
                                                 ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                      ),
-                                    ),
-                                  ),
+                                        ),
+                                      )),
                                 ],
                               ),
                             ),
