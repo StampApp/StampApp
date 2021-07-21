@@ -7,8 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:stamp_app/Constants/setting.dart';
+import 'package:stamp_app/Util/Enums/enumCheckString.dart';
 import 'package:stamp_app/Util/validation.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/dbHelper.dart';
+import 'package:stamp_app/dbInterface.dart';
+import 'package:stamp_app/models/stamp.dart';
+import 'package:stamp_app/models/stampLogs.dart';
+import 'package:uuid/uuid.dart';
 
 @immutable
 class ConfirmArguments {
@@ -16,6 +22,15 @@ class ConfirmArguments {
       {required this.type, required this.format, required this.data});
   final String type;
   final String format;
+  final String data;
+}
+
+@immutable
+class ResultArguments {
+  const ResultArguments(
+      {required this.result, required this.title, required this.data});
+  final String result;
+  final String title;
   final String data;
 }
 
@@ -43,6 +58,8 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
   QRViewController? _qrController;
   final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
   bool _isQRScanned = false;
+  static final String stampCheckString = CheckString.ok.checkStringValue!;
+  static final uuid = Uuid();
 
   // ホットリロードを機能させるには、プラットフォームがAndroidの場合はカメラを一時停止するか、
   // プラットフォームがiOSの場合はカメラを再開する必要がある
@@ -65,8 +82,8 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () {
-          ConfirmArguments none =
-              new ConfirmArguments(type: "backButton", format: "", data: "");
+          ResultArguments none =
+              new ResultArguments(result: "backButton", title: "", data: "");
           Navigator.of(context).pop(none);
           return Future.value(false);
         },
@@ -209,20 +226,50 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
       _qrController?.pauseCamera();
       _isQRScanned = true;
 
-      // 元の画面へ遷移
-      Navigator.of(context)
-          .pop(ConfirmArguments(type: type, format: format, data: data));
-      // await Navigator.pushNamed(
-      //   context,
-      //   "/",
-      //   arguments: ConfirmArguments(type: type, format: format, data: data),
-      // ).then(
-      //   // 遷移先画面から戻った場合カメラを再開
-      //   (value) {
-      //     _qrController?.resumeCamera();
-      //     _isQRScanned = false;
-      //   },
-      // );
+      if (data != "データが不正です" && format != "unknown") {
+        dynamic resultJson = json.decode(data);
+
+        if (format == "qrcode" && resultJson["data"] == stampCheckString) {
+          DateTime dateTime = DateTime.now();
+          Stamp newStamp = new Stamp(
+              id: uuid.v1(),
+              data: stampCheckString,
+              getDate: dateTime,
+              getTime: dateTime,
+              stampNum: resultJson["stampNum"],
+              useFlg: false,
+              createdAt: dateTime,
+              deletedAt: dateTime);
+          await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
+
+          // LOG 記録
+          StampLogs newLogs = new StampLogs(
+            id: uuid.v1(),
+            stampId: newStamp.id,
+            getDate: dateTime,
+            getTime: dateTime,
+            useFlg: false,
+            createdAt: dateTime,
+          );
+
+          await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
+          // 元の画面へ遷移
+          Navigator.of(context)
+              .pop(ResultArguments(result: "ok", title: "", data: data));
+        } else {
+          String title = "エラー";
+          String text = format != "qrcode" ? "これはQRコードではありません" : "このQRコードは無効です";
+          // 元の画面へ遷移
+          Navigator.of(context)
+              .pop(ResultArguments(result: "err", title: title, data: text));
+        }
+      } else {
+        String title = "エラー";
+        String text = '不正なQRコードです\n${data}';
+        // 元の画面へ遷移
+        Navigator.of(context)
+            .pop(ResultArguments(result: "err", title: title, data: text));
+      }
     }
   }
 

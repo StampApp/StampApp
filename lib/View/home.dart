@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:stamp_app/Constants/setting.dart';
+import 'package:stamp_app/Util/toInt.dart';
 import 'package:stamp_app/View/qrScan.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/dbHelper.dart';
@@ -78,7 +79,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
         getDate: dateTime,
         getTime: dateTime,
         stampNum: maps[i]['stamp_num'],
-        useFlg: maps[i]['useflg'] == 0 ? false : true,
+        useFlg: parseIntToBoolean(maps[i]['useflg']),
         createdAt: dateTime,
         deletedAt: dateTime,
       );
@@ -115,245 +116,38 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     }
 
     if (await Permission.camera.request().isGranted) {
-      ConfirmArguments result =
-          await Navigator.pushNamed(context, '/qrScan') as ConfirmArguments;
-
-      if (result.data != "データが不正です" &&
-          result.format != "unknown" &&
-          result.type != "backButton") {
+      ResultArguments result =
+          await Navigator.pushNamed(context, '/qrScan') as ResultArguments;
+      if (result.result == "ok") {
+        int maxStamp = 9; //上限無しの場合0を指定
+        int successStampLen = stampList
+            .where((element) => element.data == stampCheckString)
+            .length;
         dynamic resultJson = json.decode(result.data);
 
-        if (result.format == "qrcode" &&
-            resultJson["data"] == stampCheckString) {
-          int maxStamp = 9; //上限無しの場合0を指定
-          int localListLen = stampList.length;
-          int crossAxisCount = 3;
-          int successStampLen = stampList
-              .where((element) => element.data == stampCheckString)
-              .length;
+        Stamp newStamp = new Stamp(
+            id: uuid.v1(),
+            data: stampCheckString,
+            getDate: dateTime,
+            getTime: dateTime,
+            stampNum: resultJson["stampNum"],
+            useFlg: false,
+            createdAt: dateTime,
+            deletedAt: dateTime);
 
-          if (checkIsMaxStamps(successStampLen, maxStamp)) {
-            if (successStampLen >= maxStamp) {
-              stampMaxDialogAlert(context, maxStamp);
-            } else {
-              Stamp newStamp = new Stamp(
-                  id: uuid.v1(),
-                  data: stampCheckString,
-                  getDate: dateTime,
-                  getTime: dateTime,
-                  stampNum: resultJson["stampNum"],
-                  useFlg: false,
-                  createdAt: dateTime,
-                  deletedAt: dateTime);
-              await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
-
-              // LOG 記録
-              StampLogs newLogs = new StampLogs(
-                id: uuid.v1(),
-                stampId: newStamp.id,
-                getDate: dateTime,
-                getTime: dateTime,
-                useFlg: false,
-                createdAt: dateTime,
-              );
-
-              await DbInterface.insert(
-                  'StampLogs', DBHelper.databese(), newLogs);
-              print(await DbInterface.allSelect(
-                  'StampLogs', DBHelper.databese()));
-
-              setState(() {
-                stampList[successStampLen] = newStamp;
-              });
-              stampMaxDialogAlert(context, maxStamp);
-            }
-          } else {
-            if (localListLen == successStampLen + 1) {
-              for (int i = localListLen;
-                  i < localListLen + crossAxisCount;
-                  i++) {
-                Stamp newStamp = new Stamp(
-                    id: uuid.v1(),
-                    data: "",
-                    getDate: dateTime,
-                    getTime: dateTime,
-                    stampNum: "",
-                    useFlg: false,
-                    createdAt: dateTime,
-                    deletedAt: dateTime);
-                stampList.add(newStamp);
-              }
-            }
-            Stamp newStamp = new Stamp(
-                id: uuid.v1(),
-                data: stampCheckString,
-                getDate: dateTime,
-                getTime: dateTime,
-                stampNum: resultJson["stampNum"],
-                useFlg: false,
-                createdAt: dateTime,
-                deletedAt: dateTime);
-            await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
-
-            // LOG 記録
-            StampLogs newLogs = new StampLogs(
-              id: uuid.v1(),
-              stampId: newStamp.id,
-              getDate: dateTime,
-              getTime: dateTime,
-              useFlg: false,
-              createdAt: dateTime,
-            );
-            await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
-            print(
-                await DbInterface.allSelect('StampLogs', DBHelper.databese()));
-
-            List<dynamic> countstamp =
-                await DbInterface.allSelect('Stamp', DBHelper.databese());
-            setState(() {
-              stampListLen = countstamp.length;
-              stampList[successStampLen] = newStamp;
-            });
-          }
-        } else {
-          String title = "エラー";
-          String text =
-              result.format != "qrcode" ? "これはQRコードではありません" : "このQRコードは無効です";
-          qrAlertDialog(context, title, text);
+        setState(() {
+          stampList[successStampLen] = newStamp;
+        });
+        if (successStampLen + 1 == maxStamp) {
+          stampMaxDialogAlert(context, maxStamp);
         }
-      } else if (result.type != "backButton") {
-        String title = "エラー";
-        String text = '不正なQRコードです\n${result.data}';
-        qrAlertDialog(context, title, text);
+      } else if (result.result == "err") {
+        qrAlertDialog(context, result.title, result.data);
       }
-
-      List<dynamic> countstamp =
-          await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
-      stampListLen = countstamp.length;
     } else {
       await showRequestPermissionDialog(context);
     }
   }
-
-  // TODO: Barcode_Scanが使用できないのでロジックから修正
-  // Future<void> _qrScan() async {
-  //   if (await Permission.camera.request().isGranted) {
-  //     Navigator.pushNamed(context, '/qrScan');
-  //   } else {
-  //     await showRequestPermissionDialog(context);
-  //   }
-  //   ScanResult result = await qrScan();
-  //   final DateTime dateTime = DateTime.now();
-
-  //   if (result.rawContent != "データが不正です" &&
-  //       result.type.name != "Error" &&
-  //       result.type.name != "Cancelled") {
-  //     dynamic resultJson = json.decode(result.rawContent);
-
-  //     if (result.format.name == "qr" &&
-  //         resultJson["data"] == stampCheckString) {
-  //       int maxStamp = 9; //上限無しの場合0を指定
-  //       int localListLen = stampList.length;
-  //       int crossAxisCount = 3;
-  //       int successStampLen = stampList
-  //           .where((element) => element.data == stampCheckString)
-  //           .length;
-
-  //       if (checkIsMaxStamps(successStampLen, maxStamp)) {
-  //         if (successStampLen >= maxStamp) {
-  //           stampMaxDialogAlert(context, maxStamp);
-  //         } else {
-  //           Stamp newStamp = new Stamp(
-  //               id: uuid.v1(),
-  //               data: stampCheckString,
-  //               getDate: dateTime,
-  //               getTime: dateTime,
-  //               stampNum: resultJson["stampNum"],
-  //               useFlg: false,
-  //               createdAt: dateTime,
-  //               deletedAt: dateTime);
-  //           await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
-
-  //           // LOG 記録
-  //           StampLogs newLogs = new StampLogs(
-  //             id: uuid.v1(),
-  //             stampId: newStamp.id,
-  //             getDate: dateTime,
-  //             getTime: dateTime,
-  //             useFlg: false,
-  //             createdAt: dateTime,
-  //           );
-
-  //           await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
-  //           print(
-  //               await DbInterface.allSelect('StampLogs', DBHelper.databese()));
-
-  //           setState(() {
-  //             stampList[successStampLen] = newStamp;
-  //           });
-  //           stampMaxDialogAlert(context, maxStamp);
-  //         }
-  //       } else {
-  //         if (localListLen == successStampLen + 1) {
-  //           for (int i = localListLen; i < localListLen + crossAxisCount; i++) {
-  //             Stamp newStamp = new Stamp(
-  //                 id: uuid.v1(),
-  //                 data: "",
-  //                 getDate: dateTime,
-  //                 getTime: dateTime,
-  //                 stampNum: "",
-  //                 useFlg: false,
-  //                 createdAt: dateTime,
-  //                 deletedAt: dateTime);
-  //             stampList.add(newStamp);
-  //           }
-  //         }
-  //         Stamp newStamp = new Stamp(
-  //             id: uuid.v1(),
-  //             data: stampCheckString,
-  //             getDate: dateTime,
-  //             getTime: dateTime,
-  //             stampNum: resultJson["stampNum"],
-  //             useFlg: false,
-  //             createdAt: dateTime,
-  //             deletedAt: dateTime);
-  //         await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
-
-  //         // LOG 記録
-  //         StampLogs newLogs = new StampLogs(
-  //           id: uuid.v1(),
-  //           stampId: newStamp.id,
-  //           getDate: dateTime,
-  //           getTime: dateTime,
-  //           useFlg: false,
-  //           createdAt: dateTime,
-  //         );
-  //         await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
-  //         print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
-
-  //         List<dynamic> countstamp =
-  //             await DbInterface.allSelect('Stamp', DBHelper.databese());
-  //         setState(() {
-  //           stampListLen = countstamp.length;
-  //           stampList[successStampLen] = newStamp;
-  //         });
-  //       }
-  //     } else {
-  //       String title = "エラー";
-  //       String text =
-  //           result.format.name != "qr" ? "これはQRコードではありません" : "このQRコードは無効です";
-  //       qrAlertDialog(context, title, text);
-  //     }
-  //   } else if (result.type.name != "Cancelled") {
-  //     String title = "エラー";
-  //     String text = '不正なQRコードです\n${result.rawContent}';
-  //     qrAlertDialog(context, title, text);
-  //   }
-
-  //   List<dynamic> countstamp =
-  //       await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
-  //   stampListLen = countstamp.length;
-  // }
 
   @override
   void initState() {

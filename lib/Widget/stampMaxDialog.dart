@@ -12,14 +12,12 @@ void stampMaxDialogAlert(BuildContext context, int maxStamp) {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                  "スタンプが$maxStamp個貯まりました。\n交換してください。\n\n注:これ以上スタンプを読み込んでも増えません。"),
+              Text("スタンプが$maxStamp個貯まりました。\n交換してください。\n\n注:これ以上はスタンプを読み込めません。"),
             ],
           ),
         ),
         actions: <Widget>[
           TextButton(
-
             child: Text('はい'),
             style: OutlinedButton.styleFrom(
               primary: Colors.blue,
