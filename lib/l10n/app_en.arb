@@ -50,5 +50,19 @@
             "exchangeSpnum": {}
         }
     },
-    "usedStamps":"I used a stamp."
+    "usedStamps":"I used a stamp.",
+    "goToSetting":"Go to the setting screen.",
+    "showHaveStamp":"Show stamps you have.",
+    "goToScanning":"Go to the QR scanning screen.",
+    "goToPrevious":"Go to previous screen.",
+    "goToHistory":"Go to Usage History.",
+    "currentScreen":"Current screen.",
+    "goToUse":"Go to Terms of Use.",
+    "jumpPrivacyPolicy":"Jump to Privacy Policy.",
+    "useAccumulatedStamps":"Use the stamps you have accumulated.",
+    "sortTimeOfUse":"Sort by time of use.",
+    "displaysUsageHistory":"Displays the usage history for that date.",
+    "descriptionHome":"Description of the home screen",
+    "explanationSetting":"Explanation of the setting screen",
+    "explanationUsageHistory":"Explanation of the Usage History screen"
 }

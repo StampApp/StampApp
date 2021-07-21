@@ -50,5 +50,19 @@
             "exchangeSpnum": {}
         }
     },
-    "usedStamps":"スタンプを使用しました"
+    "usedStamps":"スタンプを使用しました",
+    "goToSetting":"設定画面へ遷移",
+    "showHaveStamp":"所持しているスタンプの表示",
+    "goToScanning":"QR読み取り画面へ遷移",
+    "goToPrevious":"前の画面へ遷移",
+    "goToHistory":"利用履歴へ遷移",
+    "currentScreen":"現在の画面",
+    "goToUse":"利用規約へ遷移",
+    "jumpPrivacyPolicy":"プライバシーポリシーへ遷移",
+    "useAccumulatedStamps":"貯まったスタンプを使用する",
+    "sortTimeOfUse":"利用時期のソート",
+    "displaysUsageHistory":"その日付の利用履歴が表示",
+    "descriptionHome":"ホーム画面の説明",
+    "explanationSetting":"設定画面の説明",
+    "explanationUsageHistory":"利用履歴の説明"
 }
