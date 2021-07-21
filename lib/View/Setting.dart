@@ -147,8 +147,10 @@ class _SettingPageState extends State<SettingPage> {
         ),
         backgroundColor: HexColor(Setting.APP_COLOR),
       ),
-      body: ListView(children: [
-        _menuItem(AppLocalizations.of(context).usageHistory,
+      body: Column(children: <Widget>[
+        Expanded(
+            child: ListView(children: [
+          _menuItem(AppLocalizations.of(context).usageHistory,
             Icon(Icons.format_list_bulleted), _historyNavigate),
         _menuItem(AppLocalizations.of(context).usage, Icon(Icons.menu_book),
             _instructionsNavigate),
@@ -158,8 +160,24 @@ class _SettingPageState extends State<SettingPage> {
             Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
         _menuItem(AppLocalizations.of(context).version,
             Icon(Icons.system_update_alt_rounded)),
-        _menuItem(AppLocalizations.of(context).stampUse,
-            Icon(Icons.shopping_bag_outlined), _useStampCheck),
+        ])),
+        Padding(
+            padding: const EdgeInsets.all(40),
+            child: OutlinedButton.icon(
+              icon: const Icon(
+                Icons.shopping_bag_outlined,
+                size: 30,
+              ),
+              label: const Text('スタンプ使用', style: TextStyle(fontSize: 18)),
+              style: OutlinedButton.styleFrom(
+                minimumSize: Size(220, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                side: BorderSide(color: HexColor(Setting.APP_COLOR)),
+              ),
+              onPressed: () => _useStampCheck(),
+            )),
       ]),
     );
   }
