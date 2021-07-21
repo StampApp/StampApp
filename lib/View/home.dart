@@ -332,8 +332,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               Widget childWidget;
               if (snapshot.connectionState == ConnectionState.done) {
                 childWidget = Column(children: [
-                  _slider(context, stampCheckString, deviceWidth)
-                  /*
+                  //_slider(context, stampCheckString, deviceWidth)
+
                   Expanded(
                       child: Container(
                     child: PageView(
@@ -348,7 +348,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                       controller: controller,
                     ),
                   )),
-                  //_totalPoint(stampListLen, deviceWidth, deviceHeight)*/
+                  //_totalPoint(stampListLen, deviceWidth, deviceHeight)
                 ]);
               } else {
                 childWidget = const CircularProgressIndicator();
@@ -361,8 +361,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       BuildContext context, String stampCheckString, double deviceWidth) {
     return Container(
         color: HexColor(Setting.APP_COLOR).withOpacity(0.6),
-        margin: EdgeInsets.fromLTRB(deviceWidth / 20,
-            MediaQuery.of(context).size.height * 0.07, deviceWidth / 20, 10),
+        margin: EdgeInsets.fromLTRB(
+            deviceWidth / 20,
+            MediaQuery.of(context).size.height * 0.07,
+            deviceWidth / 20,
+            MediaQuery.of(context).size.height * 0.1),
         height: MediaQuery.of(context).size.height * 0.73,
         child: _stampCard(context, stampCheckString, deviceWidth));
   }
