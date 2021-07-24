@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class SettingButton extends StatelessWidget {
   const SettingButton({
-    this.onNavigate,
-    Key key,
+    required this.onNavigate,
+    required Key key,
   }) : super(key: key);
   final VoidCallback onNavigate;
 

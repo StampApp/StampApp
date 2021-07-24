@@ -1,11 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:stamp_app/Constants/setting.dart';
+import 'package:stamp_app/Util/toInt.dart';
+import 'package:stamp_app/View/qrScan.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/models/stamp.dart';
-import 'package:barcode_scan/barcode_scan.dart';
-import 'package:stamp_app/Widget/qrScan.dart';
+// import 'package:barcode_scan/barcode_scan.dart';
+// import 'package:stamp_app/Widget/qrScan.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
@@ -18,7 +22,8 @@ import '../Util/Enums/enumCheckString.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeSamplePage extends StatefulWidget {
-  HomeSamplePage({Key key, this.title, this.routeObserver}) : super(key: key);
+  HomeSamplePage({Key? key, required this.title, required this.routeObserver})
+      : super(key: key);
   final String title;
   final RouteObserver<PageRoute> routeObserver;
 
@@ -36,42 +41,40 @@ class Stamp {
 }
 */
 class AppBackground extends StatelessWidget {
- @override
- Widget build(BuildContext context) {
-   return LayoutBuilder(builder: (context, contraint) {
-     final height = contraint.maxHeight;
-     final width = contraint.maxWidth;
-     return Stack(
-       children: <Widget>[
-         Container(
-           color: HexColor("e0ffff")
-         ),
-         Positioned(
-           top: height * 0.20,
-           left: height * 0.35,
-           child: Container(
-             height: height,
-             width: width,
-             decoration: BoxDecoration(
-                 shape: BoxShape.circle, color: HexColor(
-                                                      Setting.APP_COLOR).withAlpha(70)),
-           ),
-         ),
-         Positioned(
-           top: -height * 0.10,
-           left: -height * 0.39,
-           child: Container(
-             height: height,
-             width: width,
-             decoration: BoxDecoration(
-                 shape: BoxShape.circle, color: HexColor(
-                                                      Setting.APP_COLOR).withAlpha(50)),
-           ),
-         ),
-       ],
-     );
-   });
- }
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, contraint) {
+      final height = contraint.maxHeight;
+      final width = contraint.maxWidth;
+      return Stack(
+        children: <Widget>[
+          Container(color: HexColor("e0ffff")),
+          Positioned(
+            top: height * 0.20,
+            left: height * 0.35,
+            child: Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: HexColor(Setting.APP_COLOR).withAlpha(70)),
+            ),
+          ),
+          Positioned(
+            top: -height * 0.10,
+            left: -height * 0.39,
+            child: Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: HexColor(Setting.APP_COLOR).withAlpha(50)),
+            ),
+          ),
+        ],
+      );
+    });
+  }
 }
 
 class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
@@ -90,21 +93,20 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   List<List<Stamp>> cardList = [];
 
   //pageviewで使用する
-  PageController controller;
+  PageController? controller;
 
-  Future<List<Stamp>> _getStamp;
+  Future<List<Stamp>>? _getStamp;
 
   List<Stamp> stampList = [];
 
-  static final String stampCheckString = CheckString.ok.checkStringValue;
+  static final String stampCheckString = CheckString.ok.checkStringValue!;
 
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
   }
 
   Future<List<Stamp>> asyncGetStampList() async {
-    List<Map<String, dynamic>> maps =
-        await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
+    List maps = await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
     stampListLen = maps.length;
 
@@ -115,7 +117,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
         getDate: dateTime,
         getTime: dateTime,
         stampNum: maps[i]['stamp_num'],
-        useFlg: maps[i]['useflg'] == 0 ? true : false,
+        useFlg: parseIntToBoolean(maps[i]['useflg']),
         createdAt: dateTime,
         deletedAt: dateTime,
       );
@@ -123,7 +125,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
 
     //GridViewのcrossAxisCountの値
     int crossAxisCount = 3;
-    int listRow = stampListLen ~/ crossAxisCount + 1;
+    int listRow = stampListLen ~/ crossAxisCount;
     if (!(crossAxisCount < listRow)) {
       listRow = 3;
     }
@@ -144,119 +146,45 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   }
 
   Future<void> _qrScan() async {
-    ScanResult result = await qrScan(context);
-    final DateTime dateTime = DateTime.now();
+    int existStampNum =
+        await DbInterface.selectStampCount('Stamp', DBHelper.databese());
+    if (existStampNum == 9) {
+      stampMaxDialogAlert(context, existStampNum);
+      return;
+    }
 
-    if (result.rawContent != AppLocalizations.of(context).incorrectData &&
-        result.type.name != "Error" &&
-        result.type.name != "Cancelled") {
-      dynamic resultJson = json.decode(result.rawContent);
-
-      if (result.format.name == "qr" &&
-          resultJson["data"] == stampCheckString) {
+    if (await Permission.camera.request().isGranted) {
+      ResultArguments result =
+          await Navigator.pushNamed(context, '/qrScan') as ResultArguments;
+      if (result.result == "ok") {
         int maxStamp = 9; //上限無しの場合0を指定
-        int localListLen = stampList.length;
-        int crossAxisCount = 3;
         int successStampLen = stampList
             .where((element) => element.data == stampCheckString)
             .length;
+        dynamic resultJson = json.decode(result.data);
 
-        if (checkIsMaxStamps(successStampLen, maxStamp)) {
-          if (successStampLen >= maxStamp) {
-            stampMaxDialogAlert(context, maxStamp);
-          } else {
-            Stamp newStamp = new Stamp(
-                id: uuid.v1(),
-                data: stampCheckString,
-                getDate: dateTime,
-                getTime: dateTime,
-                stampNum: resultJson["stampNum"],
-                useFlg: false,
-                createdAt: dateTime,
-                deletedAt: dateTime);
-            await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
-
-            // LOG 記録
-            StampLogs newLogs = new StampLogs(
-              id: uuid.v1(),
-              stampId: newStamp.id,
-              getDate: dateTime,
-              getTime: dateTime,
-              useFlg: false,
-              createdAt: dateTime,
-            );
-
-            await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
-            print(
-                await DbInterface.allSelect('StampLogs', DBHelper.databese()));
-
-            setState(() {
-              stampList[successStampLen] = newStamp;
-            });
-            stampMaxDialogAlert(context, maxStamp);
-          }
-        } else {
-          if (localListLen == successStampLen + 1) {
-            for (int i = localListLen; i < localListLen + crossAxisCount; i++) {
-              Stamp newStamp = new Stamp(
-                  id: uuid.v1(),
-                  data: "",
-                  getDate: dateTime,
-                  getTime: dateTime,
-                  stampNum: "",
-                  useFlg: false,
-                  createdAt: dateTime,
-                  deletedAt: dateTime);
-              stampList.add(newStamp);
-            }
-          }
-          Stamp newStamp = new Stamp(
-              id: uuid.v1(),
-              data: stampCheckString,
-              getDate: dateTime,
-              getTime: dateTime,
-              stampNum: resultJson["stampNum"],
-              useFlg: false,
-              createdAt: dateTime,
-              deletedAt: dateTime);
-          await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
-
-          // LOG 記録
-          StampLogs newLogs = new StampLogs(
+        Stamp newStamp = new Stamp(
             id: uuid.v1(),
-            stampId: newStamp.id,
+            data: stampCheckString,
             getDate: dateTime,
             getTime: dateTime,
+            stampNum: resultJson["stampNum"],
             useFlg: false,
             createdAt: dateTime,
-          );
-          await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
-          print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
+            deletedAt: dateTime);
 
-          List<dynamic> countstamp =
-              await DbInterface.allSelect('Stamp', DBHelper.databese());
-          setState(() {
-            stampListLen = countstamp.length;
-            stampList[successStampLen] = newStamp;
-          });
+        setState(() {
+          stampList[successStampLen] = newStamp;
+        });
+        if (successStampLen + 1 == maxStamp) {
+          stampMaxDialogAlert(context, maxStamp);
         }
-      } else {
-        String title = AppLocalizations.of(context).error;
-        String text = result.format.name != "qr"
-            ? AppLocalizations.of(context).notQRCode
-            : AppLocalizations.of(context).invalidQRCode;
-        qrAlertDialog(context, title, text);
+      } else if (result.result == "err") {
+        qrAlertDialog(context, result.title, result.data);
       }
-    } else if (result.type.name != "Cancelled") {
-      String title = AppLocalizations.of(context).error;
-      String text =
-          AppLocalizations.of(context).incorrectData + '\n${result.rawContent}';
-      qrAlertDialog(context, title, text);
+    } else {
+      await showRequestPermissionDialog(context);
     }
-
-    List<dynamic> countstamp =
-        await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
-    stampListLen = countstamp.length;
   }
 
   @override
@@ -269,7 +197,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    widget.routeObserver.subscribe(this, ModalRoute.of(context));
+    widget.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
   }
 
   // @override
@@ -321,7 +250,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   //pageviewで使用
   void dispose() {
     widget.routeObserver.unsubscribe(this);
-    controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -356,70 +285,75 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           backgroundColor: HexColor(Setting.APP_COLOR),
         ),
         // QRへ遷移
-        floatingActionButton:Container(
-          margin:EdgeInsets.fromLTRB(0,0,deviceWidth/90,deviceWidth/30),
-          child:FloatingActionButton.extended(
-          label: Text('QR',
-              style: TextStyle(
-                fontSize: deviceWidth * 0.06,
-                fontStyle: FontStyle.normal,
-                letterSpacing: 4.0,
-              )),
-          icon: Icon(Icons.qr_code),
-          onPressed: _qrScan,
-          backgroundColor: HexColor(Setting.APP_COLOR),
-        )),
-        body:Stack(children:[AppBackground(),
-            FutureBuilder(
-            future: _getStamp,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<Stamp>> snapshot) {
-              Widget childWidget;
-              if (snapshot.connectionState == ConnectionState.done) {
-                childWidget = Column(children: [
-                  Expanded(
-                      child: Container(
-                    child: PageView(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: PageView(
-                            controller: controller,
-                            children: <Widget>[
-                              _slider(context, stampCheckString, deviceWidth,deviceHeight)
-                            ],
-                          ),
-                        ),
-                      ],
-                      controller: controller,
-                    ),
+        floatingActionButton: Container(
+            margin:
+                EdgeInsets.fromLTRB(0, 0, deviceWidth / 90, deviceWidth / 30),
+            child: FloatingActionButton.extended(
+              label: Text('QR',
+                  style: TextStyle(
+                    fontSize: deviceWidth * 0.06,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 4.0,
                   )),
-                ]);
-              } else {
-                childWidget = const CircularProgressIndicator();
-              }
-              return childWidget;
-            })]));
+              icon: Icon(Icons.qr_code),
+              onPressed: _qrScan,
+              backgroundColor: HexColor(Setting.APP_COLOR),
+            )),
+        body: Stack(children: [
+          AppBackground(),
+          FutureBuilder(
+              future: _getStamp,
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Stamp>> snapshot) {
+                Widget childWidget;
+                if (snapshot.connectionState == ConnectionState.done) {
+                  childWidget = Column(children: [
+                    Expanded(
+                        child: Container(
+                      child: PageView(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: PageView(
+                              controller: controller,
+                              children: <Widget>[
+                                _slider(context, stampCheckString, deviceWidth,
+                                    deviceHeight)
+                              ],
+                            ),
+                          ),
+                        ],
+                        controller: controller,
+                      ),
+                    )),
+                  ]);
+                } else {
+                  childWidget = const CircularProgressIndicator();
+                }
+                return childWidget;
+              })
+        ]));
   }
 
-  Widget _slider(
-      BuildContext context, String stampCheckString, double deviceWidth,double deviceHeight) {
+  Widget _slider(BuildContext context, String stampCheckString,
+      double deviceWidth, double deviceHeight) {
     return Container(
-        color : Colors.white70,
+        color: Colors.white70,
         margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 7,
             deviceWidth / 20, deviceHeight / 8.5),
         width: deviceWidth / 4 - 4 * 1,
         height: deviceWidth / 4 - 4 * 1,
-        child: _stampCard(context, stampCheckString, deviceWidth,deviceHeight));
+        child:
+            _stampCard(context, stampCheckString, deviceWidth, deviceHeight));
   }
 
-  Widget _stampCard(
-      BuildContext context, String stampCheckString, double deviceWidth,double deviceHeight) {
+  Widget _stampCard(BuildContext context, String stampCheckString,
+      double deviceWidth, double deviceHeight) {
     return SingleChildScrollView(
       child: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Center(child:_totalPoint(stampListLen, deviceWidth, deviceHeight)),
+          Center(child: _totalPoint(stampListLen, deviceWidth, deviceHeight)),
           SizedBox(
             height: MediaQuery.of(context).size.width,
             child: FutureBuilder(
@@ -433,8 +367,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                       crossAxisCount: 3,
                       physics: ClampingScrollPhysics(),
                       scrollDirection: Axis.vertical,
-                      padding: EdgeInsets.fromLTRB(
-                          10, deviceWidth / 40, 10, 0),
+                      padding: EdgeInsets.fromLTRB(10, deviceWidth / 40, 10, 0),
                       // スタンプをListの数だけ生成する
                       children: stampList
                           .map(
@@ -457,10 +390,13 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                   4 -
                                               4 * 1,
                                       // 円を生成
-                                      
+
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        border: Border.all(color: HexColor(Setting.APP_COLOR).withOpacity(0.6), width: 3),  
+                                        border: Border.all(
+                                            color: HexColor(Setting.APP_COLOR)
+                                                .withOpacity(0.6),
+                                            width: 3),
                                         image: DecorationImage(
                                             fit: BoxFit.fill,
                                             image: stamp.data ==
@@ -469,7 +405,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                     stamp.stampNum.toString())
                                                 : AssetImage(Setting.NONE_IMG)),
                                       ),
-                                       
+
                                       //円内の数字表示
                                       child: Align(
                                         alignment: Alignment.center,
@@ -479,7 +415,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                 stamp.stampNum.toString(),
                                                 style: GoogleFonts.prompt(
                                                   //color: HexColor('00C2FF').withOpacity(0.6),
-                                                  fontSize: deviceWidth*0.09,
+                                                  fontSize: deviceWidth * 0.09,
                                                   //太字にしたい場合
                                                   //fontWeight: FontWeight.w700,
                                                 ),
@@ -509,8 +445,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
           alignment: Alignment.center,
-          margin:
-              EdgeInsets.fromLTRB(deviceWidth / 8, deviceWidth/20, 0, deviceWidth/50),
+          margin: EdgeInsets.fromLTRB(
+              deviceWidth / 8, deviceWidth / 20, 0, deviceWidth / 50),
           width: deviceWidth / 2 * 1.3,
           height: deviceHeight / 16 * 1.2,
           /*decoration: BoxDecoration(
@@ -518,12 +454,36 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                 color: HexColor(Setting.APP_COLOR).withOpacity(0.6), width: 3),
           ),*/
           child: Text(
-            AppLocalizations.of(context).totalStamps + ': $point',
+            AppLocalizations.of(context)!.totalStamps + ': $point',
             style: GoogleFonts.ubuntu(
-              fontSize: deviceWidth*0.07,
+              fontSize: deviceWidth * 0.07,
               fontWeight: FontWeight.w500,
             ),
           ))
     ]);
+  }
+
+  Future<void> showRequestPermissionDialog(BuildContext context) async {
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('カメラを許可してください'),
+          content: const Text('QRコードを読み取る為にカメラを利用します'),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('キャンセル'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                openAppSettings();
+              },
+              child: const Text('設定'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

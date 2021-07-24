@@ -8,23 +8,23 @@ void stampMaxDialogAlert(BuildContext context, int maxStamp) {
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(AppLocalizations.of(context).stampCollected),
+        title: Text(AppLocalizations.of(context)!.stampCollected),
         content: Container(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(AppLocalizations.of(context).maxStamp(maxStamp) +
+              Text(AppLocalizations.of(context)!.maxStamp(maxStamp) +
                   '\n' +
-                  AppLocalizations.of(context).pleaseExchange +
+                  AppLocalizations.of(context)!.pleaseExchange +
                   '\n' +
                   '\n\n' +
-                  AppLocalizations.of(context).noMoreStamps),
+                  AppLocalizations.of(context)!.noMoreStamps),
             ],
           ),
         ),
         actions: <Widget>[
           TextButton(
-            child: Text(AppLocalizations.of(context).yes),
+            child: Text(AppLocalizations.of(context)!.yes),
             style: OutlinedButton.styleFrom(
               primary: Colors.blue,
               shape: RoundedRectangleBorder(

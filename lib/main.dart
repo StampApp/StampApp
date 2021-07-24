@@ -4,6 +4,7 @@
 * ページを追加する場合はimportしてroutesの中でルーティングパスとWidgetを定義する
 */
 import 'package:flutter/material.dart';
+import 'package:stamp_app/View/qrScan.dart';
 import 'View/home.dart';
 import 'View/terms.dart';
 import 'View/Setting.dart';
@@ -36,18 +37,20 @@ class MyApp extends StatelessWidget {
       // 作成したページを呼び出す
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => HomeSamplePage(
-            title: AppLocalizations.of(context).stampApp,
+            title: AppLocalizations.of(context)!.stampApp,
             routeObserver: _routeObserver),
+        // i18n 対応
+        '/qrScan': (BuildContext context) => QRCodeScanner(title: 'QR読み取り'),
         '/Setting': (BuildContext context) =>
-            SettingPage(title: AppLocalizations.of(context).settings),
+            SettingPage(title: AppLocalizations.of(context)!.settings),
         '/history': (BuildContext context) =>
-            HistoryPage(title: AppLocalizations.of(context).usageHistory),
+            HistoryPage(title: AppLocalizations.of(context)!.usageHistory),
         '/terms': (BuildContext context) =>
-            TermsPage(title: AppLocalizations.of(context).termsOfUse),
+            TermsPage(title: AppLocalizations.of(context)!.termsOfUse),
         '/instructions': (BuildContext context) =>
-            InstructionsPage(title: AppLocalizations.of(context).usage),
+            InstructionsPage(title: AppLocalizations.of(context)!.usage),
         '/privacyPolicy': (BuildContext context) => PrivacyPolicyPage(
-            title: AppLocalizations.of(context).privacyPolicy),
+            title: AppLocalizations.of(context)!.privacyPolicy),
       },
       localizationsDelegates: [
         // localizations delegateを追加

@@ -12,7 +12,7 @@ import 'package:stamp_app/models/stampLogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingPage extends StatefulWidget {
-  SettingPage({Key key, this.title}) : super(key: key);
+  SettingPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -20,7 +20,8 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  final int exchangeSpnum = StampCount.count.stampCount; //スタンプを交換する際に必要な数
+  final int exchangeSpnum = StampCount.count.stampCount!; //スタンプを交換する際に必要な数
+
   void _termsNavigate() {
     Navigator.of(context).pushNamed('/terms');
   }
@@ -43,13 +44,13 @@ class _SettingPageState extends State<SettingPage> {
       builder: (_) {
         return AlertDialog(
           contentPadding: EdgeInsets.fromLTRB(10, 30, 10, 30),
-          title: Text(AppLocalizations.of(context).confirmation),
+          title: Text(AppLocalizations.of(context)!.confirmation),
           content: Text(
-              AppLocalizations.of(context).exchangeStamps(exchangeSpnum) +
+              AppLocalizations.of(context)!.exchangeStamps(exchangeSpnum) +
                   "\n" +
-                  AppLocalizations.of(context).reallyUseStamps +
+                  AppLocalizations.of(context)!.reallyUseStamps +
                   "\n" +
-                  AppLocalizations.of(context).disappearStamps),
+                  AppLocalizations.of(context)!.disappearStamps),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
@@ -90,9 +91,9 @@ class _SettingPageState extends State<SettingPage> {
           context: context,
           builder: (_) {
             return AlertDialog(
-              title: Text(AppLocalizations.of(context).stampUse),
+              title: Text(AppLocalizations.of(context)!.stampUse),
               content: Text(
-                  AppLocalizations.of(context).littleStamps(exchangeSpnum)),
+                  AppLocalizations.of(context)!.littleStamps(exchangeSpnum)),
               actions: <Widget>[
                 // ボタン領域
                 ElevatedButton(
@@ -115,9 +116,9 @@ class _SettingPageState extends State<SettingPage> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).usedStamps),
+          title: Text(AppLocalizations.of(context)!.usedStamps),
           content:
-              Text(AppLocalizations.of(context).usedStamps + "\n\n$idsText"),
+              Text(AppLocalizations.of(context)!.usedStamps + "\n\n$idsText"),
           actions: <Widget>[
             // ボタン領域
             ElevatedButton(
@@ -150,16 +151,16 @@ class _SettingPageState extends State<SettingPage> {
       body: Column(children: <Widget>[
         Expanded(
             child: ListView(children: [
-          _menuItem(AppLocalizations.of(context).usageHistory,
-            Icon(Icons.format_list_bulleted), _historyNavigate),
-        _menuItem(AppLocalizations.of(context).usage, Icon(Icons.menu_book),
-            _instructionsNavigate),
-        _menuItem(AppLocalizations.of(context).termsOfUse,
-            Icon(Icons.verified_user_outlined), _termsNavigate),
-        _menuItem(AppLocalizations.of(context).privacyPolicy,
-            Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
-        _menuItem(AppLocalizations.of(context).version,
-            Icon(Icons.system_update_alt_rounded)),
+          _menuItem(AppLocalizations.of(context)!.usageHistory,
+              Icon(Icons.format_list_bulleted), _historyNavigate),
+          _menuItem(AppLocalizations.of(context)!.usage, Icon(Icons.menu_book),
+              _instructionsNavigate),
+          _menuItem(AppLocalizations.of(context)!.termsOfUse,
+              Icon(Icons.verified_user_outlined), _termsNavigate),
+          _menuItem(AppLocalizations.of(context)!.privacyPolicy,
+              Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
+          _menuItem(AppLocalizations.of(context)!.version,
+              Icon(Icons.system_update_alt_rounded)),
         ])),
         Padding(
             padding: const EdgeInsets.all(40),
@@ -182,7 +183,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget _menuItem(String title, Icon icon, [VoidCallback tap]) {
+  Widget _menuItem(String title, Icon icon, [VoidCallback? tap]) {
     return GestureDetector(
       child: Container(
           padding: EdgeInsets.all(8.0),
@@ -238,14 +239,13 @@ Widget _version() {
 Future<Map> _useStamp() async {
   // useflgがfalseのスタンプ数を取得
   int count = await DbInterface.selectStampCount('Stamp', DBHelper.databese());
-  final int stampCheckString = StampCount.count.stampCount;
+  final int stampCheckString = StampCount.count.stampCount!;
   // uuid
   final uuid = Uuid();
 
   if (count < stampCheckString) return {'idsText': null, 'canUseStamp': false};
   // useflgがfalseのスタンプを取得
-  List<Map<String, dynamic>> maps =
-      await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
+  List maps = await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
   // 更新レコードを作成
   DateTime nowDate = DateTime.now();
