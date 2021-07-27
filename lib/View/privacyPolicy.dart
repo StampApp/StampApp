@@ -11,7 +11,7 @@ import 'package:stamp_app/Widget/AppBar.dart';
 
 class PrivacyPolicyPage extends StatefulWidget {
   // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
-  PrivacyPolicyPage({Key key, this.title}) : super(key: key);
+  PrivacyPolicyPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   // 生成したStateをMyPageで使えるように

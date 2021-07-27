@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stamp_app/Widget/AppBar.dart';
 
 class TermsPage extends StatefulWidget {
-  TermsPage({Key key, this.title}) : super(key: key);
+  TermsPage({Key? key, required this.title}) : super(key: key);
   final String title;
   _TermsPageState createState() => _TermsPageState();
 }

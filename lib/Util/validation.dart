@@ -1,9 +1,9 @@
 // 読み込んだQRを検証するクラス
 import 'package:intl/intl.dart';
-import 'package:stamp_app/Util/enumCheckString.dart';
+import 'package:stamp_app/Util/Enums/enumCheckString.dart';
 
 class Validation {
-  static final String stampCheckString = CheckString.ok.checkStringValue;
+  static final String stampCheckString = CheckString.ok.checkStringValue!;
   static bool dateCheck(datetime) {
     DateTime verificationDate =
         DateFormat("yyyy/MM/dd HH:mm:ss").parseStrict(datetime);
