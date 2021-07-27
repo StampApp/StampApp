@@ -9,6 +9,7 @@ import 'package:stamp_app/Util/Enums/enumDateType.dart';
 import 'package:stamp_app/Util/Enums/enumStampCount.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({Key key, this.title}) : super(key: key);
@@ -19,6 +20,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  final int exchangeSpnum = StampCount.count.stampCount; //スタンプを交換する際に必要な数
   void _termsNavigate() {
     Navigator.of(context).pushNamed('/terms');
   }
@@ -40,8 +42,14 @@ class _SettingPageState extends State<SettingPage> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text("確認"),
-          content: Text("本当に利用しますか？\n使用した場合溜まっていたスタンプは消えてしまいます。"),
+          contentPadding: EdgeInsets.fromLTRB(10, 30, 10, 30),
+          title: Text(AppLocalizations.of(context).confirmation),
+          content: Text(
+              AppLocalizations.of(context).exchangeStamps(exchangeSpnum) +
+                  "\n" +
+                  AppLocalizations.of(context).reallyUseStamps +
+                  "\n" +
+                  AppLocalizations.of(context).disappearStamps),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
@@ -56,11 +64,13 @@ class _SettingPageState extends State<SettingPage> {
               onPressed: () => Navigator.pop(context),
             ),
 
-            RaisedButton(
+            ElevatedButton(
               child: const Text('OK'),
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               onPressed: () => {Navigator.pop(context), _useStampDialog()},
             ),
@@ -80,15 +90,18 @@ class _SettingPageState extends State<SettingPage> {
           context: context,
           builder: (_) {
             return AlertDialog(
-              title: Text("スタンプ利用"),
-              content: Text("スタンプが溜まっていません"),
+              title: Text(AppLocalizations.of(context).stampUse),
+              content: Text(
+                  AppLocalizations.of(context).littleStamps(exchangeSpnum)),
               actions: <Widget>[
                 // ボタン領域
-                RaisedButton(
+                ElevatedButton(
                   child: const Text('OK'),
-                  color: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   onPressed: () => Navigator.pop(context),
                 ),
@@ -102,15 +115,18 @@ class _SettingPageState extends State<SettingPage> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text("スタンプ利用"),
-          content: Text("スタンプを利用しました\n\n$idsText"),
+          title: Text(AppLocalizations.of(context).usedStamps),
+          content:
+              Text(AppLocalizations.of(context).usedStamps + "\n\n$idsText"),
           actions: <Widget>[
             // ボタン領域
-            RaisedButton(
+            ElevatedButton(
               child: const Text('OK'),
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               onPressed: () => Navigator.pop(context),
             ),
@@ -132,13 +148,18 @@ class _SettingPageState extends State<SettingPage> {
         backgroundColor: HexColor(Setting.APP_COLOR),
       ),
       body: ListView(children: [
-        _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),
-        _menuItem("使い方", Icon(Icons.menu_book), _instructionsNavigate),
-        _menuItem("利用規約", Icon(Icons.verified_user_outlined), _termsNavigate),
-        _menuItem("プライバシーポリシー", Icon(Icons.privacy_tip_outlined),
-            _privacyPolicyNavigate),
-        _menuItem("Version", Icon(Icons.system_update_alt_rounded)),
-        _menuItem("スタンプ使用", Icon(Icons.shopping_bag_outlined), _useStampCheck),
+        _menuItem(AppLocalizations.of(context).usageHistory,
+            Icon(Icons.format_list_bulleted), _historyNavigate),
+        _menuItem(AppLocalizations.of(context).usage, Icon(Icons.menu_book),
+            _instructionsNavigate),
+        _menuItem(AppLocalizations.of(context).termsOfUse,
+            Icon(Icons.verified_user_outlined), _termsNavigate),
+        _menuItem(AppLocalizations.of(context).privacyPolicy,
+            Icon(Icons.privacy_tip_outlined), _privacyPolicyNavigate),
+        _menuItem(AppLocalizations.of(context).version,
+            Icon(Icons.system_update_alt_rounded)),
+        _menuItem(AppLocalizations.of(context).stampUse,
+            Icon(Icons.shopping_bag_outlined), _useStampCheck),
       ]),
     );
   }
@@ -197,14 +218,14 @@ Widget _version() {
 
 // スタンプ数を取得し規定数あった場合使用する
 Future<Map> _useStamp() async {
-  // deletedFlgがfalseのスタンプ数を取得
+  // useflgがfalseのスタンプ数を取得
   int count = await DbInterface.selectStampCount('Stamp', DBHelper.databese());
   final int stampCheckString = StampCount.count.stampCount;
   // uuid
   final uuid = Uuid();
 
   if (count < stampCheckString) return {'idsText': null, 'canUseStamp': false};
-  // deletedFlgがfalseのスタンプを取得
+  // useflgがfalseのスタンプを取得
   List<Map<String, dynamic>> maps =
       await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
@@ -214,11 +235,11 @@ Future<Map> _useStamp() async {
     return Stamp(
       id: maps[i]['id'],
       data: maps[i]['data'],
-      getDate: formatStringToDateTime(maps[i]['getdate'], EnumDateType.date),
-      getTime: formatStringToDateTime(maps[i]['gettime'], EnumDateType.time),
-      stampNum: maps[i]['stampnum'],
-      deletedFlg: true,
-      createdAt: DateTime.parse(maps[i]['createdat']),
+      getDate: formatStringToDateTime(maps[i]['stamp_date'], EnumDateType.date),
+      getTime: formatStringToDateTime(maps[i]['stamp_time'], EnumDateType.time),
+      stampNum: maps[i]['stamp_num'],
+      useFlg: true,
+      createdAt: DateTime.parse(maps[i]['created_at']),
       deletedAt: nowDate,
     );
   });

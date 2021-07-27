@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // スタンプの警告を表示するアラート
 void stampMaxDialogAlert(BuildContext context, int maxStamp) {
@@ -7,19 +8,30 @@ void stampMaxDialogAlert(BuildContext context, int maxStamp) {
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('スタンプが貯まりました'),
+        title: Text(AppLocalizations.of(context).stampCollected),
         content: Container(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                  "スタンプが$maxStamp個貯まりました。\n交換してください。\n\n注:これ以上スタンプを読み込んでも増えません。"),
+              Text(AppLocalizations.of(context).maxStamp(maxStamp) +
+                  '\n' +
+                  AppLocalizations.of(context).pleaseExchange +
+                  '\n' +
+                  '\n\n' +
+                  AppLocalizations.of(context).noMoreStamps),
             ],
           ),
         ),
         actions: <Widget>[
           TextButton(
-            child: Text('はい'),
+            child: Text(AppLocalizations.of(context).yes),
+            style: OutlinedButton.styleFrom(
+              primary: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              side: const BorderSide(color: Colors.blue),
+            ),
             onPressed: () => Navigator.of(context).pop(1),
           ),
         ],

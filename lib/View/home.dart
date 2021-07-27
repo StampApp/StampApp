@@ -10,10 +10,12 @@ import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
 import 'package:uuid/uuid.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../Util/checkIsMaxStamps.dart';
 import '../Util/Enums/enumCheckString.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeSamplePage extends StatefulWidget {
   HomeSamplePage({Key key, this.title, this.routeObserver}) : super(key: key);
@@ -33,6 +35,42 @@ class Stamp {
   Stamp(this.id, this.data, this.stampNum, this.createAt);
 }
 */
+class AppBackground extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, contraint) {
+      final height = contraint.maxHeight;
+      final width = contraint.maxWidth;
+      return Stack(
+        children: <Widget>[
+          Container(color: HexColor("e0ffff")),
+          Positioned(
+            top: height * 0.20,
+            left: height * 0.35,
+            child: Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: HexColor(Setting.APP_COLOR).withAlpha(70)),
+            ),
+          ),
+          Positioned(
+            top: -height * 0.10,
+            left: -height * 0.39,
+            child: Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: HexColor(Setting.APP_COLOR).withAlpha(50)),
+            ),
+          ),
+        ],
+      );
+    });
+  }
+}
 
 class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   static final uuid = Uuid();
@@ -74,8 +112,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
         data: maps[i]['data'],
         getDate: dateTime,
         getTime: dateTime,
-        stampNum: maps[i]['stampnum'],
-        deletedFlg: maps[i]['deleteflg'] == 0 ? true : false,
+        stampNum: maps[i]['stamp_num'],
+        useFlg: maps[i]['useflg'] == 0 ? true : false,
         createdAt: dateTime,
         deletedAt: dateTime,
       );
@@ -94,7 +132,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           getDate: dateTime,
           getTime: dateTime,
           stampNum: (i).toString(),
-          deletedFlg: false,
+          useFlg: false,
           createdAt: dateTime,
           deletedAt: dateTime);
       stampList.add(newStamp);
@@ -104,10 +142,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   }
 
   Future<void> _qrScan() async {
-    ScanResult result = await qrScan();
+    ScanResult result = await qrScan(context);
     final DateTime dateTime = DateTime.now();
 
-    if (result.rawContent != "データが不正です" &&
+    if (result.rawContent != AppLocalizations.of(context).incorrectData &&
         result.type.name != "Error" &&
         result.type.name != "Cancelled") {
       dynamic resultJson = json.decode(result.rawContent);
@@ -131,7 +169,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                 getDate: dateTime,
                 getTime: dateTime,
                 stampNum: resultJson["stampNum"],
-                deletedFlg: false,
+                useFlg: false,
                 createdAt: dateTime,
                 deletedAt: dateTime);
             await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
@@ -164,7 +202,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                   getDate: dateTime,
                   getTime: dateTime,
                   stampNum: "",
-                  deletedFlg: false,
+                  useFlg: false,
                   createdAt: dateTime,
                   deletedAt: dateTime);
               stampList.add(newStamp);
@@ -176,7 +214,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               getDate: dateTime,
               getTime: dateTime,
               stampNum: resultJson["stampNum"],
-              deletedFlg: false,
+              useFlg: false,
               createdAt: dateTime,
               deletedAt: dateTime);
           await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
@@ -201,14 +239,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           });
         }
       } else {
-        String title = "エラー";
-        String text =
-            result.format.name != "qr" ? "これはQRコードではありません" : "このQRコードは無効です";
+        String title = AppLocalizations.of(context).error;
+        String text = result.format.name != "qr"
+            ? AppLocalizations.of(context).notQRCode
+            : AppLocalizations.of(context).invalidQRCode;
         qrAlertDialog(context, title, text);
       }
     } else if (result.type.name != "Cancelled") {
-      String title = "エラー";
-      String text = '不正なQRコードです\n${result.rawContent}';
+      String title = AppLocalizations.of(context).error;
+      String text =
+          AppLocalizations.of(context).incorrectData + '\n${result.rawContent}';
       qrAlertDialog(context, title, text);
     }
 
@@ -265,7 +305,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             getDate: dateTime,
             getTime: dateTime,
             stampNum: (i + 1).toString(),
-            deletedFlg: false,
+            useFlg: false,
             createdAt: dateTime,
             deletedAt: dateTime);
         newStampList.add(newStamp);
@@ -315,68 +355,74 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           backgroundColor: HexColor(Setting.APP_COLOR),
         ),
         // QRへ遷移
-        floatingActionButton: FloatingActionButton.extended(
-          label: Text('QR',
-              style: TextStyle(
-                fontSize: deviceWidth * 0.06,
-                fontStyle: FontStyle.normal,
-                letterSpacing: 4.0,
-              )),
-          icon: Icon(Icons.qr_code),
-          onPressed: _qrScan,
-          backgroundColor: HexColor(Setting.APP_COLOR),
-        ),
-        body: FutureBuilder(
-            future: _getStamp,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<Stamp>> snapshot) {
-              Widget childWidget;
-              if (snapshot.connectionState == ConnectionState.done) {
-                childWidget = Column(children: [
-                  //_slider(context, stampCheckString, deviceWidth)
-
-                  Expanded(
-                      child: Container(
-                    child: PageView(
-                      children: <Widget>[
-                        PageView(
-                          controller: controller,
-                          children: <Widget>[
-                            _slider(context, stampCheckString, deviceWidth)
-                          ],
-                        ),
-                      ],
-                      controller: controller,
-                    ),
+        floatingActionButton: Container(
+            margin:
+                EdgeInsets.fromLTRB(0, 0, deviceWidth / 90, deviceWidth / 30),
+            child: FloatingActionButton.extended(
+              label: Text('QR',
+                  style: TextStyle(
+                    fontSize: deviceWidth * 0.06,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 4.0,
                   )),
-                  //_totalPoint(stampListLen, deviceWidth, deviceHeight)
-                ]);
-              } else {
-                childWidget = const CircularProgressIndicator();
-              }
-              return childWidget;
-            }));
+              icon: Icon(Icons.qr_code),
+              onPressed: _qrScan,
+              backgroundColor: HexColor(Setting.APP_COLOR),
+            )),
+        body: Stack(children: [
+          AppBackground(),
+          FutureBuilder(
+              future: _getStamp,
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Stamp>> snapshot) {
+                Widget childWidget;
+                if (snapshot.connectionState == ConnectionState.done) {
+                  childWidget = Column(children: [
+                    //_slider(context, stampCheckString, deviceWidth)
+
+                    Expanded(
+                        child: Container(
+                      child: PageView(
+                        children: <Widget>[
+                          PageView(
+                            controller: controller,
+                            children: <Widget>[
+                              _slider(context, stampCheckString, deviceWidth,
+                                  deviceHeight)
+                            ],
+                          ),
+                        ],
+                        controller: controller,
+                      ),
+                    )),
+                  ]);
+                } else {
+                  childWidget = const CircularProgressIndicator();
+                }
+                return childWidget;
+              })
+        ]));
   }
 
-  Widget _slider(
-      BuildContext context, String stampCheckString, double deviceWidth) {
+  Widget _slider(BuildContext context, String stampCheckString,
+      double deviceWidth, double deviceHeight) {
     return Container(
-        color: HexColor(Setting.APP_COLOR).withOpacity(0.6),
-        margin: EdgeInsets.fromLTRB(
-            deviceWidth / 20,
-            MediaQuery.of(context).size.height * 0.07,
-            deviceWidth / 20,
-            MediaQuery.of(context).size.height * 0.1),
-        height: MediaQuery.of(context).size.height * 0.73,
-        child: _stampCard(context, stampCheckString, deviceWidth));
+        color: Colors.white70,
+        margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 7,
+            deviceWidth / 20, deviceHeight / 8.5),
+        width: deviceWidth / 4 - 4 * 1,
+        height: deviceWidth / 4 - 4 * 1,
+        child:
+            _stampCard(context, stampCheckString, deviceWidth, deviceHeight));
   }
 
-  Widget _stampCard(
-      BuildContext context, String stampCheckString, double deviceWidth) {
+  Widget _stampCard(BuildContext context, String stampCheckString,
+      double deviceWidth, double deviceHeight) {
     return SingleChildScrollView(
       child: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
+          Center(child: _totalPoint(stampListLen, deviceWidth, deviceHeight)),
           SizedBox(
             child: FutureBuilder(
                 future: _getStamp,
@@ -406,12 +452,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   GestureDetector(
-                                      onTap: () =>
-                                          stamp.data == stampCheckString
-                                              ? stampDialog(context, stamp)
-                                              : (context),
-                                      child: Container(
-                                        //padding: const EdgeInsets.all(10.0),
+                                    onTap: () => stamp.data == stampCheckString
+                                        ? stampDialog(context, stamp)
+                                        : (context),
+                                    child: Container(
+                                        //padding: const EdgeInsets.all(11.0),
                                         width:
                                             MediaQuery.of(context).size.width /
                                                     4 -
@@ -421,11 +466,13 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                     4 -
                                                 4 * 1,
                                         // 円を生成
+
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          //border: Border.all(
-                                          //  color: HexColor("00FFFF"), width: 3),
-                                          color: HexColor('FFFFFF'),
+                                          border: Border.all(
+                                              color: HexColor(Setting.APP_COLOR)
+                                                  .withOpacity(0.6),
+                                              width: 3),
                                           image: DecorationImage(
                                               fit: BoxFit.fill,
                                               image: stamp.data ==
@@ -435,6 +482,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                   : AssetImage(
                                                       Setting.NONE_IMG)),
                                         ),
+
                                         //円内の数字表示
                                         child: Align(
                                           alignment: Alignment.center,
@@ -442,17 +490,16 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                               ? Text("")
                                               : Text(
                                                   stamp.stampNum.toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 25.0,
-                                                    fontStyle: FontStyle.normal,
-                                                    letterSpacing: 4.0,
-                                                    color: HexColor(
-                                                        Setting.APP_COLOR),
+                                                  style: GoogleFonts.prompt(
+                                                    //color: HexColor('00C2FF').withOpacity(0.6),
+                                                    fontSize:
+                                                        deviceWidth * 0.09,
+                                                    //太字にしたい場合
+                                                    //fontWeight: FontWeight.w700,
                                                   ),
-                                                  textAlign: TextAlign.center,
                                                 ),
-                                        ),
-                                      )),
+                                        )),
+                                  )
                                 ],
                               ),
                             ),
@@ -474,20 +521,19 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
           alignment: Alignment.center,
-          margin:
-              EdgeInsets.fromLTRB(deviceWidth / 20, deviceHeight / 85, 0, 25),
-          width: deviceWidth / 2 * 1,
-          height: deviceHeight / 16 * 1,
-          decoration: BoxDecoration(
+          margin: EdgeInsets.fromLTRB(
+              deviceWidth / 8, deviceWidth / 20, 0, deviceWidth / 50),
+          width: deviceWidth / 2 * 1.3,
+          height: deviceHeight / 16 * 1.2,
+          /*decoration: BoxDecoration(
             border: Border.all(
                 color: HexColor(Setting.APP_COLOR).withOpacity(0.6), width: 3),
-          ),
+          ),*/
           child: Text(
-            '合計スタンプ数: $point',
-            style: TextStyle(
-              fontSize: deviceHeight * 0.026,
-              fontStyle: FontStyle.normal,
-              letterSpacing: 2.0,
+            AppLocalizations.of(context).totalStamps + ': $point',
+            style: GoogleFonts.ubuntu(
+              fontSize: deviceWidth * 0.07,
+              fontWeight: FontWeight.w500,
             ),
           ))
     ]);
