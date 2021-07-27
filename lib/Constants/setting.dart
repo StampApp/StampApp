@@ -6,4 +6,6 @@ class Setting {
   static const String NONE_IMG = 'assets/images/stamp/none.png';
   static const String STAMP_FLOWER = 'assets/images/stamp/flower-4.png';
   static const Map<String, String> DB_TABLES = { "STAMP": 'Stamp', "LOGS": 'StampLogs'};
+  static const int MAX_STAMPS = 9;
+  static const String VALID_TEXT = 'ok';
 }
