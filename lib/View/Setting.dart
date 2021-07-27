@@ -5,7 +5,7 @@ import 'package:stamp_app/models/stamp.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/enumDateType.dart';
 import 'package:stamp_app/Util/enumStampCount.dart';
-import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/Widget/AppBar.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({Key key, this.title}) : super(key: key);
@@ -119,14 +119,11 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        backgroundColor: HexColor(Setting.APP_COLOR),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(deviceHeight * 0.08),
+          child: AppBarPage(widget.title),
       ),
       body: ListView(children: [
         _menuItem("利用履歴", Icon(Icons.format_list_bulleted), _historyNavigate),

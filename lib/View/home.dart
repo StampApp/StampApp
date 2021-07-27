@@ -36,6 +36,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
 
+  void _settingNavigate() {
+    Navigator.of(context).pushNamed('/Setting');
+  }
+
   //カード枚数は1以上
   int cardnum = 1;
 
@@ -55,10 +59,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   List<Stamp> stampList = [];
 
   static final String stampCheckString = CheckString.ok.checkStringValue;
-
-  void _settingNavigate() {
-    Navigator.of(context).pushNamed('/Setting');
-  }
 
   Future<List<Stamp>> asyncGetStampList() async {
     List<Map<String, dynamic>> maps =
@@ -259,30 +259,33 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //ロゴを中央にしたい場合↓
-              //padding: const EdgeInsets.all(8.0), child: Text('         ')),
-              Image.asset(
-                Setting.APP_LOGO,
-                fit: BoxFit.contain,
-                height: 50,
-              ),
-              Container(padding: EdgeInsets.only(left: 190))
-            ],
-          ),
-          actions: <Widget>[
-            // 設定ボタン
-            IconButton(
-              icon: Icon(Icons.settings,
-                  color: Colors.white, size: deviceWidth * 0.07),
-              onPressed: _settingNavigate,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(deviceHeight * 0.08),
+          child: AppBar(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween, // これで両端に寄せる
+              children: [
+                //ロゴを中央にしたい場合↓
+                //padding: const EdgeInsets.all(8.0), child: Text('         ')),
+                Image.asset(
+                    Setting.APP_LOGO,
+                    fit: BoxFit.contain,
+                    height: deviceHeight * 0.08,
+                ),
+              ],
             ),
-          ],
-          backgroundColor: HexColor(Setting.APP_COLOR),
-        ),
+            actions: <Widget>[
+              // 設定ボタン
+              IconButton(
+                icon: Icon(Icons.settings,
+                    color: Colors.white, size: deviceHeight * 0.05),
+                onPressed: _settingNavigate,
+              ),
+              Container(padding: EdgeInsets.only(right: deviceWidth * 0.02)),
+            ],
+            backgroundColor: HexColor(Setting.APP_COLOR),
+          ),
+       ),
         // QRへ遷移
         floatingActionButton: FloatingActionButton.extended(
           label: Text('QR',
