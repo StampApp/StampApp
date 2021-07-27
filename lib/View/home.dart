@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Util/toInt.dart';
 import 'package:stamp_app/View/qrScan.dart';
@@ -12,12 +11,10 @@ import 'package:stamp_app/models/stamp.dart';
 // import 'package:stamp_app/Widget/qrScan.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
-import 'package:stamp_app/models/stampLogs.dart';
 import 'package:uuid/uuid.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
-import '../Util/checkIsMaxStamps.dart';
 import '../Util/Enums/enumCheckString.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
