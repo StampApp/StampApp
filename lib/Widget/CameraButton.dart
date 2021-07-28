@@ -13,7 +13,7 @@ class CameraButton extends StatelessWidget {
     return GestureDetector(
       child: FloatingActionButton(
         tooltip: 'Scan',
-        child: Icon(Icons.camera),
+        child: const Icon(Icons.camera),
         onPressed: onNavigate,
       ),
     );
