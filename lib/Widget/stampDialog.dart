@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // 読み込み結果を表示するダイアログ
 void stampDialog(BuildContext context, Stamp stamp) {
@@ -20,9 +21,8 @@ void stampDialog(BuildContext context, Stamp stamp) {
                     fit: BoxFit.fitWidth),
               ),
               ListTile(
-                // TODO: i18n対応
                 title: Text(
-                  'スタンプ読み込み日時',
+                  AppLocalizations.of(context)!.stampLoadingDateTime,
                   style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 subtitle: Text(
@@ -35,8 +35,7 @@ void stampDialog(BuildContext context, Stamp stamp) {
         ),
         actions: <Widget>[
           TextButton(
-            // TODO: i18n対応
-            child: Text('OK'),
+            child: Text(AppLocalizations.of(context)!.ok),
             onPressed: () => Navigator.of(context).pop(1),
           ),
         ],
