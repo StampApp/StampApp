@@ -110,7 +110,7 @@ class _HistoryPageState extends State<HistoryPage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(deviceHeight * 0.08),
-          child: AppBarPage(widget.title),
+        child: AppBarPage(widget.title),
       ),
 
       // リストの日付の処理が終わるまで読み込み中を表示する
@@ -127,8 +127,8 @@ class _HistoryPageState extends State<HistoryPage> {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: TextButton(
-                        //TODO: i18n対応
-                        child: Text("履歴の削除"),
+                        child:
+                            Text(AppLocalizations.of(context)!.deleteHistory),
                         style: OutlinedButton.styleFrom(
                           primary: Colors.blue,
                           shape: RoundedRectangleBorder(
@@ -283,13 +283,11 @@ class _HistoryPageState extends State<HistoryPage> {
         return AlertDialog(
           contentPadding: EdgeInsets.fromLTRB(10, 30, 10, 30),
           title: Text(AppLocalizations.of(context)!.confirmation),
-          //TODO: i18n対応
-          content: Text("本当に利用履歴を削除しますか？"),
+          content: Text(AppLocalizations.of(context)!.reallyDeleteHistory),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
-              //TODO: i18n対応
-              child: const Text('cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
               style: OutlinedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(
@@ -301,8 +299,7 @@ class _HistoryPageState extends State<HistoryPage> {
             ),
 
             ElevatedButton(
-              //TODO: i18n対応
-              child: const Text('OK'),
+              child: Text(AppLocalizations.of(context)!.ok),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(

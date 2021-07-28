@@ -116,5 +116,7 @@
     "cameraMove":"カメラを動かす",
     "cameraSetting":"カメラ設定",
     "stampLoadingDateTime":"スタンプ読み込み日時",
-    "ok":"はい"
+    "ok":"はい",
+    "deleteHistory":"履歴の削除",
+    "reallyDeleteHistory":"本当に利用履歴を削除しますか？"
     }
