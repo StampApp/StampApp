@@ -1,5 +1,5 @@
 class Setting {
-  static const String VERSION = '0.8';
+  static const String VERSION = '0.9';
   static const String DB_PATH = 'stamp_database.db';
   static const String APP_COLOR = '00C2FF';
   static const String APP_LOGO = 'assets/images/other/logo_Contrast.png';
