@@ -468,18 +468,18 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('カメラを許可してください'),
-          content: const Text('QRコードを読み取る為にカメラを利用します'),
+          title: Text(AppLocalizations.of(context)!.cameraPermissions),
+          content: Text(AppLocalizations.of(context)!.cameraPermissionsMain),
           actions: <Widget>[
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('キャンセル'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             ElevatedButton(
               onPressed: () async {
                 openAppSettings();
               },
-              child: const Text('設定'),
+              child: Text(AppLocalizations.of(context)!.settings),
             ),
           ],
         );

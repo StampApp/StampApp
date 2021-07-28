@@ -169,7 +169,8 @@ class _SettingPageState extends State<SettingPage> {
                 Icons.shopping_bag_outlined,
                 size: 30,
               ),
-              label: const Text('スタンプ使用', style: TextStyle(fontSize: 18)),
+              label: Text(AppLocalizations.of(context)!.useStamp,
+                  style: TextStyle(fontSize: 18)),
               style: OutlinedButton.styleFrom(
                 minimumSize: Size(220, 50),
                 shape: RoundedRectangleBorder(
