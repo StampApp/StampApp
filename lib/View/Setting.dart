@@ -197,14 +197,14 @@ Widget _version() {
 
 // スタンプ数を取得し規定数あった場合使用する
 Future<Map> _useStamp() async {
-  // deletedFlgがfalseのスタンプ数を取得
+  // useFlgがfalseのスタンプ数を取得
   int count = await DbInterface.selectStampCount('Stamp', DBHelper.databese());
   final int stampCheckString = StampCount.count.stampCount;
   // uuid
   final uuid = Uuid();
 
   if (count < stampCheckString) return {'idsText': null, 'canUseStamp': false};
-  // deletedFlgがfalseのスタンプを取得
+  // useFlgがfalseのスタンプを取得
   List<Map<String, dynamic>> maps =
       await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
@@ -217,7 +217,7 @@ Future<Map> _useStamp() async {
       getDate: formatStringToDateTime(maps[i]['getdate'], EnumDateType.date),
       getTime: formatStringToDateTime(maps[i]['gettime'], EnumDateType.time),
       stampNum: maps[i]['stampnum'],
-      deletedFlg: true,
+      useFlg: true,
       createdAt: DateTime.parse(maps[i]['createdat']),
       deletedAt: nowDate,
     );

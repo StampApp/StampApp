@@ -18,7 +18,7 @@ class DBHelper {
           "getdate TEXT,"
           "gettime TEXT,"
           "stampnum TEXT,"
-          "deletedflg INTEGER,"
+          "useFlg INTEGER,"
           "createdat TEXT,"
           "deletedat TEXT"
           ")"

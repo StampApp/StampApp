@@ -38,7 +38,7 @@ class _HistoryPageState extends State<HistoryPage> {
           data: maps[i]['data'],
           getDate: formatStringToDateTime(maps[i]['getdate'], EnumDateType.date),
           getTime: formatStringToDateTime(maps[i]['gettime'], EnumDateType.time),
-          deletedFlg: maps[i]['deletedflg'] == 0,
+          useFlg: maps[i]['useFlg'] == 0,
         );
       });
     }

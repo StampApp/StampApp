@@ -11,7 +11,7 @@ class Stamp {
   final DateTime getDate; // 取得日
   final DateTime getTime; // 取得時間
   final String stampNum; // スタンプの数
-  final bool deletedFlg; // 使用済みフラグ
+  final bool useFlg; // 使用済みフラグ
   final DateTime createdAt; // スタンプが押された時間
   final DateTime deletedAt; // 削除日時
 
@@ -21,7 +21,7 @@ class Stamp {
       this.getDate,
       this.getTime,
       this.stampNum,
-      this.deletedFlg,
+      this.useFlg,
       this.createdAt,
       this.deletedAt});
 
@@ -30,14 +30,14 @@ class Stamp {
   Map<String, dynamic> toMap() {
     String toDate = formatDateTimeToString(getDate, EnumDateType.date);
     String toTime = formatDateTimeToString(getTime, EnumDateType.time);
-    int deleted = parseBooleanToInt(deletedFlg);
+    int deleted = parseBooleanToInt(useFlg);
     return {
       'id': id,
       'data': data,
       'getdate': toDate,
       'gettime': toTime,
       'stampnum': stampNum,
-      'deletedflg': deleted,
+      'useFlg': deleted,
       'createdat': createdAt.toString(),
       'deletedat': deletedAt.toString()
     };
@@ -45,7 +45,7 @@ class Stamp {
 
   @override
   String toString() {
-    return 'Stamp{id: $id, data: $data, getdate: $getDate, gettime: $getTime, stampnum: $stampNum, deletedflg: $deletedFlg, createdat: $createdAt, deletedat: $deletedAt}';
+    return 'Stamp{id: $id, data: $data, getdate: $getDate, gettime: $getTime, stampnum: $stampNum, useFlg: $useFlg, createdat: $createdAt, deletedat: $deletedAt}';
   }
 
   // テーブル作成
@@ -60,7 +60,7 @@ class Stamp {
   //           "getdate TEXT,"
   //           "gettime TEXT,"
   //           "stampnum TEXT,"
-  //           "deletedflg INTEGER,"
+  //           "useFlg INTEGER,"
   //           "createdat TEXT,"
   //           "deletedat TEXT"
   //           ")");

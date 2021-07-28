@@ -1,14 +1,14 @@
-int parseBooleanToInt(bool deletedFlg) {
+int parseBooleanToInt(bool useFlg) {
   var ret = 0;
-  if (deletedFlg) {
+  if (useFlg) {
     ret = 1;
   }
   return ret;
 }
 
-bool parseIntToBoolean(int deletedFlg) {
+bool parseIntToBoolean(int useFlg) {
   var ret = false;
-  if (deletedFlg == 1) {
+  if (useFlg == 1) {
     ret = true;
   }
   return ret;

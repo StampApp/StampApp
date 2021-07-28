@@ -51,7 +51,7 @@ class DbInterface {
     final List<Map<String, dynamic>> maps = await db.rawQuery(
         "SELECT count(*) as count " +
             "FROM $_tableName " +
-            "WHERE deletedflg = 0");
+            "WHERE useFlg = 0");
     int count = maps[0]['count'];
     return count;
   }
@@ -61,7 +61,7 @@ class DbInterface {
     final int stampCheckString = StampCount.count.stampCount;
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query('$_tableName',
-        where: 'deletedflg = ?',
+        where: 'useFlg = ?',
         limit: stampCheckString,
         orderBy: 'getdate asc, gettime asc',
         whereArgs: [0]);
