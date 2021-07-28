@@ -103,6 +103,7 @@ class _SettingPageState extends State<SettingPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    side: const BorderSide(color: Colors.blue),
                   ),
                   onPressed: () => Navigator.pop(context),
                 ),
