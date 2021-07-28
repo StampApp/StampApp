@@ -115,5 +115,6 @@
     "cameraStop":"Stop the camera.",
     "cameraMove":"Move the camera.",
     "cameraSetting":"Camera Setting",
-    "stampLoadingDateTime":"Stamp loading date and time"
+    "stampLoadingDateTime":"Stamp loading date and time",
+    "ok":"OK"
 }
