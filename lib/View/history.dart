@@ -152,6 +152,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: TextButton(
+                        //TODO: i18n対応
                         child: Text("履歴の削除"),
                         style: OutlinedButton.styleFrom(
                           primary: Colors.blue,
@@ -307,10 +308,12 @@ class _HistoryPageState extends State<HistoryPage> {
         return AlertDialog(
           contentPadding: EdgeInsets.fromLTRB(10, 30, 10, 30),
           title: Text(AppLocalizations.of(context)!.confirmation),
+          //TODO: i18n対応
           content: Text("本当に利用履歴を削除しますか？"),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
+              //TODO: i18n対応
               child: const Text('cancel'),
               style: OutlinedButton.styleFrom(
                 primary: Colors.blue,
@@ -323,6 +326,7 @@ class _HistoryPageState extends State<HistoryPage> {
             ),
 
             ElevatedButton(
+              //TODO: i18n対応
               child: const Text('OK'),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
