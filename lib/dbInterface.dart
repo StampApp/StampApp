@@ -29,8 +29,8 @@ class DbInterface {
     final List<Map<String, dynamic>> maps = await db.rawQuery("SELECT * " +
         "FROM $_tableName " +
         "WHERE datetime('$nowDate', '-$pastMonths months') " +
-        "< getdate " +
-        "order by getdate desc, gettime desc");
+        "< stamp_date " +
+        "order by stamp_date desc, stamp_time desc");
     return maps;
   }
 
@@ -49,21 +49,19 @@ class DbInterface {
   static Future<int> selectStampCount(String _tableName, var database) async {
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.rawQuery(
-        "SELECT count(*) as count " +
-            "FROM $_tableName " +
-            "WHERE deletedflg = 0");
+        "SELECT count(*) as count " + "FROM $_tableName " + "WHERE useflg = 0");
     int count = maps[0]['count'];
     return count;
   }
 
   // deleteFlgが0のスタンプを取得する
   static Future<List> selectDeleteFlg(String _tableName, var database) async {
-    final int stampCheckString = StampCount.count.stampCount;
+    final int stampCheckString = StampCount.count.stampCount!;
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query('$_tableName',
-        where: 'deletedflg = ?',
+        where: 'useflg = ?',
         limit: stampCheckString,
-        orderBy: 'getdate asc, gettime asc',
+        orderBy: 'stamp_date asc, stamp_time asc',
         whereArgs: [0]);
     return maps;
   }

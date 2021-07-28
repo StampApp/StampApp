@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 class CameraButton extends StatelessWidget {
   const CameraButton({
-    this.onNavigate,
-    Key key,
+    required this.onNavigate,
+    required Key key,
   }) : super(key: key);
   final VoidCallback onNavigate;
 
@@ -13,7 +13,7 @@ class CameraButton extends StatelessWidget {
     return GestureDetector(
       child: FloatingActionButton(
         tooltip: 'Scan',
-        child: Icon(Icons.camera),
+        child: const Icon(Icons.camera),
         onPressed: onNavigate,
       ),
     );

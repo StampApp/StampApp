@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/models/stamp.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // 読み込み結果を表示するダイアログ
 void stampDialog(BuildContext context, Stamp stamp) {
@@ -14,32 +17,43 @@ void stampDialog(BuildContext context, Stamp stamp) {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                title: Text("Image"),
                 subtitle: Image.asset(stamp.stampNum.toString(),
                     fit: BoxFit.fitWidth),
               ),
               ListTile(
-                title: Text("stampNum"),
-                subtitle: Text(stamp.stampNum.toString()),
-              ),
-              ListTile(
-                title: Text("data"),
-                subtitle: Text(stamp.data),
-              ),
-              ListTile(
-                title: Text("createAt"),
-                subtitle: Text(stamp.createdAt.toString()),
+                title: Text(
+                  AppLocalizations.of(context)!.stampLoadingDateTime,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(dateFormat(stamp.createdAt),
+                    style: TextStyle(
+                        color: Colors.black, fontSize: 15, height: 2)),
               ),
             ],
           ),
         ),
         actions: <Widget>[
-          TextButton(
-            child: Text('OK'),
+          OutlinedButton(
+            child: Text(AppLocalizations.of(context)!.ok),
+            style: OutlinedButton.styleFrom(
+              primary: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              side: const BorderSide(color: Colors.blue),
+            ),
             onPressed: () => Navigator.of(context).pop(1),
-          ),
+          )
         ],
       );
     },
   );
+}
+
+String dateFormat(createdAt) {
+  //createdAtを「yyyy年MM月DD日(E)　hh:mm:ss」という表記に変更する関数
+  initializeDateFormatting('ja');
+  String data = DateFormat.yMMMEd('ja').format(createdAt).toString() + "　";
+  data += DateFormat.jms('ja').format(createdAt).toString();
+  return data;
 }
