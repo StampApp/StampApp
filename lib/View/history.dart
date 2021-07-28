@@ -91,6 +91,12 @@ class _HistoryPageState extends State<HistoryPage> {
     pastMonth = pastMonthArr[dropDownValue];
   }
 
+  //利用履歴の削除を行い画面を再表示する
+  deleteLogs() {
+    setState(() {});
+    DbInterface.allDelete('StampLogs', DBHelper.databese());
+  }
+
   void init() {
     setItem();
     _selectItem = _items[0].value!;
@@ -140,27 +146,43 @@ class _HistoryPageState extends State<HistoryPage> {
           // getDateListの処理が終了した場合
           if (snapshot.connectionState == ConnectionState.done) {
             return ListView(children: <Widget>[
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-                //ドロップダウンメニュー
-                Container(
-                  padding: EdgeInsets.only(left: 15),
-                  margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
-                  decoration: BoxDecoration(
-                    //枠線を丸くするかどうか
-                    //borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(
-                        color: HexColor(Setting.APP_COLOR), width: 1),
-                  ),
-                  child: DropdownButton(
-                    items: _items,
-                    value: _selectItem,
-                    onChanged: (value) => {
-                      pastMonthChange(value as int),
-                      setState(() => _selectItem = value),
-                    },
-                  ),
-                )
-              ]),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: TextButton(
+                        child: Text("履歴の削除"),
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          side: BorderSide(color: HexColor(Setting.APP_COLOR)),
+                        ),
+                        onPressed: () => _deleteLogsCheck(),
+                      ),
+                    ),
+                    //ドロップダウンメニュー
+                    Container(
+                      padding: EdgeInsets.only(left: 15),
+                      margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
+                      decoration: BoxDecoration(
+                        //枠線を丸くするかどうか
+                        //borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(
+                            color: HexColor(Setting.APP_COLOR), width: 1),
+                      ),
+                      child: DropdownButton(
+                        items: _items,
+                        value: _selectItem,
+                        onChanged: (value) => {
+                          pastMonthChange(value as int),
+                          setState(() => _selectItem = value),
+                        },
+                      ),
+                    ),
+                  ]),
               if (snapshot.data.length != 0)
                 for (int i = 0; i < snapshot.data.length; i++)
                   _line(snapshot.data[i], stampList)
@@ -274,6 +296,45 @@ class _HistoryPageState extends State<HistoryPage> {
           tileColor: HexColor(Setting.APP_COLOR),
         ),
       ),
+    );
+  }
+
+  //履歴削除の確認ダイアログ
+  Future<dynamic> _deleteLogsCheck() {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.fromLTRB(10, 30, 10, 30),
+          title: Text(AppLocalizations.of(context)!.confirmation),
+          content: Text("本当に利用履歴を削除しますか？"),
+          actions: <Widget>[
+            // ボタン領域
+            OutlinedButton(
+              child: const Text('cancel'),
+              style: OutlinedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                side: const BorderSide(color: Colors.blue),
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+
+            ElevatedButton(
+              child: const Text('OK'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () => {Navigator.pop(context), deleteLogs()},
+            ),
+          ],
+        );
+      },
     );
   }
 }
