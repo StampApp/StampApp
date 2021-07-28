@@ -16,11 +16,11 @@ class HexColor extends Color {
       } else {
         throw new HexException('The characters are not 6 characters.');
       }
-    } on HexException catch (e) {
-      print('HexException catch ${e.cause}');
+    } on HexException {
+      // print('HexException catch ${e.cause}');
       rethrow;
     } catch (e) {
-      print('catch:$e');
+      // print('catch:$e');
       rethrow;
     }
   }
