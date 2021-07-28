@@ -115,5 +115,8 @@
     "cameraStop":"Stop the camera.",
     "cameraMove":"Move the camera.",
     "cameraSetting":"Camera Setting",
-    "stampLoadingDateTime":"Stamp loading date and time"
+    "stampLoadingDateTime":"Stamp loading date and time",
+    "ok":"OK",
+    "deleteHistory":"Delete history",
+    "reallyDeleteHistory":"Do you really want to delete your usage history?"
 }

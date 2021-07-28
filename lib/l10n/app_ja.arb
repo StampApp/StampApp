@@ -106,7 +106,7 @@
     "privacyPolicyArticle6":"第6条（準拠法・裁判管轄）",
     "privacyPolicyArticle6Main":"本ポリシーの解釈にあたっては、日本法を準拠法とします。\n本サービスに関して紛争が生じた場合には、当社の本店所在地を管轄する裁判所を専属的合意管轄とします。",
     "privacyPolicyEnacted":"2021年5月20日　制定・施行",
-    "cancel":"キャンセル",
+    "cancel":"いいえ",
     "cameraPermissions":"カメラを許可してください",
     "cameraPermissionsMain":"QRコードを読み取る為にカメラを利用します",
     "qrRead":"QRコード読み取り",
@@ -115,5 +115,8 @@
     "cameraStop":"カメラを停止",
     "cameraMove":"カメラを動かす",
     "cameraSetting":"カメラ設定",
-    "stampLoadingDateTime":"スタンプ読み込み日時"
+    "stampLoadingDateTime":"スタンプ読み込み日時",
+    "ok":"はい",
+    "deleteHistory":"履歴の削除",
+    "reallyDeleteHistory":"本当に利用履歴を削除しますか？"
     }
