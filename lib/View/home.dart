@@ -443,7 +443,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                               : Text(
                                                   stamp.stampNum.toString(),
                                                   style: TextStyle(
-                                                    fontSize: 25.0,
+                                                    fontSize: deviceWidth * 0.09,
                                                     fontStyle: FontStyle.normal,
                                                     letterSpacing: 4.0,
                                                     color: HexColor(
