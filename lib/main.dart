@@ -39,8 +39,9 @@ class MyApp extends StatelessWidget {
         '/': (BuildContext context) => HomeSamplePage(
             title: AppLocalizations.of(context)!.stampApp,
             routeObserver: _routeObserver),
-        // TODO: i18n 対応
-        '/qrScan': (BuildContext context) => QRCodeScanner(title: 'QR読み取り'),
+        // i18n 対応
+        '/qrScan': (BuildContext context) =>
+            QRCodeScanner(title: AppLocalizations.of(context)!.qrRead),
         '/Setting': (BuildContext context) =>
             SettingPage(title: AppLocalizations.of(context)!.settings),
         '/history': (BuildContext context) =>
