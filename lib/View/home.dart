@@ -160,7 +160,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             createdAt: dateTime,
             deletedAt: dateTime);
 
+        List<dynamic> countstamp =
+            await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
         setState(() {
+          stampListLen = countstamp.length;
           stampList[successStampLen] = newStamp;
         });
         if (successStampLen + 1 == maxStamp) {
@@ -228,7 +231,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             deletedAt: dateTime);
         newStampList.add(newStamp);
       }
+
+      List<dynamic> countstamp =
+          await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
       setState(() {
+        stampListLen = countstamp.length;
         stampList = newStampList;
       });
     }
