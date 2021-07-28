@@ -8,8 +8,6 @@
 */
 import 'package:flutter/material.dart';
 import 'package:stamp_app/Widget/AppBar.dart';
-import 'package:stamp_app/Constants/setting.dart';
-import '../Widget/HexColor.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PrivacyPolicyPage extends StatefulWidget {
@@ -44,7 +42,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
         children: <Widget>[
           SizedBox(height: deviceHeight * 0.04),
           Text(AppLocalizations.of(context)!.privacyPolicyRead),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -53,8 +51,8 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           ),
           //第1条
           Text(AppLocalizations.of(context)!.privacyPolicyArticle1,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -62,7 +60,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.privacyPolicyArticle1Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -71,8 +69,8 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           ),
           //第2条
           Text(AppLocalizations.of(context)!.privacyPolicyArticle2,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -80,7 +78,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.privacyPolicyArticle2Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -89,8 +87,8 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           ),
           //第3条
           Text(AppLocalizations.of(context)!.privacyPolicyArticle3,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -98,7 +96,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.privacyPolicyArticle3Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -107,8 +105,8 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           ),
           //第4条
           Text(AppLocalizations.of(context)!.privacyPolicyArticle4,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -116,7 +114,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.privacyPolicyArticle4Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -125,8 +123,8 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           ),
           //第5条
           Text(AppLocalizations.of(context)!.privacyPolicyArticle5,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -134,7 +132,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.privacyPolicyArticle5Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -143,8 +141,8 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           ),
           //第6条
           Text(AppLocalizations.of(context)!.privacyPolicyArticle6,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -152,7 +150,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.privacyPolicyArticle6Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -160,7 +158,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.withRules,
-              style: TextStyle(fontWeight: FontWeight.bold)),
+              style: const TextStyle(fontWeight: FontWeight.bold)),
           Text(AppLocalizations.of(context)!.privacyPolicyEnacted)
         ],
       ),

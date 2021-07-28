@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:stamp_app/Widget/AppBar.dart';
-import 'package:stamp_app/Constants/setting.dart';
-import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InstructionsPage extends StatefulWidget {

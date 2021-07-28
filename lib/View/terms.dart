@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/Widget/AppBar.dart';
-import 'package:stamp_app/Constants/setting.dart';
-import '../Widget/HexColor.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TermsPage extends StatefulWidget {
@@ -27,9 +25,9 @@ class _TermsPageState extends State<TermsPage> {
           bottom: 50,
         ),
         children: <Widget>[
-          SizedBox(height: 25),
+          const SizedBox(height: 25),
           Text(AppLocalizations.of(context)!.termsRead),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -38,8 +36,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第1条
           Text(AppLocalizations.of(context)!.article1,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -47,7 +45,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article1Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -56,8 +54,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第2条
           Text(AppLocalizations.of(context)!.article2,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -65,7 +63,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article2Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -74,8 +72,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第3条
           Text(AppLocalizations.of(context)!.article3,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -83,7 +81,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article3Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -92,8 +90,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第4条
           Text(AppLocalizations.of(context)!.article4,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -101,7 +99,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article4Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -110,8 +108,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第5条
           Text(AppLocalizations.of(context)!.article5,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -119,7 +117,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article5Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -128,8 +126,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第6条
           Text(AppLocalizations.of(context)!.article6,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -137,7 +135,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article6Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -146,8 +144,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第7条
           Text(AppLocalizations.of(context)!.article7,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -155,7 +153,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article7Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -164,8 +162,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第8条
           Text(AppLocalizations.of(context)!.article8,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -173,7 +171,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article8Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -182,8 +180,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第9条
           Text(AppLocalizations.of(context)!.article9,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -191,7 +189,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article9Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -200,8 +198,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第10条
           Text(AppLocalizations.of(context)!.article10,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -209,7 +207,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article10Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -218,8 +216,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第11条
           Text(AppLocalizations.of(context)!.article11,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -227,7 +225,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article11Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -236,8 +234,8 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //第12条
           Text(AppLocalizations.of(context)!.article12,
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          Divider(
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -245,7 +243,7 @@ class _TermsPageState extends State<TermsPage> {
             endIndent: 16,
           ),
           Text(AppLocalizations.of(context)!.article12Main),
-          Divider(
+          const Divider(
             height: 40,
             thickness: 1,
             color: Colors.black,
@@ -254,7 +252,7 @@ class _TermsPageState extends State<TermsPage> {
           ),
           //附則
           Text(AppLocalizations.of(context)!.withRules,
-              style: TextStyle(fontWeight: FontWeight.bold)),
+              style: const TextStyle(fontWeight: FontWeight.bold)),
           Text(AppLocalizations.of(context)!.enacted)
         ],
       ),

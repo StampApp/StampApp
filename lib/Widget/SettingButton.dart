@@ -11,7 +11,7 @@ class SettingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: IconButton(
-        icon: Icon(Icons.settings),
+        icon: const Icon(Icons.settings),
         color: Colors.blue,
         iconSize: 60,
         onPressed: onNavigate,
