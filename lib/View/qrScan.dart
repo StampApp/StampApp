@@ -81,9 +81,8 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () {
-          // TODO: title, dataのハンドリングを行う
-          ResultArguments none =
-              new ResultArguments(result: "backButton", title: "", data: "");
+          ResultArguments none = new ResultArguments(
+              result: "backButton", title: "none", data: "none");
           Navigator.of(context).pop(none);
           return Future.value(false);
         },
@@ -183,7 +182,6 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         );
       }
       final data = await scanValidation(scanData);
-      _stampSet(data);
       _transitionToNextScreen('', describeEnum(data.format as BarcodeFormat),
           data.rawContent as String);
     });
@@ -197,12 +195,11 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
       _qrController?.pauseCamera();
       _isQRScanned = true;
 
-      // TODO: BarcodeFormatに基づいた値で判定を行う
-      if (data != "データが不正です" && format != "unknown") {
+      if (data != "データが不正です" && format != describeEnum(BarcodeFormat.unknown)) {
         dynamic resultJson = json.decode(data);
 
-        // TODO: BarcodeFormatに基づいた値で判定を行う
-        if (format == "qrcode" && resultJson["data"] == stampCheckString) {
+        if (format == describeEnum(BarcodeFormat.qrcode) &&
+            resultJson["data"] == stampCheckString) {
           DateTime dateTime = DateTime.now();
           Stamp newStamp = new Stamp(
               id: uuid.v1(),
@@ -231,8 +228,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
               .pop(ResultArguments(result: "ok", title: "", data: data));
         } else {
           String title = AppLocalizations.of(context)!.error;
-          // TODO: BarcodeFormatに基づいた値で判定を行う
-          String text = format != "qrcode"
+          String text = format != describeEnum(BarcodeFormat.qrcode)
               ? AppLocalizations.of(context)!.notQRCode
               : AppLocalizations.of(context)!.invalidQRCode;
           // 元の画面へ遷移
@@ -290,11 +286,5 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
           AppLocalizations.of(context)!.error + ': ${e.message}';
       return result;
     }
-  }
-
-  // TODO: 変数が使用されていないので調査し修正する
-  Future<void> _stampSet(ScanResult data) async {
-    ScanResult result = data;
-    final DateTime dateTime = DateTime.now();
   }
 }
