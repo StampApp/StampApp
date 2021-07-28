@@ -1,23 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:stamp_app/Constants/setting.dart';
+import 'package:stamp_app/Util/Enums/enumStampCount.dart';
 import 'package:stamp_app/Util/toInt.dart';
 import 'package:stamp_app/View/qrScan.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/models/stamp.dart';
-// import 'package:barcode_scan/barcode_scan.dart';
-// import 'package:stamp_app/Widget/qrScan.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
-import 'package:stamp_app/models/stampLogs.dart';
 import 'package:uuid/uuid.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
-import '../Util/checkIsMaxStamps.dart';
 import '../Util/Enums/enumCheckString.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -31,15 +27,6 @@ class HomeSamplePage extends StatefulWidget {
   _HomeSamplePageState createState() => _HomeSamplePageState();
 }
 
-/*
-class Stamp {
-  String id;
-  String data;
-  num stampNum;
-  String createAt;
-  Stamp(this.id, this.data, this.stampNum, this.createAt);
-}
-*/
 class AppBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -148,7 +135,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   Future<void> _qrScan() async {
     int existStampNum =
         await DbInterface.selectStampCount('Stamp', DBHelper.databese());
-    if (existStampNum == 9) {
+    if (existStampNum == StampCount.count.stampCount!) {
       stampMaxDialogAlert(context, existStampNum);
       return;
     }
@@ -156,8 +143,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     if (await Permission.camera.request().isGranted) {
       ResultArguments result =
           await Navigator.pushNamed(context, '/qrScan') as ResultArguments;
-      if (result.result == "ok") {
-        int maxStamp = 9; //上限無しの場合0を指定
+      if (result.result == stampCheckString) {
+        int maxStamp = StampCount.count.stampCount!; //上限無しの場合0を指定
         int successStampLen = stampList
             .where((element) => element.data == stampCheckString)
             .length;
@@ -173,7 +160,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             createdAt: dateTime,
             deletedAt: dateTime);
 
+        List<dynamic> countstamp =
+            await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
         setState(() {
+          stampListLen = countstamp.length;
           stampList[successStampLen] = newStamp;
         });
         if (successStampLen + 1 == maxStamp) {
@@ -241,7 +231,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             deletedAt: dateTime);
         newStampList.add(newStamp);
       }
+
+      List<dynamic> countstamp =
+          await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
       setState(() {
+        stampListLen = countstamp.length;
         stampList = newStampList;
       });
     }
@@ -267,8 +261,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              //ロゴを中央にしたい場合↓
-              //padding: const EdgeInsets.all(8.0), child: Text('         ')),
               Image.asset(
                   Setting.APP_LOGO,
                   fit: BoxFit.contain,
@@ -453,10 +445,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               deviceWidth / 8, deviceWidth / 20, 0, deviceWidth / 50),
           width: deviceWidth / 2 * 1.3,
           height: deviceHeight / 16 * 1.2,
-          /*decoration: BoxDecoration(
-            border: Border.all(
-                color: HexColor(Setting.APP_COLOR).withOpacity(0.6), width: 3),
-          ),*/
           child: Text(
             AppLocalizations.of(context)!.totalStamps + ': $point',
             style: GoogleFonts.ubuntu(
@@ -472,18 +460,18 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('カメラを許可してください'),
-          content: const Text('QRコードを読み取る為にカメラを利用します'),
+          title: Text(AppLocalizations.of(context)!.cameraPermissions),
+          content: Text(AppLocalizations.of(context)!.cameraPermissionsMain),
           actions: <Widget>[
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('キャンセル'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             ElevatedButton(
               onPressed: () async {
                 openAppSettings();
               },
-              child: const Text('設定'),
+              child: Text(AppLocalizations.of(context)!.settings),
             ),
           ],
         );

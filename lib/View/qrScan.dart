@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +14,7 @@ import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:stamp_app/models/stampLogs.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @immutable
 class ConfirmArguments {
@@ -43,8 +43,7 @@ class ScanResult {
     this.rawContent = "",
     this.format = BarcodeFormat.unknown,
   })  : assert(rawContent != null),
-        assert(format != null),
-        assert(type != null);
+        assert(format != null);
 }
 
 class QRCodeScanner extends StatefulWidget {
@@ -82,6 +81,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () {
+          // TODO: title, dataのハンドリングを行う
           ResultArguments none =
               new ResultArguments(result: "backButton", title: "", data: "");
           Navigator.of(context).pop(none);
@@ -96,7 +96,6 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
             children: <Widget>[
               Expanded(
                 flex: 4,
-                // child: _buildPermissionState(context),
                 child: _buildQRView(context),
               ),
               Expanded(
@@ -106,7 +105,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      const Text('カメラ設定'),
+                      Text(AppLocalizations.of(context)!.cameraSetting),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -120,8 +119,9 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                               },
                               child: FutureBuilder(
                                 future: _qrController?.getFlashStatus(),
-                                builder: (context, snapshot) =>
-                                    Text('フラッシュ: ${snapshot.data}'),
+                                builder: (context, snapshot) => Text(
+                                    AppLocalizations.of(context)!.flash +
+                                        ': ${snapshot.data}'),
                               ),
                             ),
                           ),
@@ -134,41 +134,12 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                               },
                               child: FutureBuilder(
                                 future: _qrController?.getCameraInfo(),
-                                builder: (context, snapshot) => snapshot.data !=
-                                        null
-                                    ? Text(
-                                        'カメラ切り替え: ${describeEnum(snapshot.data!)}')
-                                    : const Text('loading'),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                await _qrController?.pauseCamera();
-                              },
-                              child: const Text(
-                                'カメラを停止',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                await _qrController?.resumeCamera();
-                              },
-                              child: const Text(
-                                'カメラを動かす',
-                                style: TextStyle(fontSize: 20),
+                                builder: (context, snapshot) =>
+                                    snapshot.data != null
+                                        ? Text(AppLocalizations.of(context)!
+                                                .cameraSwitching +
+                                            ': ${describeEnum(snapshot.data!)}')
+                                        : const Text('loading'),
                               ),
                             ),
                           ),
@@ -226,9 +197,11 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
       _qrController?.pauseCamera();
       _isQRScanned = true;
 
+      // TODO: BarcodeFormatに基づいた値で判定を行う
       if (data != "データが不正です" && format != "unknown") {
         dynamic resultJson = json.decode(data);
 
+        // TODO: BarcodeFormatに基づいた値で判定を行う
         if (format == "qrcode" && resultJson["data"] == stampCheckString) {
           DateTime dateTime = DateTime.now();
           Stamp newStamp = new Stamp(
@@ -257,15 +230,18 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
           Navigator.of(context)
               .pop(ResultArguments(result: "ok", title: "", data: data));
         } else {
-          String title = "エラー";
-          String text = format != "qrcode" ? "これはQRコードではありません" : "このQRコードは無効です";
+          String title = AppLocalizations.of(context)!.error;
+          // TODO: BarcodeFormatに基づいた値で判定を行う
+          String text = format != "qrcode"
+              ? AppLocalizations.of(context)!.notQRCode
+              : AppLocalizations.of(context)!.invalidQRCode;
           // 元の画面へ遷移
           Navigator.of(context)
               .pop(ResultArguments(result: "err", title: title, data: text));
         }
       } else {
-        String title = "エラー";
-        String text = '不正なQRコードです\n${data}';
+        String title = AppLocalizations.of(context)!.error;
+        String text = AppLocalizations.of(context)!.illegalQRCode + '\n$data';
         // 元の画面へ遷移
         Navigator.of(context)
             .pop(ResultArguments(result: "err", title: title, data: text));
@@ -280,7 +256,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
       if (scanData.format != BarcodeFormat.qrcode) {
         result.format = scanData.format;
-        result.rawContent = 'データが不正です';
+        result.rawContent = AppLocalizations.of(context)!.incorrectData;
       }
 
       var manifestContent = await rootBundle.loadString('AssetManifest.json');
@@ -289,29 +265,34 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
           .where((String key) => key.contains('images/'))
           .toList();
 
-      Map<String, dynamic> rowContent = json.decode(scanData.code!);
+      Map<String, dynamic> rowContent = json.decode(scanData.code);
 
       if (!Validation.dateCheck(rowContent['createdAt']) ||
           !Validation.strCheck(rowContent['data']) ||
           !Validation.pathCheck(rowContent['stampNum'], imagePaths)) {
-        result.rawContent = 'データが不正です';
+        result.rawContent = AppLocalizations.of(context)!.incorrectData;
       } else {
         result.rawContent = scanData.code;
       }
       return result;
     } on PlatformException catch (e) {
-      var result =
-          ScanResult(format: BarcodeFormat.unknown, rawContent: 'データが不正です');
-      result.rawContent = 'エラー: ${e.message}';
+      var result = ScanResult(
+          format: BarcodeFormat.unknown,
+          rawContent: AppLocalizations.of(context)!.incorrectData);
+      result.rawContent =
+          AppLocalizations.of(context)!.error + ': ${e.message}';
       return result;
     } on FormatException catch (e) {
-      var result =
-          ScanResult(format: BarcodeFormat.unknown, rawContent: 'データが不正です');
-      result.rawContent = 'エラー: ${e.message}';
+      var result = ScanResult(
+          format: BarcodeFormat.unknown,
+          rawContent: AppLocalizations.of(context)!.incorrectData);
+      result.rawContent =
+          AppLocalizations.of(context)!.error + ': ${e.message}';
       return result;
     }
   }
 
+  // TODO: 変数が使用されていないので調査し修正する
   Future<void> _stampSet(ScanResult data) async {
     ScanResult result = data;
     final DateTime dateTime = DateTime.now();

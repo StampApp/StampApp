@@ -28,31 +28,9 @@ class _HistoryPageState extends State<HistoryPage> {
   String? _getStamp;
   String? _useStamp;
 
-  // DBから使用したスタンプを取得する
-  /*
-    getStampList() async {
-      List<Map<String, dynamic>> maps = await DbInterface.selectDateDesc(
-          'Stamp', DBHelper.databese(), DateTime.now(), pastMonth);
-
-      print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
-
-      // mapからstamp型への変換
-      return List.generate(maps.length, (i) {
-        return Stamp(
-          id: maps[i]['id'],
-          data: maps[i]['data'],
-          getDate: formatStringToDateTime(maps[i]['getdate'], EnumDateType.date),
-          getTime: formatStringToDateTime(maps[i]['gettime'], EnumDateType.time),
-          deletedFlg: maps[i]['deletedflg'] == 0,
-        );
-      });
-    }
-   */
   getStampList() async {
     List maps = await DbInterface.selectDateDescLogs(
         'StampLogs', DBHelper.databese(), DateTime.now(), pastMonth);
-
-    // print(await DbInterface.allSelect('StampLogs', DBHelper.databese()));
 
     // mapからstamp型への変換
     return List.generate(maps.length, (i) {

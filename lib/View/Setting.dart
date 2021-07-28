@@ -55,7 +55,7 @@ class _SettingPageState extends State<SettingPage> {
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
-              child: const Text('cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
               style: OutlinedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(
@@ -67,7 +67,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
 
             ElevatedButton(
-              child: const Text('OK'),
+              child: Text(AppLocalizations.of(context)!.ok),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(
@@ -98,7 +98,7 @@ class _SettingPageState extends State<SettingPage> {
               actions: <Widget>[
                 // ボタン領域
                 ElevatedButton(
-                  child: const Text('OK'),
+                  child: Text(AppLocalizations.of(context)!.ok),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blue,
                     shape: RoundedRectangleBorder(
@@ -123,7 +123,7 @@ class _SettingPageState extends State<SettingPage> {
           actions: <Widget>[
             // ボタン領域
             ElevatedButton(
-              child: const Text('OK'),
+              child: Text(AppLocalizations.of(context)!.ok),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(
@@ -167,7 +167,8 @@ class _SettingPageState extends State<SettingPage> {
                 Icons.shopping_bag_outlined,
                 size: 30,
               ),
-              label: const Text('スタンプ使用', style: TextStyle(fontSize: 18)),
+              label: Text(AppLocalizations.of(context)!.useStamp,
+                  style: TextStyle(fontSize: 18)),
               style: OutlinedButton.styleFrom(
                 minimumSize: Size(220, 50),
                 shape: RoundedRectangleBorder(
