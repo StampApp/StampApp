@@ -81,10 +81,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
 
-  void _settingNavigate() {
-    Navigator.of(context).pushNamed('/Setting');
-  }
-
   //カード枚数は1以上
   int cardnum = 1;
 
@@ -104,6 +100,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   List<Stamp> stampList = [];
 
   static final String stampCheckString = CheckString.ok.checkStringValue!;
+
+  void _settingNavigate() {
+    Navigator.of(context).pushNamed('/Setting');
+  }
 
   Future<List<Stamp>> asyncGetStampList() async {
     List maps = await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
@@ -263,15 +263,15 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(deviceHeight * 0.08),
           child: AppBar(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // これで両端に寄せる
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 //ロゴを中央にしたい場合↓
                 //padding: const EdgeInsets.all(8.0), child: Text('         ')),
                 Image.asset(
                     Setting.APP_LOGO,
                     fit: BoxFit.contain,
-                    height: deviceHeight * 0.08,
+                    height: deviceHeight * 0.07,
                 ),
               ],
             ),
