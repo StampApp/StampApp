@@ -20,6 +20,7 @@ void stampDialog(BuildContext context, Stamp stamp) {
                     fit: BoxFit.fitWidth),
               ),
               ListTile(
+                // TODO: i18n対応
                 title: Text("スタンプ読み込み日時"),
                 subtitle: Text(dateFormat(stamp.createdAt)),
               ),
@@ -28,6 +29,7 @@ void stampDialog(BuildContext context, Stamp stamp) {
         ),
         actions: <Widget>[
           TextButton(
+            // TODO: i18n対応
             child: Text('OK'),
             onPressed: () => Navigator.of(context).pop(1),
           ),

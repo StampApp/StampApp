@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +42,7 @@ class ScanResult {
     this.rawContent = "",
     this.format = BarcodeFormat.unknown,
   })  : assert(rawContent != null),
-        assert(format != null),
-        assert(type != null);
+        assert(format != null);
 }
 
 class QRCodeScanner extends StatefulWidget {
@@ -82,6 +80,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () {
+          // TODO: title, dataのハンドリングを行う
           ResultArguments none =
               new ResultArguments(result: "backButton", title: "", data: "");
           Navigator.of(context).pop(none);
@@ -96,7 +95,6 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
             children: <Widget>[
               Expanded(
                 flex: 4,
-                // child: _buildPermissionState(context),
                 child: _buildQRView(context),
               ),
               Expanded(
@@ -106,6 +104,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
+                      // TODO: i18n対応
                       const Text('カメラ設定'),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -121,6 +120,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                               child: FutureBuilder(
                                 future: _qrController?.getFlashStatus(),
                                 builder: (context, snapshot) =>
+                                    // TODO: i18n対応
                                     Text('フラッシュ: ${snapshot.data}'),
                               ),
                             ),
@@ -137,38 +137,9 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                                 builder: (context, snapshot) => snapshot.data !=
                                         null
                                     ? Text(
+                                        // TODO: i18n対応
                                         'カメラ切り替え: ${describeEnum(snapshot.data!)}')
                                     : const Text('loading'),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                await _qrController?.pauseCamera();
-                              },
-                              child: const Text(
-                                'カメラを停止',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                await _qrController?.resumeCamera();
-                              },
-                              child: const Text(
-                                'カメラを動かす',
-                                style: TextStyle(fontSize: 20),
                               ),
                             ),
                           ),
@@ -226,9 +197,11 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
       _qrController?.pauseCamera();
       _isQRScanned = true;
 
+      // TODO: BarcodeFormatに基づいた値で判定を行う
       if (data != "データが不正です" && format != "unknown") {
         dynamic resultJson = json.decode(data);
 
+        // TODO: BarcodeFormatに基づいた値で判定を行う
         if (format == "qrcode" && resultJson["data"] == stampCheckString) {
           DateTime dateTime = DateTime.now();
           Stamp newStamp = new Stamp(
@@ -258,6 +231,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
               .pop(ResultArguments(result: "ok", title: "", data: data));
         } else {
           String title = "エラー";
+          // TODO: BarcodeFormatに基づいた値で判定を行う
           String text = format != "qrcode" ? "これはQRコードではありません" : "このQRコードは無効です";
           // 元の画面へ遷移
           Navigator.of(context)
@@ -265,7 +239,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         }
       } else {
         String title = "エラー";
-        String text = '不正なQRコードです\n${data}';
+        String text = '不正なQRコードです\n$data';
         // 元の画面へ遷移
         Navigator.of(context)
             .pop(ResultArguments(result: "err", title: title, data: text));
@@ -289,7 +263,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
           .where((String key) => key.contains('images/'))
           .toList();
 
-      Map<String, dynamic> rowContent = json.decode(scanData.code!);
+      Map<String, dynamic> rowContent = json.decode(scanData.code);
 
       if (!Validation.dateCheck(rowContent['createdAt']) ||
           !Validation.strCheck(rowContent['data']) ||
@@ -312,6 +286,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     }
   }
 
+  // TODO: 変数が使用されていないので調査し修正する
   Future<void> _stampSet(ScanResult data) async {
     ScanResult result = data;
     final DateTime dateTime = DateTime.now();

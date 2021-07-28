@@ -11,11 +11,6 @@ String formatDateTimeToString(DateTime datetime, EnumDateType dateType) {
     default:
       return DateFormat('yyyy-MM-dd').format(datetime);
   }
-  // if (dateType == enumDateType.date.toString()) {
-  //   return DateFormat('yyyy-MM-dd').format(datetime);
-  // } else if (dateType == enumDateType.time.toString()) {
-  //   return DateFormat('HH:mm:ss').format(datetime);
-  // }
 }
 
 // stringからdatetimeへの変換

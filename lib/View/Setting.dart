@@ -54,6 +54,7 @@ class _SettingPageState extends State<SettingPage> {
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
+              // TODO: i18n対応
               child: const Text('cancel'),
               style: OutlinedButton.styleFrom(
                 primary: Colors.blue,
@@ -66,6 +67,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
 
             ElevatedButton(
+              // TODO: i18n対応
               child: const Text('OK'),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
@@ -97,6 +99,7 @@ class _SettingPageState extends State<SettingPage> {
               actions: <Widget>[
                 // ボタン領域
                 ElevatedButton(
+                  // TODO: i18n対応
                   child: const Text('OK'),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blue,
@@ -122,6 +125,7 @@ class _SettingPageState extends State<SettingPage> {
           actions: <Widget>[
             // ボタン領域
             ElevatedButton(
+              // TODO: i18n対応
               child: const Text('OK'),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
@@ -169,6 +173,7 @@ class _SettingPageState extends State<SettingPage> {
                 Icons.shopping_bag_outlined,
                 size: 30,
               ),
+              // TODO: i18n対応
               label: const Text('スタンプ使用', style: TextStyle(fontSize: 18)),
               style: OutlinedButton.styleFrom(
                 minimumSize: Size(220, 50),
