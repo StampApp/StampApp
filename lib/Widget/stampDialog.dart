@@ -21,8 +21,14 @@ void stampDialog(BuildContext context, Stamp stamp) {
                     fit: BoxFit.fitWidth),
               ),
               ListTile(
-                title: Text(AppLocalizations.of(context)!.stampLoadingDateTime),
-                subtitle: Text(dateFormat(stamp.createdAt)),
+                title: Text(
+                  AppLocalizations.of(context)!.stampLoadingDateTime,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                subtitle: Text(
+                  dateFormat(stamp.createdAt),
+                  style: TextStyle(color: Colors.black, fontSize: 15, height: 2)
+                  ),
               ),
             ],
           ),
