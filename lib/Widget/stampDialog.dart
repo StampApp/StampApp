@@ -29,6 +29,7 @@ void stampDialog(BuildContext context, Stamp stamp) {
         ),
         actions: <Widget>[
           TextButton(
+            // TODO: i18n対応
             child: Text('OK'),
             onPressed: () => Navigator.of(context).pop(1),
           ),

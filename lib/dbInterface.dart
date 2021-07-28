@@ -49,7 +49,7 @@ class DbInterface {
   static Future<int> selectStampCount(String _tableName, var database) async {
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.rawQuery(
-        "SELECT count(*) as count " + "FROM $_tableName " + "WHERE useFlg = 0");
+        "SELECT count(*) as count " + "FROM $_tableName " + "WHERE useflg = 0");
     int count = maps[0]['count'];
     return count;
   }
@@ -59,7 +59,7 @@ class DbInterface {
     final int stampCheckString = StampCount.count.stampCount!;
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query('$_tableName',
-        where: 'useFlg = ?',
+        where: 'useflg = ?',
         limit: stampCheckString,
         orderBy: 'stamp_date asc, stamp_time asc',
         whereArgs: [0]);
