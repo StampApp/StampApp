@@ -54,8 +54,7 @@ class _SettingPageState extends State<SettingPage> {
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
-              // TODO: i18n対応
-              child: const Text('cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
               style: OutlinedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(
@@ -67,8 +66,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
 
             ElevatedButton(
-              // TODO: i18n対応
-              child: const Text('OK'),
+              child: Text(AppLocalizations.of(context)!.ok),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(
@@ -99,8 +97,7 @@ class _SettingPageState extends State<SettingPage> {
               actions: <Widget>[
                 // ボタン領域
                 ElevatedButton(
-                  // TODO: i18n対応
-                  child: const Text('OK'),
+                  child: Text(AppLocalizations.of(context)!.ok),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blue,
                     shape: RoundedRectangleBorder(
@@ -125,8 +122,7 @@ class _SettingPageState extends State<SettingPage> {
           actions: <Widget>[
             // ボタン領域
             ElevatedButton(
-              // TODO: i18n対応
-              child: const Text('OK'),
+              child: Text(AppLocalizations.of(context)!.ok),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(
