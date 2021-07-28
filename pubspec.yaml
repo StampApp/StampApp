@@ -52,6 +52,7 @@ flutter_native_splash:
   color: "4DD0E1"
 
 dev_dependencies:
+  flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
   sqflite_common_ffi: ^2.0.0+1
