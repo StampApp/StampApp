@@ -5,6 +5,7 @@ import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
+import 'package:stamp_app/Widget/AppBar.dart';
 import 'package:stamp_app/Util/Enums/enumDateType.dart';
 import 'package:stamp_app/Util/Enums/enumStampCount.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
@@ -139,14 +140,11 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        backgroundColor: HexColor(Setting.APP_COLOR),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(deviceHeight * 0.08),
+          child: AppBarPage(widget.title),
       ),
       body: Column(children: <Widget>[
         Expanded(

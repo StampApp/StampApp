@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import 'package:stamp_app/Widget/AppBar.dart';
 import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,14 +15,11 @@ class InstructionsPage extends StatefulWidget {
 class _InstructionsPageState extends State<InstructionsPage> {
   @override
   Widget build(BuildContext context) {
+    final double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        backgroundColor: HexColor(Setting.APP_COLOR),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(deviceHeight * 0.08),
+          child: AppBarPage(widget.title),
       ),
       body: Introduction(),
     );

@@ -254,28 +254,32 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-        appBar: AppBar(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(deviceHeight * 0.08),
+        child: AppBar(
+          toolbarHeight: deviceHeight * 0.1,
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Image.asset(
-                Setting.APP_LOGO,
-                fit: BoxFit.contain,
-                height: 50,
+                  Setting.APP_LOGO,
+                  fit: BoxFit.contain,
+                  height: deviceHeight * 0.08,
               ),
-              Container(padding: EdgeInsets.only(left: 190))
             ],
           ),
           actions: <Widget>[
             // 設定ボタン
             IconButton(
               icon: Icon(Icons.settings,
-                  color: Colors.white, size: deviceWidth * 0.07),
+                  color: Colors.white, size: deviceHeight * 0.05),
               onPressed: _settingNavigate,
             ),
+            Container(padding: EdgeInsets.only(right: deviceWidth * 0.02)),
           ],
           backgroundColor: HexColor(Setting.APP_COLOR),
         ),
+      ),
         // QRへ遷移
         floatingActionButton: Container(
             margin:

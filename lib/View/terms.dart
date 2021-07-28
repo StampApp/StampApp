@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stamp_app/Widget/AppBar.dart';
 import 'package:stamp_app/Constants/setting.dart';
 import '../Widget/HexColor.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,10 +13,11 @@ class TermsPage extends StatefulWidget {
 class _TermsPageState extends State<TermsPage> {
   @override
   Widget build(BuildContext context) {
+    final double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: HexColor(Setting.APP_COLOR),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(deviceHeight * 0.08),
+          child: AppBarPage(widget.title),
       ),
       body: ListView(
         padding: const EdgeInsets.only(

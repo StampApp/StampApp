@@ -7,6 +7,7 @@ import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/Enums/enumDateType.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/Widget/AppBar.dart';
 import 'package:stamp_app/models/stampLogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -99,14 +100,11 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     final Size displaySize = MediaQuery.of(context).size;
+    final double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        backgroundColor: HexColor(Setting.APP_COLOR),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(deviceHeight * 0.08),
+          child: AppBarPage(widget.title),
       ),
 
       // リストの日付の処理が終わるまで読み込み中を表示する
