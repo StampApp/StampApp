@@ -21,8 +21,11 @@ void stampDialog(BuildContext context, Stamp stamp) {
               ),
               ListTile(
                 // TODO: i18n対応
-                title: Text("スタンプ読み込み日時"),
-                subtitle: Text(dateFormat(stamp.createdAt)),
+                title: Text('スタンプ読み込み日時'),
+                subtitle: Text(
+                  dateFormat(stamp.createdAt),
+                  style: TextStyle(color: Colors.black, fontSize: 15, height: 2)
+                  ),
               ),
             ],
           ),
