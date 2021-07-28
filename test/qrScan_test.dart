@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stamp_app/Constants/setting.dart';
-import 'package:stamp_app/Util/enumCheckString.dart';
+import 'package:stamp_app/Util/Enums/enumCheckString.dart';
 import 'package:stamp_app/Util/validation.dart';
 
 void main() {
   group('QRコードのContentのValidation Test: ', () {
-    final String stampCheckString = CheckString.ok.checkStringValue;
+    final String stampCheckString = CheckString.ok.checkStringValue!;
     final List<String> imagePaths = [Setting.STAMP_FLOWER, Setting.NONE_IMG];
     //QRの日付が今の日付より前
     test('QRの日付が今の日付より前 -> true', () {

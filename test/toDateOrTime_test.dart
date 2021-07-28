@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
-import 'package:stamp_app/Util/enumDateType.dart';
+import 'package:stamp_app/Util/Enums/enumDateType.dart';
 
 void main() {
   group('スタンプ用の日付、時間をパースする関数 Test: ', () {
