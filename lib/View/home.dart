@@ -10,6 +10,7 @@ import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Widget/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
 import 'package:uuid/uuid.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../Widget/stampDialog.dart';
 import '../Widget/stampMaxDialog.dart';
 import '../Util/checkIsMaxStamps.dart';
@@ -33,6 +34,44 @@ class Stamp {
   Stamp(this.id, this.data, this.stampNum, this.createAt);
 }
 */
+class AppBackground extends StatelessWidget {
+ @override
+ Widget build(BuildContext context) {
+   return LayoutBuilder(builder: (context, contraint) {
+     final height = contraint.maxHeight;
+     final width = contraint.maxWidth;
+     return Stack(
+       children: <Widget>[
+         Container(
+           color: HexColor("e0ffff")
+         ),
+         Positioned(
+           top: height * 0.20,
+           left: height * 0.35,
+           child: Container(
+             height: height,
+             width: width,
+             decoration: BoxDecoration(
+                 shape: BoxShape.circle, color: HexColor(
+                                                      Setting.APP_COLOR).withAlpha(70)),
+           ),
+         ),
+         Positioned(
+           top: -height * 0.10,
+           left: -height * 0.39,
+           child: Container(
+             height: height,
+             width: width,
+             decoration: BoxDecoration(
+                 shape: BoxShape.circle, color: HexColor(
+                                                      Setting.APP_COLOR).withAlpha(50)),
+           ),
+         ),
+       ],
+     );
+   });
+ }
+}
 
 class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   static final uuid = Uuid();
@@ -74,8 +113,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
         data: maps[i]['data'],
         getDate: dateTime,
         getTime: dateTime,
-        stampNum: maps[i]['stampnum'],
-        deletedFlg: maps[i]['deleteflg'] == 0 ? true : false,
+        stampNum: maps[i]['stamp_num'],
+        useFlg: maps[i]['useflg'] == 0 ? true : false,
         createdAt: dateTime,
         deletedAt: dateTime,
       );
@@ -94,7 +133,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           getDate: dateTime,
           getTime: dateTime,
           stampNum: (i).toString(),
-          deletedFlg: false,
+          useFlg: false,
           createdAt: dateTime,
           deletedAt: dateTime);
       stampList.add(newStamp);
@@ -131,7 +170,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                 getDate: dateTime,
                 getTime: dateTime,
                 stampNum: resultJson["stampNum"],
-                deletedFlg: false,
+                useFlg: false,
                 createdAt: dateTime,
                 deletedAt: dateTime);
             await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
@@ -164,7 +203,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                   getDate: dateTime,
                   getTime: dateTime,
                   stampNum: "",
-                  deletedFlg: false,
+                  useFlg: false,
                   createdAt: dateTime,
                   deletedAt: dateTime);
               stampList.add(newStamp);
@@ -176,7 +215,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               getDate: dateTime,
               getTime: dateTime,
               stampNum: resultJson["stampNum"],
-              deletedFlg: false,
+              useFlg: false,
               createdAt: dateTime,
               deletedAt: dateTime);
           await DbInterface.insert('Stamp', DBHelper.databese(), newStamp);
@@ -265,7 +304,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             getDate: dateTime,
             getTime: dateTime,
             stampNum: (i + 1).toString(),
-            deletedFlg: false,
+            useFlg: false,
             createdAt: dateTime,
             deletedAt: dateTime);
         newStampList.add(newStamp);
@@ -288,7 +327,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     // Scaffoldは画面構成の基本Widget
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
         appBar: AppBar(
           title: Row(
@@ -315,7 +353,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           backgroundColor: HexColor(Setting.APP_COLOR),
         ),
         // QRへ遷移
-        floatingActionButton: FloatingActionButton.extended(
+        floatingActionButton:Container(
+          margin:EdgeInsets.fromLTRB(0,0,deviceWidth/90,deviceWidth/30),
+          child:FloatingActionButton.extended(
           label: Text('QR',
               style: TextStyle(
                 fontSize: deviceWidth * 0.06,
@@ -325,58 +365,56 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           icon: Icon(Icons.qr_code),
           onPressed: _qrScan,
           backgroundColor: HexColor(Setting.APP_COLOR),
-        ),
-        body: FutureBuilder(
+        )),
+        body:Stack(children:[AppBackground(),
+            FutureBuilder(
             future: _getStamp,
             builder:
                 (BuildContext context, AsyncSnapshot<List<Stamp>> snapshot) {
               Widget childWidget;
               if (snapshot.connectionState == ConnectionState.done) {
                 childWidget = Column(children: [
-                  //_slider(context, stampCheckString, deviceWidth)
-
                   Expanded(
                       child: Container(
                     child: PageView(
-                      children: <Widget>[
-                        PageView(
+                      children: <Widget>[PageView(
                           controller: controller,
                           children: <Widget>[
-                            _slider(context, stampCheckString, deviceWidth)
+                            _slider(context, stampCheckString, deviceWidth,deviceHeight)
                           ],
                         ),
                       ],
                       controller: controller,
                     ),
                   )),
-                  //_totalPoint(stampListLen, deviceWidth, deviceHeight)
                 ]);
               } else {
                 childWidget = const CircularProgressIndicator();
               }
               return childWidget;
-            }));
+            })]));
   }
 
   Widget _slider(
-      BuildContext context, String stampCheckString, double deviceWidth) {
+      BuildContext context, String stampCheckString, double deviceWidth,double deviceHeight) {
     return Container(
-        color: HexColor(Setting.APP_COLOR).withOpacity(0.6),
+        color : Colors.white70,
         margin: EdgeInsets.fromLTRB(
             deviceWidth / 20,
             MediaQuery.of(context).size.height * 0.07,
             deviceWidth / 20,
             MediaQuery.of(context).size.height * 0.1),
         height: MediaQuery.of(context).size.height * 0.73,
-        child: _stampCard(context, stampCheckString, deviceWidth));
+        child: _stampCard(context, stampCheckString, deviceWidth,deviceHeight));
   }
 
   Widget _stampCard(
-      BuildContext context, String stampCheckString, double deviceWidth) {
+      BuildContext context, String stampCheckString, double deviceWidth,double deviceHeight) {
     return SingleChildScrollView(
       child: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
+          Center(child:_totalPoint(stampListLen, deviceWidth, deviceHeight)),
           SizedBox(
             child: FutureBuilder(
                 future: _getStamp,
@@ -392,11 +430,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                       childAspectRatio: MediaQuery.of(context).size.width > 600
                           ? (MediaQuery.of(context).size.height /
                               MediaQuery.of(context).size.width *
-                              0.9)
+                              0.93)
                           : 1,
-                      padding: EdgeInsets.fromLTRB(
-                          0, MediaQuery.of(context).size.height * 0.01, 0, 10),
-
+                      padding: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height * 0.01, 0, 10),
                       // スタンプをListの数だけ生成する
                       children: stampList
                           .map(
@@ -406,7 +442,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   GestureDetector(
-                                      onTap: () =>
+                                    onTap: () =>
                                           stamp.data == stampCheckString
                                               ? stampDialog(context, stamp)
                                               : (context),
@@ -423,9 +459,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                         // 円を生成
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          //border: Border.all(
-                                          //  color: HexColor("00FFFF"), width: 3),
-                                          color: HexColor('FFFFFF'),
+                                          border: Border.all(
+                                            color: HexColor(Setting.APP_COLOR).withOpacity(0.6),width:3),
                                           image: DecorationImage(
                                               fit: BoxFit.fill,
                                               image: stamp.data ==
@@ -442,22 +477,18 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                               ? Text("")
                                               : Text(
                                                   stamp.stampNum.toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 25.0,
-                                                    fontStyle: FontStyle.normal,
-                                                    letterSpacing: 4.0,
-                                                    color: HexColor(
-                                                        Setting.APP_COLOR),
+                                                  style: GoogleFonts.prompt(
+                                                    fontSize:deviceWidth * 0.09,
                                                   ),
                                                   textAlign: TextAlign.center,
                                                 ),
-                                        ),
-                                      )),
+                                          ),
+                                    ),
+                                  ),
                                 ],
-                              ),
-                            ),
-                          )
-                          .toList(),
+                               ),
+                            ),)
+                    .toList(),
                     );
                   } else {
                     childWidget = const CircularProgressIndicator();
@@ -475,19 +506,18 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       Container(
           alignment: Alignment.center,
           margin:
-              EdgeInsets.fromLTRB(deviceWidth / 20, deviceHeight / 85, 0, 25),
-          width: deviceWidth / 2 * 1,
-          height: deviceHeight / 16 * 1,
-          decoration: BoxDecoration(
+              EdgeInsets.fromLTRB(deviceWidth / 8, deviceWidth/20, 0, deviceWidth/50),
+          width: deviceWidth / 2 * 1.3,
+          height: deviceHeight / 16 * 1.2,
+          /*decoration: BoxDecoration(
             border: Border.all(
                 color: HexColor(Setting.APP_COLOR).withOpacity(0.6), width: 3),
-          ),
+          ),*/
           child: Text(
             '合計スタンプ数: $point',
-            style: TextStyle(
-              fontSize: deviceHeight * 0.026,
-              fontStyle: FontStyle.normal,
-              letterSpacing: 2.0,
+            style: GoogleFonts.ubuntu(
+              fontSize: deviceWidth*0.07,
+              fontWeight: FontWeight.w500,
             ),
           ))
     ]);
