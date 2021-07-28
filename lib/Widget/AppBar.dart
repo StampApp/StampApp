@@ -17,17 +17,19 @@ class _HeaderPageState extends State<AppBarPage>{
     final double deviceHeight = MediaQuery.of(context).size.height;
 
     return AppBar(
+      toolbarHeight: 100,
       backgroundColor: HexColor(Setting.APP_COLOR),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(widget.title,
-              style: TextStyle(fontSize: deviceHeight * 0.032))]),
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back,
-                color: Colors.white, size: deviceHeight * 0.032),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
+        children: [
+          Text(widget.title,
+            style: TextStyle(fontSize: deviceHeight * 0.032))
+      ]),
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back,
+          color: Colors.white, size: deviceHeight * 0.032),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
     );
  }
 }

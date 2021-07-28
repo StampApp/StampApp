@@ -262,31 +262,32 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(deviceHeight * 0.08),
-          child: AppBar(
-            title: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                //ロゴを中央にしたい場合↓
-                //padding: const EdgeInsets.all(8.0), child: Text('         ')),
-                Image.asset(
-                    Setting.APP_LOGO,
-                    fit: BoxFit.contain,
-                    height: deviceHeight * 0.07,
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              // 設定ボタン
-              IconButton(
-                icon: Icon(Icons.settings,
-                    color: Colors.white, size: deviceHeight * 0.05),
-                onPressed: _settingNavigate,
+        child: AppBar(
+          toolbarHeight: deviceHeight * 0.1,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              //ロゴを中央にしたい場合↓
+              //padding: const EdgeInsets.all(8.0), child: Text('         ')),
+              Image.asset(
+                  Setting.APP_LOGO,
+                  fit: BoxFit.contain,
+                  height: deviceHeight * 0.08,
               ),
-              Container(padding: EdgeInsets.only(right: deviceWidth * 0.02)),
             ],
-            backgroundColor: HexColor(Setting.APP_COLOR),
           ),
-       ),
+          actions: <Widget>[
+            // 設定ボタン
+            IconButton(
+              icon: Icon(Icons.settings,
+                  color: Colors.white, size: deviceHeight * 0.05),
+              onPressed: _settingNavigate,
+            ),
+            Container(padding: EdgeInsets.only(right: deviceWidth * 0.02)),
+          ],
+          backgroundColor: HexColor(Setting.APP_COLOR),
+        ),
+      ),
         // QRへ遷移
         floatingActionButton: Container(
             margin:
