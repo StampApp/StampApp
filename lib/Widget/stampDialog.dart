@@ -24,20 +24,26 @@ void stampDialog(BuildContext context, Stamp stamp) {
                 title: Text(
                   AppLocalizations.of(context)!.stampLoadingDateTime,
                   style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                subtitle: Text(
-                  dateFormat(stamp.createdAt),
-                  style: TextStyle(color: Colors.black, fontSize: 15, height: 2)
-                  ),
+                ),
+                subtitle: Text(dateFormat(stamp.createdAt),
+                    style: TextStyle(
+                        color: Colors.black, fontSize: 15, height: 2)),
               ),
             ],
           ),
         ),
         actions: <Widget>[
-          TextButton(
+          OutlinedButton(
             child: Text(AppLocalizations.of(context)!.ok),
+            style: OutlinedButton.styleFrom(
+              primary: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              side: const BorderSide(color: Colors.blue),
+            ),
             onPressed: () => Navigator.of(context).pop(1),
-          ),
+          )
         ],
       );
     },

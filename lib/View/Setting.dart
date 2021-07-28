@@ -65,13 +65,14 @@ class _SettingPageState extends State<SettingPage> {
               onPressed: () => Navigator.pop(context),
             ),
 
-            ElevatedButton(
+            OutlinedButton(
               child: Text(AppLocalizations.of(context)!.ok),
-              style: ElevatedButton.styleFrom(
+              style: OutlinedButton.styleFrom(
                 primary: Colors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
+                side: const BorderSide(color: Colors.blue),
               ),
               onPressed: () => {Navigator.pop(context), _useStampDialog()},
             ),
