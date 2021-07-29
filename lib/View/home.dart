@@ -410,6 +410,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                             : Text(
                                                 stamp.stampNum.toString(),
                                                 style: GoogleFonts.prompt(
+                                                  color: HexColor('000000'),
                                                   //color: HexColor('00C2FF').withOpacity(0.6),
                                                   fontSize: deviceWidth * 0.09,
                                                   //太字にしたい場合
@@ -448,6 +449,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           child: Text(
             AppLocalizations.of(context)!.totalStamps + ': $point',
             style: GoogleFonts.ubuntu(
+              color: HexColor('000000'),
               fontSize: deviceWidth * 0.07,
               fontWeight: FontWeight.w500,
             ),
