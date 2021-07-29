@@ -290,8 +290,6 @@ Future<Map> _useStamp() async {
       createdAt: nowDate,
     );
 
-    print(retIds);
-
   String idsText = '';
   // スタンプ更新
   for (var element in stampList) {
