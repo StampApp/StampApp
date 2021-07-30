@@ -70,16 +70,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
 
-  //カード枚数は1以上
-  int cardnum = 1;
-
   //スタンプ合計
   int stampListLen = 0;
-
-  //カード枚数格納配列
-  List<String> cardnumber = [];
-
-  List<List<Stamp>> cardList = [];
 
   //pageviewで使用する
   PageController? controller;
@@ -155,7 +147,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
 
         Stamp newStamp = new Stamp(
             id: uuid.v1(),
-            data: stampCheckString,
+            data: resultJson["data"],
             getDate: dateTime,
             getTime: dateTime,
             stampNum: resultJson["stampNum"],
@@ -349,7 +341,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       double deviceWidth, double deviceHeight) {
     return SingleChildScrollView(
       child: Column(
-        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Center(child: _totalPoint(stampListLen, deviceWidth, deviceHeight)),
           SizedBox(
@@ -384,7 +375,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                         ? stampDialog(context, stamp)
                                         : (context),
                                     child: Container(
-                                      //padding: const EdgeInsets.all(10.0),
                                       width: MediaQuery.of(context).size.width /
                                               4 -
                                           4 * 1,

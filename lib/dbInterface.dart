@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:sqflite/sqflite.dart';
 import 'package:stamp_app/Util/Enums/enumStampCount.dart';
 
+// TODO: コメント等を整備する
 class DbInterface {
   /*
   @param _tableName テーブル名

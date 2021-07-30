@@ -31,5 +31,5 @@ class _HeaderPageState extends State<AppBarPage>{
         onPressed: () => Navigator.of(context).pop(),
       ),
     );
- }
+  }
 }

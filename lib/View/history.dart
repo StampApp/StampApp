@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Util/toInt.dart';
-import 'package:stamp_app/Widget/stamp_icon_icons.dart';
+import 'package:stamp_app/Widget/stampIcons.dart';
 import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/Util/toDateOrTime.dart';
