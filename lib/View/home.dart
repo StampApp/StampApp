@@ -341,7 +341,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       double deviceWidth, double deviceHeight) {
     return SingleChildScrollView(
       child: Column(
-        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Center(child: _totalPoint(stampListLen, deviceWidth, deviceHeight)),
           SizedBox(
@@ -376,7 +375,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                         ? stampDialog(context, stamp)
                                         : (context),
                                     child: Container(
-                                      //padding: const EdgeInsets.all(10.0),
                                       width: MediaQuery.of(context).size.width /
                                               4 -
                                           4 * 1,

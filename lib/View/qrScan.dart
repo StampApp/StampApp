@@ -174,13 +174,13 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     // QRを読み込みをlistenする
     qrController.scannedDataStream.listen((scanData) async {
       // QRのデータが取得出来ない場合SnackBar表示
-      if (scanData.code == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('QR code data does not exist'),
-          ),
-        );
-      }
+      // if (scanData.code == null) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(
+      //       content: Text('QR code data does not exist'),
+      //     ),
+      //   );
+      // }
       final data = await scanValidation(scanData);
       _transitionToNextScreen('', describeEnum(data.format as BarcodeFormat),
           data.rawContent as String);
