@@ -264,16 +264,31 @@ Future<Map> _useStamp() async {
   });
 
   // LOG 記録
-  List<StampLogs> logList = List.generate(maps.length, (i) {
-    return StampLogs(
+  // List<StampLogs> logList = List.generate(maps.length, (i) {
+  //   return StampLogs(
+  //     id: uuid.v1(),
+  //     stampId: maps[i]['id'],
+  //     getDate: nowDate,
+  //     getTime: nowDate,
+  //     useFlg: true,
+  //     createdAt: nowDate,
+  //   );
+  // });
+
+  String retIds = "";
+  List.generate(maps.length, (i) {
+    retIds += maps[i]['id'];
+    retIds += ",";
+  });
+
+  StampLogs log = StampLogs(
       id: uuid.v1(),
-      stampId: maps[i]['id'],
+      stampId: retIds,
       getDate: nowDate,
       getTime: nowDate,
       useFlg: true,
       createdAt: nowDate,
     );
-  });
 
   String idsText = '';
   // スタンプ更新
@@ -284,10 +299,15 @@ Future<Map> _useStamp() async {
     idsText += '$id \n';
   }
 
-  // LOG 記録
-  for (var log in logList) {
+  // スタンプが9個に達していた時に消費するとログが一つ表示する
+  if (maps.length == StampCount.count.stampCount) {
     await DbInterface.insert('StampLogs', DBHelper.databese(), log);
   }
+
+  // LOG 記録
+  // for (var log in logList) {
+  //   await DbInterface.insert('StampLogs', DBHelper.databese(), log);
+  // }
 
   return {'idsText': idsText, 'canUseStamp': true};
 }

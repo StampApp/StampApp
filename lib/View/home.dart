@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stamp_app/Constants/setting.dart';
+import 'package:stamp_app/Util/Enums/enumDateType.dart';
 import 'package:stamp_app/Util/Enums/enumStampCount.dart';
+import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/toInt.dart';
 import 'package:stamp_app/View/qrScan.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
@@ -95,19 +97,20 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   Future<List<Stamp>> asyncGetStampList() async {
     List maps = await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
-    stampListLen = maps.length;
-
-    stampList = List.generate(maps.length, (i) {
-      return Stamp(
-        id: maps[i]['id'],
-        data: maps[i]['data'],
-        getDate: dateTime,
-        getTime: dateTime,
-        stampNum: maps[i]['stamp_num'],
-        useFlg: parseIntToBoolean(maps[i]['useflg']),
-        createdAt: dateTime,
-        deletedAt: dateTime,
-      );
+    setState(() {
+      stampListLen = maps.length;
+      stampList = List.generate(maps.length, (i) {
+        return Stamp(
+          id: maps[i]['id'],
+          data: maps[i]['data'],
+          getDate: formatStringToDateTime(maps[i]['stamp_date'], EnumDateType.date),
+          getTime: formatStringToDateTime(maps[i]['stamp_time'], EnumDateType.time),
+          stampNum: maps[i]['stamp_num'],
+          useFlg: parseIntToBoolean(maps[i]['useflg']),
+          createdAt: DateTime.parse(maps[i]['created_at']),
+          deletedAt: DateTime.parse(maps[i]['deleted_at']),
+        );
+      });
     });
 
     //GridViewのcrossAxisCountの値
@@ -412,6 +415,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                             : Text(
                                                 stamp.stampNum.toString(),
                                                 style: GoogleFonts.prompt(
+                                                  color: HexColor('000000'),
                                                   fontSize: deviceWidth * 0.09,
                                                 ),
                                                 textAlign: TextAlign.center,
@@ -446,6 +450,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           child: Text(
             AppLocalizations.of(context)!.totalStamps + ': $point',
             style: GoogleFonts.ubuntu(
+              color: HexColor('000000'),
               fontSize: deviceWidth * 0.07,
               fontWeight: FontWeight.w500,
             ),
