@@ -3,8 +3,6 @@ import 'package:stamp_app/Util/toInt.dart';
 import 'package:stamp_app/Util/Enums/enumDateType.dart';
 
 class Stamp {
-  // static final _tableName = 'Stamp'; // テーブル名
-
   // モデル定義
   final String id;
   final String data; // スタンプ情報
@@ -48,26 +46,4 @@ class Stamp {
   String toString() {
     return 'Stamp{id: $id, data: $data, stamp_date: $getDate, stamp_time: $getTime, stamp_num: $stampNum, useflg: $useFlg, created_at: $createdAt, deleted_at: $deletedAt}';
   }
-
-  // テーブル作成
-  // join関数でデータベースのパスを設定
-  // static Future<Database> get database async {
-  //   final Future<Database> _database = openDatabase(
-  //     join(await getDatabasesPath(), 'stamp_database.db'),
-  //     onCreate: (db, version) {
-  //       return db.execute("CREATE TABLE $_tableName ("
-  //           "id TEXT PRIMARY KEY,"
-  //           "data TEXT,"
-  //           "stamp_date TEXT,"
-  //           "stamp_time TEXT,"
-  //           "stamp_num TEXT,"
-  //           "useflg INTEGER,"
-  //           "created_at TEXT,"
-  //           "deleted_at TEXT"
-  //           ")");
-  //     },
-  //     version: 1,
-  //   );
-  //   return _database;
-  // }
 }

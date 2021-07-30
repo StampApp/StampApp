@@ -113,14 +113,14 @@ class _SettingPageState extends State<SettingPage> {
           });
     }
 
-    String idsText = res['idsText'];
+    String retCreatedAt = res['retCreatedAt'];
     return showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context)!.usedStamps),
           content:
-              Text(AppLocalizations.of(context)!.usedStamps + "\n\n$idsText"),
+              Text(AppLocalizations.of(context)!.usedStamps + "\n\n$retCreatedAt"),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
@@ -244,7 +244,7 @@ Future<Map> _useStamp() async {
   // uuid
   final uuid = Uuid();
 
-  if (count < stampCheckString) return {'idsText': null, 'canUseStamp': false};
+  if (count < stampCheckString) return {'retCreatedAt': null, 'canUseStamp': false};
   // useflgがfalseのスタンプを取得
   List maps = await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
@@ -263,31 +263,34 @@ Future<Map> _useStamp() async {
     );
   });
 
-  // LOG 記録
-  List<StampLogs> logList = List.generate(maps.length, (i) {
-    return StampLogs(
+  String retIds = "";
+  List.generate(maps.length, (i) {
+    retIds += maps[i]['id'];
+    retIds += ",";
+  });
+
+  StampLogs log = StampLogs(
       id: uuid.v1(),
-      stampId: maps[i]['id'],
+      stampId: retIds,
       getDate: nowDate,
       getTime: nowDate,
       useFlg: true,
       createdAt: nowDate,
     );
-  });
 
-  String idsText = '';
+  String retCreatedAt = '';
   // スタンプ更新
   for (var element in stampList) {
     await DbInterface.update('Stamp', DBHelper.databese(), element);
     // 更新したIDを保持
-    String id = element.id;
-    idsText += '$id \n';
+    String createdAt = dateFormat(element.createdAt);
+    retCreatedAt += '$createdAt \n';
   }
 
-  // LOG 記録
-  for (var log in logList) {
+  // スタンプが9個に達していた時に消費するとログが一つ表示する
+  if (maps.length == StampCount.count.stampCount) {
     await DbInterface.insert('StampLogs', DBHelper.databese(), log);
   }
 
-  return {'idsText': idsText, 'canUseStamp': true};
+  return {'retCreatedAt': retCreatedAt, 'canUseStamp': true};
 }

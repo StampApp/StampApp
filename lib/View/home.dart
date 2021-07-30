@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stamp_app/Constants/setting.dart';
+import 'package:stamp_app/Util/Enums/enumDateType.dart';
 import 'package:stamp_app/Util/Enums/enumStampCount.dart';
+import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Util/toInt.dart';
 import 'package:stamp_app/View/qrScan.dart';
 import 'package:stamp_app/Widget/qrAlertDialog.dart';
@@ -68,16 +70,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
 
-  //カード枚数は1以上
-  int cardnum = 1;
-
   //スタンプ合計
   int stampListLen = 0;
-
-  //カード枚数格納配列
-  List<String> cardnumber = [];
-
-  List<List<Stamp>> cardList = [];
 
   //pageviewで使用する
   PageController? controller;
@@ -95,19 +89,20 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   Future<List<Stamp>> asyncGetStampList() async {
     List maps = await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
-    stampListLen = maps.length;
-
-    stampList = List.generate(maps.length, (i) {
-      return Stamp(
-        id: maps[i]['id'],
-        data: maps[i]['data'],
-        getDate: dateTime,
-        getTime: dateTime,
-        stampNum: maps[i]['stamp_num'],
-        useFlg: parseIntToBoolean(maps[i]['useflg']),
-        createdAt: dateTime,
-        deletedAt: dateTime,
-      );
+    setState(() {
+      stampListLen = maps.length;
+      stampList = List.generate(maps.length, (i) {
+        return Stamp(
+          id: maps[i]['id'],
+          data: maps[i]['data'],
+          getDate: formatStringToDateTime(maps[i]['stamp_date'], EnumDateType.date),
+          getTime: formatStringToDateTime(maps[i]['stamp_time'], EnumDateType.time),
+          stampNum: maps[i]['stamp_num'],
+          useFlg: parseIntToBoolean(maps[i]['useflg']),
+          createdAt: DateTime.parse(maps[i]['created_at']),
+          deletedAt: DateTime.parse(maps[i]['deleted_at']),
+        );
+      });
     });
 
     //GridViewのcrossAxisCountの値
@@ -152,7 +147,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
 
         Stamp newStamp = new Stamp(
             id: uuid.v1(),
-            data: stampCheckString,
+            data: resultJson["data"],
             getDate: dateTime,
             getTime: dateTime,
             stampNum: resultJson["stampNum"],
@@ -254,32 +249,32 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(deviceHeight * 0.08),
-        child: AppBar(
-          toolbarHeight: deviceHeight * 0.1,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Image.asset(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(deviceHeight * 0.08),
+          child: AppBar(
+            toolbarHeight: deviceHeight * 0.1,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Image.asset(
                   Setting.APP_LOGO,
                   fit: BoxFit.contain,
                   height: deviceHeight * 0.08,
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            // 設定ボタン
-            IconButton(
-              icon: Icon(Icons.settings,
-                  color: Colors.white, size: deviceHeight * 0.05),
-              onPressed: _settingNavigate,
+                ),
+              ],
             ),
-            Container(padding: EdgeInsets.only(right: deviceWidth * 0.02)),
-          ],
-          backgroundColor: HexColor(Setting.APP_COLOR),
+            actions: <Widget>[
+              // 設定ボタン
+              IconButton(
+                icon: Icon(Icons.settings,
+                    color: Colors.white, size: deviceHeight * 0.05),
+                onPressed: _settingNavigate,
+              ),
+              Container(padding: EdgeInsets.only(right: deviceWidth * 0.02)),
+            ],
+            backgroundColor: HexColor(Setting.APP_COLOR),
+          ),
         ),
-      ),
         // QRへ遷移
         floatingActionButton: Container(
             margin:
@@ -308,15 +303,12 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                         child: Container(
                       child: PageView(
                         children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: PageView(
-                              controller: controller,
-                              children: <Widget>[
-                                _slider(context, stampCheckString, deviceWidth,
-                                    deviceHeight)
-                              ],
-                            ),
+                          PageView(
+                            controller: controller,
+                            children: <Widget>[
+                              _slider(context, stampCheckString, deviceWidth,
+                                  deviceHeight)
+                            ],
                           ),
                         ],
                         controller: controller,
@@ -335,10 +327,12 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       double deviceWidth, double deviceHeight) {
     return Container(
         color: Colors.white70,
-        margin: EdgeInsets.fromLTRB(deviceWidth / 20, deviceWidth / 7,
-            deviceWidth / 20, deviceHeight / 8.5),
-        width: deviceWidth / 4 - 4 * 1,
-        height: deviceWidth / 4 - 4 * 1,
+        margin: EdgeInsets.fromLTRB(
+            deviceWidth / 20,
+            MediaQuery.of(context).size.height * 0.05,
+            deviceWidth / 20,
+            MediaQuery.of(context).size.height * 0.13),
+        height: MediaQuery.of(context).size.height * 0.73,
         child:
             _stampCard(context, stampCheckString, deviceWidth, deviceHeight));
   }
@@ -347,11 +341,9 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       double deviceWidth, double deviceHeight) {
     return SingleChildScrollView(
       child: Column(
-        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Center(child: _totalPoint(stampListLen, deviceWidth, deviceHeight)),
           SizedBox(
-            height: MediaQuery.of(context).size.width,
             child: FutureBuilder(
                 future: _getStamp,
                 builder: (BuildContext context,
@@ -363,7 +355,13 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                       crossAxisCount: 3,
                       physics: ClampingScrollPhysics(),
                       scrollDirection: Axis.vertical,
-                      padding: EdgeInsets.fromLTRB(10, deviceWidth / 40, 10, 0),
+                      childAspectRatio: MediaQuery.of(context).size.width > 600
+                          ? (MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width *
+                              0.93)
+                          : 1,
+                      padding: EdgeInsets.fromLTRB(
+                          0, MediaQuery.of(context).size.height * 0.01, 0, 10),
                       // スタンプをListの数だけ生成する
                       children: stampList
                           .map(
@@ -377,7 +375,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                         ? stampDialog(context, stamp)
                                         : (context),
                                     child: Container(
-                                      //padding: const EdgeInsets.all(11.0),
                                       width: MediaQuery.of(context).size.width /
                                               4 -
                                           4 * 1,
@@ -386,7 +383,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                   4 -
                                               4 * 1,
                                       // 円を生成
-
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         border: Border.all(
@@ -401,7 +397,6 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                     stamp.stampNum.toString())
                                                 : AssetImage(Setting.NONE_IMG)),
                                       ),
-
                                       //円内の数字表示
                                       child: Align(
                                         alignment: Alignment.center,
@@ -410,10 +405,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                             : Text(
                                                 stamp.stampNum.toString(),
                                                 style: GoogleFonts.prompt(
-                                                  //color: HexColor('00C2FF').withOpacity(0.6),
+                                                  color: HexColor('000000'),
                                                   fontSize: deviceWidth * 0.09,
-                                                  //太字にしたい場合
-                                                  //fontWeight: FontWeight.w700,
                                                 ),
                                                 textAlign: TextAlign.center,
                                               ),
@@ -441,13 +434,13 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
           alignment: Alignment.center,
-          margin: EdgeInsets.fromLTRB(
-              deviceWidth / 8, deviceWidth / 20, 0, deviceWidth / 50),
+          margin: EdgeInsets.fromLTRB(deviceWidth / 8, deviceWidth / 20, 0, 0),
           width: deviceWidth / 2 * 1.3,
           height: deviceHeight / 16 * 1.2,
           child: Text(
             AppLocalizations.of(context)!.totalStamps + ': $point',
             style: GoogleFonts.ubuntu(
+              color: HexColor('000000'),
               fontSize: deviceWidth * 0.07,
               fontWeight: FontWeight.w500,
             ),
