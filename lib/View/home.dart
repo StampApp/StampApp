@@ -254,90 +254,96 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(deviceHeight * 0.08),
-        child: AppBar(
-          toolbarHeight: deviceHeight * 0.1,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Image.asset(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(deviceHeight * 0.08),
+          child: AppBar(
+            toolbarHeight: deviceHeight * 0.1,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Image.asset(
                   Setting.APP_LOGO,
                   fit: BoxFit.contain,
                   height: deviceHeight * 0.08,
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            // 設定ボタン
-            IconButton(
-              icon: Icon(Icons.settings,
-                  color: Colors.white, size: deviceHeight * 0.05),
-              onPressed: _settingNavigate,
+                ),
+              ],
             ),
-            Container(padding: EdgeInsets.only(right: deviceWidth * 0.02)),
-          ],
-          backgroundColor: HexColor(Setting.APP_COLOR),
+            actions: <Widget>[
+              // 設定ボタン
+              IconButton(
+                icon: Icon(Icons.settings,
+                    color: Colors.white, size: deviceHeight * 0.05),
+                onPressed: _settingNavigate,
+              ),
+              Container(padding: EdgeInsets.only(right: deviceWidth * 0.02)),
+            ],
+            backgroundColor: HexColor(Setting.APP_COLOR),
+          ),
         ),
-      ),
         // QRへ遷移
-        floatingActionButton:Container(
-          margin:EdgeInsets.fromLTRB(0,0,deviceWidth/90,deviceWidth/30),
-          child:FloatingActionButton.extended(
-          label: Text('QR',
-              style: TextStyle(
-                fontSize: deviceWidth * 0.06,
-                fontStyle: FontStyle.normal,
-                letterSpacing: 4.0,
-              )),
-          icon: Icon(Icons.qr_code),
-          onPressed: _qrScan,
-          backgroundColor: HexColor(Setting.APP_COLOR),
-        )),
-        body:Stack(children:[AppBackground(),
-            FutureBuilder(
-            future: _getStamp,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<Stamp>> snapshot) {
-              Widget childWidget;
-              if (snapshot.connectionState == ConnectionState.done) {
-                childWidget = Column(children: [
-                  Expanded(
-                      child: Container(
-                    child: PageView(
-                      children: <Widget>[PageView(
-                          controller: controller,
-                          children: <Widget>[
-                            _slider(context, stampCheckString, deviceWidth,deviceHeight)
-                          ],
-                        ),
-                      ],
-                      controller: controller,
-                    ),
+        floatingActionButton: Container(
+            margin:
+                EdgeInsets.fromLTRB(0, 0, deviceWidth / 90, deviceWidth / 30),
+            child: FloatingActionButton.extended(
+              label: Text('QR',
+                  style: TextStyle(
+                    fontSize: deviceWidth * 0.06,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 4.0,
                   )),
-                ]);
-              } else {
-                childWidget = const CircularProgressIndicator();
-              }
-              return childWidget;
-            })]));
+              icon: Icon(Icons.qr_code),
+              onPressed: _qrScan,
+              backgroundColor: HexColor(Setting.APP_COLOR),
+            )),
+        body: Stack(children: [
+          AppBackground(),
+          FutureBuilder(
+              future: _getStamp,
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Stamp>> snapshot) {
+                Widget childWidget;
+                if (snapshot.connectionState == ConnectionState.done) {
+                  childWidget = Column(children: [
+                    Expanded(
+                        child: Container(
+                      child: PageView(
+                        children: <Widget>[
+                          PageView(
+                            controller: controller,
+                            children: <Widget>[
+                              _slider(context, stampCheckString, deviceWidth,
+                                  deviceHeight)
+                            ],
+                          ),
+                        ],
+                        controller: controller,
+                      ),
+                    )),
+                  ]);
+                } else {
+                  childWidget = const CircularProgressIndicator();
+                }
+                return childWidget;
+              })
+        ]));
   }
 
-  Widget _slider(
-      BuildContext context, String stampCheckString, double deviceWidth,double deviceHeight) {
+  Widget _slider(BuildContext context, String stampCheckString,
+      double deviceWidth, double deviceHeight) {
     return Container(
-        color : Colors.white70,
+        color: Colors.white70,
         margin: EdgeInsets.fromLTRB(
             deviceWidth / 20,
-            MediaQuery.of(context).size.height * 0.07,
+            MediaQuery.of(context).size.height * 0.05,
             deviceWidth / 20,
-            MediaQuery.of(context).size.height * 0.1),
+            MediaQuery.of(context).size.height * 0.13),
         height: MediaQuery.of(context).size.height * 0.73,
-        child: _stampCard(context, stampCheckString, deviceWidth,deviceHeight));
+        child:
+            _stampCard(context, stampCheckString, deviceWidth, deviceHeight));
   }
 
-  Widget _stampCard(
-      BuildContext context, String stampCheckString, double deviceWidth,double deviceHeight) {
+  Widget _stampCard(BuildContext context, String stampCheckString,
+      double deviceWidth, double deviceHeight) {
     return SingleChildScrollView(
       child: Column(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -360,7 +366,8 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                               MediaQuery.of(context).size.width *
                               0.93)
                           : 1,
-                      padding: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height * 0.01, 0, 10),
+                      padding: EdgeInsets.fromLTRB(
+                          0, MediaQuery.of(context).size.height * 0.01, 0, 10),
                       // スタンプをListの数だけ生成する
                       children: stampList
                           .map(
@@ -370,53 +377,53 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   GestureDetector(
-                                    onTap: () =>
-                                          stamp.data == stampCheckString
-                                              ? stampDialog(context, stamp)
-                                              : (context),
-                                      child: Container(
-                                        //padding: const EdgeInsets.all(10.0),
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                    4 -
-                                                4 * 1,
-                                        height:
-                                            MediaQuery.of(context).size.width /
-                                                    4 -
-                                                4 * 1,
-                                        // 円を生成
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: HexColor(Setting.APP_COLOR).withOpacity(0.6),width:3),
-                                          image: DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: stamp.data ==
-                                                      stampCheckString
-                                                  ? AssetImage(
-                                                      stamp.stampNum.toString())
-                                                  : AssetImage(
-                                                      Setting.NONE_IMG)),
-                                        ),
-                                        //円内の数字表示
-                                        child: Align(
-                                          alignment: Alignment.center,
-                                          child: stamp.data == stampCheckString
-                                              ? Text("")
-                                              : Text(
-                                                  stamp.stampNum.toString(),
-                                                  style: GoogleFonts.prompt(
-                                                    fontSize:deviceWidth * 0.09,
-                                                  ),
-                                                  textAlign: TextAlign.center,
+                                    onTap: () => stamp.data == stampCheckString
+                                        ? stampDialog(context, stamp)
+                                        : (context),
+                                    child: Container(
+                                      //padding: const EdgeInsets.all(10.0),
+                                      width: MediaQuery.of(context).size.width /
+                                              4 -
+                                          4 * 1,
+                                      height:
+                                          MediaQuery.of(context).size.width /
+                                                  4 -
+                                              4 * 1,
+                                      // 円を生成
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: HexColor(Setting.APP_COLOR)
+                                                .withOpacity(0.6),
+                                            width: 3),
+                                        image: DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: stamp.data ==
+                                                    stampCheckString
+                                                ? AssetImage(
+                                                    stamp.stampNum.toString())
+                                                : AssetImage(Setting.NONE_IMG)),
+                                      ),
+                                      //円内の数字表示
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: stamp.data == stampCheckString
+                                            ? Text("")
+                                            : Text(
+                                                stamp.stampNum.toString(),
+                                                style: GoogleFonts.prompt(
+                                                  fontSize: deviceWidth * 0.09,
                                                 ),
-                                          ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                      ),
                                     ),
                                   ),
                                 ],
-                               ),
-                            ),)
-                    .toList(),
+                              ),
+                            ),
+                          )
+                          .toList(),
                     );
                   } else {
                     childWidget = const CircularProgressIndicator();
@@ -433,8 +440,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
           alignment: Alignment.center,
-          margin: EdgeInsets.fromLTRB(
-              deviceWidth / 8, deviceWidth / 20, 0, deviceWidth / 50),
+          margin: EdgeInsets.fromLTRB(deviceWidth / 8, deviceWidth / 20, 0, 0),
           width: deviceWidth / 2 * 1.3,
           height: deviceHeight / 16 * 1.2,
           child: Text(
@@ -446,6 +452,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           ))
     ]);
   }
+
   Future<void> showRequestPermissionDialog(BuildContext context) async {
     await showDialog<void>(
       context: context,
