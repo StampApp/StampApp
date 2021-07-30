@@ -263,18 +263,6 @@ Future<Map> _useStamp() async {
     );
   });
 
-  // LOG 記録
-  // List<StampLogs> logList = List.generate(maps.length, (i) {
-  //   return StampLogs(
-  //     id: uuid.v1(),
-  //     stampId: maps[i]['id'],
-  //     getDate: nowDate,
-  //     getTime: nowDate,
-  //     useFlg: true,
-  //     createdAt: nowDate,
-  //   );
-  // });
-
   String retIds = "";
   List.generate(maps.length, (i) {
     retIds += maps[i]['id'];
