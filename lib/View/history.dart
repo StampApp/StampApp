@@ -125,7 +125,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(15),
                       child: TextButton(
                         child:
                             Text(AppLocalizations.of(context)!.deleteHistory),
@@ -139,25 +139,27 @@ class _HistoryPageState extends State<HistoryPage> {
                         onPressed: () => _deleteLogsCheck(),
                       ),
                     ),
+                    Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Container(
+                          padding: EdgeInsets.only(left: 15),
+                          margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
+                          decoration: BoxDecoration(
+                            //枠線を丸くするかどうか
+                            //borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                                color: HexColor(Setting.APP_COLOR), width: 1),
+                          ),
+                          child: DropdownButton(
+                            items: _items,
+                            value: _selectItem,
+                            onChanged: (value) => {
+                              pastMonthChange(value as int),
+                              setState(() => _selectItem = value),
+                            },
+                          ),
+                        )),
                     //ドロップダウンメニュー
-                    Container(
-                      padding: EdgeInsets.only(left: 15),
-                      margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
-                      decoration: BoxDecoration(
-                        //枠線を丸くするかどうか
-                        //borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                            color: HexColor(Setting.APP_COLOR), width: 1),
-                      ),
-                      child: DropdownButton(
-                        items: _items,
-                        value: _selectItem,
-                        onChanged: (value) => {
-                          pastMonthChange(value as int),
-                          setState(() => _selectItem = value),
-                        },
-                      ),
-                    ),
                   ]),
               if (snapshot.data.length != 0)
                 for (int i = 0; i < snapshot.data.length; i++)
@@ -211,7 +213,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget _row(StampLogs stamplist) {
     return GestureDetector(
         child: Container(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
             decoration: new BoxDecoration(
                 border: new Border(
                     bottom: BorderSide(width: 1.0, color: Colors.grey))),
