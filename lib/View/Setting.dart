@@ -113,14 +113,14 @@ class _SettingPageState extends State<SettingPage> {
           });
     }
 
-    String idsText = res['idsText'];
+    String retCreatedAt = res['retCreatedAt'];
     return showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context)!.usedStamps),
           content:
-              Text(AppLocalizations.of(context)!.usedStamps + "\n\n$idsText"),
+              Text(AppLocalizations.of(context)!.usedStamps + "\n\n$retCreatedAt"),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
@@ -244,7 +244,7 @@ Future<Map> _useStamp() async {
   // uuid
   final uuid = Uuid();
 
-  if (count < stampCheckString) return {'idsText': null, 'canUseStamp': false};
+  if (count < stampCheckString) return {'retCreatedAt': null, 'canUseStamp': false};
   // useflgがfalseのスタンプを取得
   List maps = await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
@@ -290,13 +290,13 @@ Future<Map> _useStamp() async {
       createdAt: nowDate,
     );
 
-  String idsText = '';
+  String retCreatedAt = '';
   // スタンプ更新
   for (var element in stampList) {
     await DbInterface.update('Stamp', DBHelper.databese(), element);
     // 更新したIDを保持
-    String id = element.id;
-    idsText += '$id \n';
+    String createdAt = dateFormat(element.createdAt);
+    retCreatedAt += '$createdAt \n';
   }
 
   // スタンプが9個に達していた時に消費するとログが一つ表示する
@@ -304,10 +304,5 @@ Future<Map> _useStamp() async {
     await DbInterface.insert('StampLogs', DBHelper.databese(), log);
   }
 
-  // LOG 記録
-  // for (var log in logList) {
-  //   await DbInterface.insert('StampLogs', DBHelper.databese(), log);
-  // }
-
-  return {'idsText': idsText, 'canUseStamp': true};
+  return {'retCreatedAt': retCreatedAt, 'canUseStamp': true};
 }
