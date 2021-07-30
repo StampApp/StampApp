@@ -203,7 +203,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
           DateTime dateTime = DateTime.now();
           Stamp newStamp = new Stamp(
               id: uuid.v1(),
-              data: stampCheckString,
+              data: resultJson["data"],
               getDate: dateTime,
               getTime: dateTime,
               stampNum: resultJson["stampNum"],
@@ -225,7 +225,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
           await DbInterface.insert('StampLogs', DBHelper.databese(), newLogs);
           // 元の画面へ遷移
           Navigator.of(context)
-              .pop(ResultArguments(result: "ok", title: "", data: data));
+              .pop(ResultArguments(result: "ok", title: "none", data: data));
         } else {
           String title = AppLocalizations.of(context)!.error;
           String text = format != describeEnum(BarcodeFormat.qrcode)
