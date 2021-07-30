@@ -11,7 +11,6 @@ void stampDialog(BuildContext context, Stamp stamp) {
     builder: (BuildContext context) {
       return AlertDialog(
         content: Container(
-          // height: 320,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
