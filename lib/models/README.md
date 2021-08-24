@@ -26,6 +26,8 @@ stamp.toMap();
 
 String toString()  
 スタンプの情報を全て文字列に変換します。  
+Stamp{id: [id], stamp_id: [stampId], stamp_date: [getDate], stamp_time: [getTime], stamp_num: [stampNum], useflg: [useFlg], created_at: [createdAt], deleted_at: [deletedAt]}  
+という形式の文字列になります。  
 記述例  
 stamp.toString();
 
@@ -39,7 +41,6 @@ String id 　一意の ID
 String stampId 　上記 id とは別のスタンプの ID  
 DateTime getDate 　スタンプの取得日  
 DateTime getTime 　スタンプの取得時間  
-String stampNum 　スタンプの数  
 bool useFlg 　使用済みフラグ
 
 #### メソッド
@@ -51,7 +52,7 @@ stampLogs.toMap();
 
 String toString()  
 スタンプの情報を全て文字列に変換します。  
-'Stamp{id: [id], stamp_id: [stampId], stamp_date: [getDate] ~~ deleted_at: [deletedAt]}';  
+'Stamp{id: [id], stamp_id: [stampId], stamp_date: [getDate], stamp_time: [getTime], useflg: [useFlg], created_at: [createdAt]}'  
 という形式の文字列になります。  
 記述例  
 stampLogs.toString();
