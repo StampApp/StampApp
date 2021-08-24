@@ -26,11 +26,10 @@ Map<String, dynamic> toMap();
 // 記述例
 stamp.toMap();
 
-// スタンプの情報を全て文字列に変換します。  
-String toString()
+// Map 型のものを String 型に変換します。
+String toString();
 
 // 記述例
-
 stamp.toString();
 
 /_
@@ -55,6 +54,8 @@ _/
 
 #### メソッド
 
+###### toMap()
+
 ```Dart
 Map<String, dynamic> toMap()
 ```
@@ -66,7 +67,7 @@ StampLogs 型から Map 型に変換します。
 stampLogs.toMap();
 ```
 
----
+###### toString()
 
 ```Dart
 String toString()
