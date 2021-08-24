@@ -31,6 +31,8 @@ Stamp 型から Map 型に変換します。
 stamp.toMap();
 ```
 
+---
+
 ```Dart
 String toString()
 ```
@@ -43,6 +45,8 @@ String toString()
 ```Dart
 stamp.toString();
 ```
+
+---
 
 ---
 
@@ -71,6 +75,8 @@ StampLogs 型から Map 型に変換します。
 ```Dart
 stampLogs.toMap();
 ```
+
+---
 
 ```Dart
 String toString()
