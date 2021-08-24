@@ -14,6 +14,7 @@ color: HexColor('FFFFFF')
 ```
 
 ## qrAlertDialog.dartの使い方
+
 正常なQRコード以外を読み込んだ場合に警告文をポップアップで表示させるWidget
 ```dart
 //importします
