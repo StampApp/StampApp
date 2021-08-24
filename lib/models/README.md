@@ -47,11 +47,11 @@ bool useFlg 　使用済みフラグ
 Map<String, dynamic> toMap()  
 StampLogs 型から Map 型に変換します。  
 記述例  
-stamp.toMap();
+stampLogs.toMap();
 
 String toString()  
 スタンプの情報を全て文字列に変換します。  
 'Stamp{id: [id], stamp_id: [stampId], stamp_date: [getDate] ~~ deleted_at: [deletedAt]}';  
 という形式の文字列になります。  
 記述例  
-stamp.toString();
+stampLogs.toString();
