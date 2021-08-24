@@ -8,11 +8,11 @@ import 'package:stamp_app/Util/Enums/enumStampCount.dart';
 /// 条件文には[db.query]と[db.rawQuery]が存在する
 /// 基本は[db.query]、条件が複雑でありSQL文を使用したい場合、[db.rawQuery]を使用するのが〇
 /// 
-/// 処理をする際、model型 Map型で相互変換する必要あり
-/// 例: select時 Map型 -> model型
+/// 処理をする際、[model]型 [Map]型で相互変換する必要あり
+/// 例: select時 [Map]型 -> [model]型
 /// 
 /// テーブルとmodelでカラムの型に違いがある場合、変換する必要あり
-/// 例: [stamp_date] テーブル -> text型、 model -> DateTime型
+/// 例: [stamp_date] テーブル -> [text],  model -> [DateTime]
 /// 
 /// 以下、参考文献
 /// sqflite通信サンプル: https://flutter.ctrnost.com/logic/sqlite/
