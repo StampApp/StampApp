@@ -20,17 +20,29 @@ DateTime? deletedAt 　削除日時
 
 #### メソッド
 
-Map<String, dynamic> toMap()  
-Stamp 型から Map 型に変換します。  
-記述例  
-stamp.toMap();
+```Dart
+Map<String, dynamic> toMap()
+```
 
-String toString()  
+Stamp 型から Map 型に変換します。  
+記述例
+
+```Dart
+stamp.toMap();
+```
+
+```Dart
+String toString()
+```
+
 スタンプの情報を全て文字列に変換します。  
 Stamp{id: [id], stamp_id: [stampId], stamp_date: [getDate], stamp_time: [getTime], stamp_num: [stampNum], useflg: [useFlg], created_at: [createdAt], deleted_at: [deletedAt]}  
 という形式の文字列になります。  
-記述例  
+記述例
+
+```Dart
 stamp.toString();
+```
 
 ---
 
@@ -49,14 +61,26 @@ bool useFlg 　使用済みフラグ
 
 #### メソッド
 
-Map<String, dynamic> toMap()  
-StampLogs 型から Map 型に変換します。  
-記述例  
-stampLogs.toMap();
+```Dart
+Map<String, dynamic> toMap()
+```
 
-String toString()  
+StampLogs 型から Map 型に変換します。  
+記述例
+
+```Dart
+stampLogs.toMap();
+```
+
+```Dart
+String toString()
+```
+
 スタンプの情報を全て文字列に変換します。  
 'Stamp{id: [id], stamp_id: [stampId], stamp_date: [getDate], stamp_time: [getTime], useflg: [useFlg], created_at: [createdAt]}'  
 という形式の文字列になります。  
-記述例  
+記述例
+
+```Dart
 stampLogs.toString();
+```
