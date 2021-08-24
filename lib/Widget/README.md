@@ -1,4 +1,7 @@
-# widgetの説明
+# widgetとは
+widgetとは、FlutterアプリのUIを構築するパーツです。
+
+# 既存widgetの説明
 
 ## HexColor.dartの使い方
 アプリで使用したい色をカラーコードで指定できるWidget
