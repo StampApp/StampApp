@@ -48,8 +48,6 @@ stamp.toString();
 
 ---
 
----
-
 ### stampLogs.dart について
 
 スタンプの取得履歴の model です。  
