@@ -1,4 +1,4 @@
-## model について
+# model について
 
 このディレクトリにはスタンプアプリ内で使用しているモデルが入っています。
 
@@ -31,6 +31,8 @@ Stamp{id: [id], stamp_id: [stampId], stamp_date: [getDate], stamp_time: [getTime
 という形式の文字列になります。  
 記述例  
 stamp.toString();
+
+---
 
 ## stampLogs.dart について
 
