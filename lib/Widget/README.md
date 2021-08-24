@@ -1,9 +1,9 @@
 # widgetとは
+
 widgetとは、FlutterアプリのUIを構築するパーツです。
 
-# 既存widgetの説明
-
 ## HexColor.dartの使い方
+
 アプリで使用したい色をカラーコードで指定できるWidget
 ```dart
 //importします
@@ -70,7 +70,6 @@ import '../Widget/stampMaxDialog.dart';
 stampMaxDialogAlert(context, maxStamp);
 ```
 
-
 ## AppBar.dartの使い方
 ​
 このディレクトリ下の `AppBar.dart` は、単一化されたヘッダーを仕様変更時に楽に書き換えできるようにしたものです。
@@ -92,5 +91,3 @@ appBar: PreferredSize(
 ## 今後拡張していくにあたって
 ​
 今後ヘッダーの書き換えにあたって、`home.dart`のように統一でなくなるものにはこちらは使用しない方がいいでしょう。
-
----
