@@ -1,4 +1,5 @@
 # widgetの説明
+
 ## HexColor.dartの使い方
 アプリで使用したい色をカラーコードで指定できるWidget
 ```dart
@@ -20,29 +21,6 @@ if (result.result == "err") {
     qrAlertDialog(context, result.title, result.data);
 }
 ```
-
-## AppBar.dartの使い方
-​
-このディレクトリ下の'AppBar.dart'は、単一化されたヘッダーを仕様変更時に楽に書き換えできるようにしたものです。
-ただし、統一したヘッダーでない場合（今回は'home.dart'）は、こちらを使用しないようにしてください。
-​
-```Dart
-//まずはこのようにimportします
-import 'package:stamp_app/Widget/AppBar.dart';
-​
-//使用したい箇所で呼び出してあげます（これだとmain.dartで設定したタイトルがヘッダーに表示されるようになります）
-AppBarPage(widget.title)
-//（例）↓のようにPreferredSize（Appbarの高さをいじれる）の中に記述した方がより実用的になります。
-appBar: PreferredSize(
-    preferredSize: Size.fromHeight(deviceHeight * 0.08),
-    AppBarPage(widget.title)
-)
-```
-
-## 今後拡張していくにあたって
-​
-今後ヘッダーの書き換えにあたって、'home.dart'のように統一でなくなるものにはこちらは使用しない方がいいでしょう。
-
 ​
 ## stampIcons.dartの使い方
 ​
@@ -89,3 +67,26 @@ stampMaxDialogAlert(context, maxStamp);
 ```
 
 
+## AppBar.dartの使い方
+​
+このディレクトリ下の `AppBar.dart` は、単一化されたヘッダーを仕様変更時に楽に書き換えできるようにしたものです。
+ただし、統一したヘッダーでない場合（今回は `home.dart` ）は、こちらを使用しないようにしてください。
+​
+```Dart
+//まずはこのようにimportします
+import 'package:stamp_app/Widget/AppBar.dart';
+​
+//使用したい箇所で呼び出してあげます（これだとmain.dartで設定したタイトルがヘッダーに表示されるようになります）
+AppBarPage(widget.title)
+//（例）↓のようにPreferredSize（Appbarの高さをいじれる）の中に記述した方がより実用的になります。
+appBar: PreferredSize(
+    preferredSize: Size.fromHeight(deviceHeight * 0.08),
+    AppBarPage(widget.title)
+)
+```
+---
+## 今後拡張していくにあたって
+​
+今後ヘッダーの書き換えにあたって、`home.dart`のように統一でなくなるものにはこちらは使用しない方がいいでしょう。
+
+---
