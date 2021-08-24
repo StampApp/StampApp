@@ -1,3 +1,9 @@
+///boolをintへ変更
+///
+///boo;がfalseの場合は0に変更する
+///boolがtrueの場合は1に変更する
+///
+
 int parseBooleanToInt(bool deletedFlg) {
   var ret = 0;
   if (deletedFlg) {
@@ -5,6 +11,12 @@ int parseBooleanToInt(bool deletedFlg) {
   }
   return ret;
 }
+
+///intをboolへ変更
+///
+///intが0の場合はfalseに変更する
+///intが1の場合はtrueに変更する
+///
 
 bool parseIntToBoolean(int deletedFlg) {
   var ret = false;
