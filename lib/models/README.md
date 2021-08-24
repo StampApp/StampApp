@@ -56,11 +56,12 @@ _/
 
 ###### toMap()
 
+StampLogs 型から Map 型に変換します。
+
 ```Dart
 Map<String, dynamic> toMap()
 ```
 
-StampLogs 型から Map 型に変換します。  
 記述例
 
 ```Dart
@@ -69,15 +70,17 @@ stampLogs.toMap();
 
 ###### toString()
 
+スタンプの情報を全て文字列に変換します。
+
 ```Dart
 String toString()
 ```
 
-スタンプの情報を全て文字列に変換します。  
-`'Stamp{id: [id], stamp_id: [stampId], stamp_date: [getDate], stamp_time: [getTime], useflg: [useFlg], created_at: [createdAt]}'`  
-という形式の文字列になります。  
 記述例
 
 ```Dart
 stampLogs.toString();
 ```
+
+`'Stamp{id: [id], stamp_id: [stampId], stamp_date: [getDate], stamp_time: [getTime], useflg: [useFlg], created_at: [createdAt]}'`  
+という形式の文字列になります。
