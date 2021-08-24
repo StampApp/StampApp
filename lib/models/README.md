@@ -20,22 +20,36 @@
 
 #### メソッド
 
-// Stamp 型から Map 型に変換します。
-Map<String, dynamic> toMap();
+###### toMap()
 
-// 記述例
+Stamp 型から Map 型に変換します。
+
+```Dart
+Map<String, dynamic> toMap()
+```
+
+記述例
+
+```Dart
 stamp.toMap();
+```
 
-// Map 型のものを String 型に変換します。
-String toString();
+###### toString()
 
-// 記述例
+スタンプの情報を全て文字列に変換します。
+
+```Dart
+String toString()
+```
+
+記述例
+
+```Dart
 stamp.toString();
+```
 
-/_
 `Stamp{id: [id], stamp_id: [stampId], stamp_date: [getDate], stamp_time: [getTime], stamp_num: [stampNum], useflg: [useFlg], created_at: [createdAt], deleted_at: [deletedAt]}`  
 という形式の文字列になります。
-_/
 
 ---
 
