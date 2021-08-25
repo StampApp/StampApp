@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/Util/HexColor.dart';
 
 void main() {
   group('HexColor関数 Test: ', () {
