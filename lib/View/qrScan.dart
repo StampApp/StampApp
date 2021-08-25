@@ -8,7 +8,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Util/Enums/enumCheckString.dart';
 import 'package:stamp_app/Util/validation.dart';
-import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/Util/HexColor.dart';
 import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/models/stamp.dart';

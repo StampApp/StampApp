@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stamp_app/Constants/setting.dart';
-import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/Util/HexColor.dart';
 
 class AppBarPage extends StatefulWidget{
   AppBarPage(this.title);

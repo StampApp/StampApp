@@ -8,7 +8,7 @@ import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Widget/AppBar.dart';
 import 'package:stamp_app/Util/Enums/enumDateType.dart';
 import 'package:stamp_app/Util/Enums/enumStampCount.dart';
-import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/Util/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
