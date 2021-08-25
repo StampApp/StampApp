@@ -4,7 +4,7 @@ import 'package:stamp_app/Util/Enums/enumCheckString.dart';
 /// QRコードが現時刻より昔だった場合trueを返す
 ///
 /// [dateCheck],引数QRコードの時間　戻り値boolean
-/// [verificationDate]DateTime型　受け取った時刻をyyyy/MM/dd HH:mm:ss形式に
+/// [verificationDate]DateTime型　受け取った時刻を(yyyy/MM/dd HH:mm:ss)形式に
 /// [now]DateTime型　現時刻
 ///
 class Validation {
