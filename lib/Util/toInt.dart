@@ -1,6 +1,6 @@
 /// boolをintへ変更
 ///
-/// boo;がfalseの場合は0に変更する
+/// boolがfalseの場合は0に変更する
 /// boolがtrueの場合は1に変更する
 ///
 
