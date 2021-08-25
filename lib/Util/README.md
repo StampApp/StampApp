@@ -100,3 +100,15 @@ Validation.pathCheck("assets/images/stamp/test", imagePaths) // -> false
 // 文字列が0文字の場合はfalse
 Validation.pathCheck("", imagePaths) // -> false
 ```
+## HexColor.dartの使い方
+
+アプリで使用したい色をカラーコードで指定できる
+### import
+```dart
+import 'package:stamp_app/Widget/HexColor.dart';
+```
+### 使用例
+```dart
+//色を指定したいところで使用
+color: HexColor('FFFFFF')
+```

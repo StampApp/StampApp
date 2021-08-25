@@ -2,17 +2,6 @@
 
 widgetとは、FlutterアプリのUIを構築するパーツです。
 
-## HexColor.dartの使い方
-
-アプリで使用したい色をカラーコードで指定できるWidget
-```dart
-//importします
-import 'package:stamp_app/Widget/HexColor.dart';
-
-//色を指定したいところで使用
-color: HexColor('FFFFFF')
-```
-
 ## qrAlertDialog.dartの使い方
 
 正常なQRコード以外を読み込んだ場合に警告文をポップアップで表示させるWidget
