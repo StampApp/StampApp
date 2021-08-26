@@ -255,6 +255,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         result.rawContent = AppLocalizations.of(context)!.incorrectData;
       }
 
+      /// AssetManifest.jsonはassetsの中全てのファイルのパスを持って自動生成されるファイル
       var manifestContent = await rootBundle.loadString('AssetManifest.json');
       Map<String, dynamic> manifestMap = json.decode(manifestContent);
       List<String> imagePaths = manifestMap.keys
