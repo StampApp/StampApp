@@ -1,10 +1,11 @@
-# widgetとは
+# widget とは
 
-widgetとは、FlutterアプリのUIを構築するパーツです。
+widget とは、Flutter アプリの UI を構築するパーツです。
 
-## qrAlertDialog.dartの使い方
+## qrAlertDialog.dart の使い方
 
-正常なQRコード以外を読み込んだ場合に警告文をポップアップで表示させるWidget
+正常な QR コード以外を読み込んだ場合に警告文をポップアップで表示させる Widget です。
+
 ```dart
 //importします
 import import 'package:stamp_app/Widget/qrAlertDialog.dart';
@@ -14,13 +15,17 @@ if (result.result == "err") {
     qrAlertDialog(context, result.title, result.data);
 }
 ```
+
 ​
-## stampIcons.dartの使い方
+
+## stampIcons.dart の使い方
+
 ​
-このディレクトリ下の'stampIcons.dart'は、オリジナルのスタンプアイコンを使用できるようにするものです。
+オリジナルのスタンプアイコンを使用できるようにする Widget です。
 この度のアイコンは、スタンプを押しているのをイメージしたアイコンになります。
 [こちらを参考にしました](https://techracho.bpsinc.jp/wingdoor/2020_06_05/92667)
 ​
+
 ```Dart
 //まずはこのようにimportします
 import 'package:stamp_app/Widget/stampIcons.dart';
@@ -33,10 +38,13 @@ fonts:
     fonts:
       - asset: assets/images/other/StampIcon.ttf
 ```
-## stampDialog.dartの使い方
+
+## stampDialog.dart の使い方
+
 ​
-このディレクトリ下の'stampDialog.dart'は、スタンプのイメージをタップした時に表示するダイアログを生成しています。
+スタンプのイメージをタップした時に表示するダイアログを生成する Widget です。
 ​
+
 ```Dart
 //まずはこのようにimportします
 import '../Widget/stampDialog.dart';
@@ -46,11 +54,14 @@ onTap: () => stamp.data == stampCheckString
     ? stampDialog(context, stamp)
     : (context),
 ```
+
 ​
-## stampMaxDialog.dartの使い方
+
+## stampMaxDialog.dart の使い方
+
+スタンプ数が上限に達した時に表示するダイアログを生成する Widget です。
 ​
-このディレクトリ下の'stampMaxDialog.dart'は、スタンプ数が上限に達した時に表示するダイアログを生成しています。
-​
+
 ```Dart
 //まずはこのようにimportします
 import '../Widget/stampMaxDialog.dart';
@@ -59,11 +70,13 @@ import '../Widget/stampMaxDialog.dart';
 stampMaxDialogAlert(context, maxStamp);
 ```
 
-## AppBar.dartの使い方
+## AppBar.dart の使い方
+
 ​
-このディレクトリ下の `AppBar.dart` は、単一化されたヘッダーを仕様変更時に楽に書き換えできるようにしたものです。
+単一化されたヘッダーを仕様変更時に楽に書き換えできるようにした Widget です。
 ただし、統一したヘッダーでない場合（今回は `home.dart` ）は、こちらを使用しないようにしてください。
 ​
+
 ```Dart
 //まずはこのようにimportします
 import 'package:stamp_app/Widget/AppBar.dart';
@@ -76,7 +89,10 @@ appBar: PreferredSize(
     AppBarPage(widget.title)
 )
 ```
+
 ---
+
 ## 今後拡張していくにあたって
+
 ​
 今後ヘッダーの書き換えにあたって、`home.dart`のように統一でなくなるものにはこちらは使用しない方がいいでしょう。
