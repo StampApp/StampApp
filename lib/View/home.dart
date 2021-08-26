@@ -29,6 +29,7 @@ class HomeSamplePage extends StatefulWidget {
   _HomeSamplePageState createState() => _HomeSamplePageState();
 }
 
+//背景の設定
 class AppBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -291,6 +292,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               backgroundColor: HexColor(Setting.APP_COLOR),
             )),
         body: Stack(children: [
+          //背景
           AppBackground(),
           FutureBuilder(
               future: _getStamp,
