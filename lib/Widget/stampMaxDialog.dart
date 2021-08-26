@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// スタンプの警告を表示するアラート
+/// スタンプ数が上限に達していることをアラートで表示する
+///
+/// [stampMaxDialogAlert] 引数 [context][maxstamp]
+///
+/// [context]
+/// [maxstamp] int型のスタンプの上限数（現在は9）
+///
 void stampMaxDialogAlert(BuildContext context, int maxStamp) {
   showDialog(
     context: context,
