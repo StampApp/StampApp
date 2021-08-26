@@ -3,6 +3,7 @@ import 'package:stamp_app/Util/toInt.dart';
 import 'package:stamp_app/Util/Enums/enumDateType.dart';
 
 class Stamp {
+
   // モデル定義
   final String id;
   final String data; // スタンプ情報
@@ -13,6 +14,8 @@ class Stamp {
   final DateTime? createdAt; // スタンプが押された時間
   final DateTime? deletedAt; // 削除日時
 
+  // required thisは引数を必須引数にするかつstampクラスのインスタンスということを指す
+  // thisはstampクラスのインスタンスということを指す
   Stamp({
     required this.id,
     required this.data,
@@ -42,6 +45,7 @@ class Stamp {
     };
   }
 
+  // スタンプの情報を全て文字列に変換する
   @override
   String toString() {
     return 'Stamp{id: $id, data: $data, stamp_date: $getDate, stamp_time: $getTime, stamp_num: $stampNum, useflg: $useFlg, created_at: $createdAt, deleted_at: $deletedAt}';
