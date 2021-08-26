@@ -1,5 +1,4 @@
-include: package:flutter_lints/analysis_options.yaml
-
+# lint ruleを記載する
 analyzer:
   errors:
     avoid_print: warning
