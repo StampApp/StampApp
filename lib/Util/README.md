@@ -11,8 +11,8 @@ import 'package:stamp_app/Util/checkIsMaxStamps.dart';
 ```
 ### 使用例
 ```dart
-//第一引数+1が第二引数以上のときtureを返す。
-checkIsMaxStamps(2, 3) // -> ture
+//第一引数+1が第二引数以上のときtrueを返す。
+checkIsMaxStamps(2, 3) // -> true
 checkIsMaxStamps(1, 3) // -> false
 //第二引数が0のときは必ずfalseを返す。
 checkIsMaxStamps(3, 0) // -> false
@@ -63,7 +63,7 @@ parseBooleanToInt(true) // -> 1
 //intが0の場合はfalseに変更する
 parseIntToBoolean(0) // -> false
 //intが1の場合はtrueに変更する
-parseIntToBoolean(1) // -> ture
+parseIntToBoolean(1) // -> true
 ```
 ## validation.dartの使い方
 ​
@@ -76,13 +76,13 @@ import 'package:stamp_app/Util/validation.dart';
 ```dart
 //[dateCheck]:QRコードに含まれる時刻のチェック
 //QRコードが現時刻より前だった場合trueを返す
-Validation.dateCheck('2021/06/11 12:00:00') // -> ture
+Validation.dateCheck('2021/06/11 12:00:00') // -> true
 //QRコードが現時刻より後だった場合falseを返す
 Validation.dateCheck('2022/07/02 12:00:00') // -> false
 
 //[strCheck]:正規表現チェック
-//checkStringValueの内容が含まれる場合はture
-Validation.strCheck(stampCheckString) // -> ture
+//checkStringValueの内容が含まれる場合はtrue
+Validation.strCheck(stampCheckString) // -> true
 // httpが含まれる場合はfalse
 Validation.strCheck('http' + stampCheckString) // -> false
 // 記号が含まれる場合はfalse
@@ -90,11 +90,11 @@ Validation.strCheck(stampCheckString + '()#%#') // -> false
 
 //[pathCheck]:ファイルがあるか確認
 // パスの先頭に./が含まれておりファイルが存在する場合はtrue
-Validation.pathCheck(  "./assets/images/stamp/flower-4.png", imagePaths) // -> ture
+Validation.pathCheck(  "./assets/images/stamp/flower-4.png", imagePaths) // -> true
 // パスの先頭に/が含まれておりファイルが存在する場合はtrue
-Validation.pathCheck("/assets/images/stamp/flower-4.png", imagePaths) // -> ture
+Validation.pathCheck("/assets/images/stamp/flower-4.png", imagePaths) // -> true
 // ファイルが存在する場合はtrue
-Validation.pathCheck(Setting.STAMP_FLOWER, imagePaths) // -> ture
+Validation.pathCheck(Setting.STAMP_FLOWER, imagePaths) // -> true
 // ファイルが存在しない場合はfalse
 Validation.pathCheck("assets/images/stamp/test", imagePaths) // -> false
 // 文字列が0文字の場合はfalse
