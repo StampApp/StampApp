@@ -47,6 +47,7 @@ class AppBackground extends StatelessWidget {
               width: width,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
+                  /// アプリカラー呼び出し（現在は'00C2FF'）
                   color: HexColor(Setting.APP_COLOR).withAlpha(70)),
             ),
           ),
@@ -83,10 +84,12 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
 
   static final String stampCheckString = CheckString.ok.checkStringValue!;
 
+  // 設定画面へ遷移設定（設定アイコンで使用）
   void _settingNavigate() {
     Navigator.of(context).pushNamed('/Setting');
   }
 
+  // 所持しているスタンプのリストを呼び出し
   Future<List<Stamp>> asyncGetStampList() async {
     List maps = await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
@@ -128,9 +131,11 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     return stampList;
   }
 
+  // QRスキャンボタンを押した時の処理
   Future<void> _qrScan() async {
     int existStampNum =
         await DbInterface.selectStampCount('Stamp', DBHelper.databese());
+    // スタンプが上限に達していた場合にアラートで表示
     if (existStampNum == StampCount.count.stampCount!) {
       stampMaxDialogAlert(context, existStampNum);
       return;
@@ -140,7 +145,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       ResultArguments result =
           await Navigator.pushNamed(context, '/qrScan') as ResultArguments;
       if (result.result == stampCheckString) {
-        int maxStamp = StampCount.count.stampCount!; //上限無しの場合0を指定
+        int maxStamp = StampCount.count.stampCount!; // 上限無しの場合0を指定
         int successStampLen = stampList
             .where((element) => element.data == stampCheckString)
             .length;
@@ -162,12 +167,14 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
           stampListLen = countstamp.length;
           stampList[successStampLen] = newStamp;
         });
+        // スタンプ取得後にスタンプ上限に達した場合にアラートで表示
         if (successStampLen + 1 == maxStamp) {
           stampMaxDialogAlert(context, maxStamp);
         }
       } else if (result.result == "err") {
         qrAlertDialog(context, result.title, result.data);
       }
+    // 最初に押された時、カメラ機能の許可要求をダイアログで表示
     } else {
       await showRequestPermissionDialog(context);
     }
@@ -246,11 +253,13 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    // Scaffoldは画面構成の基本Widget
+    // デバイスの高さと幅を取得
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
+    // Scaffoldは画面構成の基本Widget
     return Scaffold(
         appBar: PreferredSize(
+          // ヘッダーの高さを調整する
           preferredSize: Size.fromHeight(deviceHeight * 0.08),
           child: AppBar(
             toolbarHeight: deviceHeight * 0.1,
@@ -325,7 +334,15 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
         ]));
   }
 
-  // スタンプカードの背景
+  /// スタンプカードの背景設定
+  ///
+  /// [_slider],引数[context][stampCheckString][deviceWidth][deviceHeight]
+  ///
+  /// [context]
+  /// [stampCheckString] string型
+  /// [deviceWidth] double型
+  /// [deviceHeight] double型
+  ///
   Widget _slider(BuildContext context, String stampCheckString,
       double deviceWidth, double deviceHeight) {
     return Container(
@@ -340,7 +357,15 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             _stampCard(context, stampCheckString, deviceWidth, deviceHeight));
   }
 
-  // スタンプカード生成
+  /// スタンプカードを生成します
+  ///
+  /// [_stampCard],引数[context][stampCheckString][deviceWidth][deviceHeight]
+  ///
+  /// [context]
+  /// [stampCheckString] string型
+  /// [deviceWidth] double型
+  /// [deviceHeight] double型
+  ///
   Widget _stampCard(BuildContext context, String stampCheckString,
       double deviceWidth, double deviceHeight) {
     return SingleChildScrollView(
@@ -375,6 +400,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   GestureDetector(
+                                    // スタンプ情報表示
                                     onTap: () => stamp.data == stampCheckString
                                         ? stampDialog(context, stamp)
                                         : (context),
@@ -434,7 +460,14 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     );
   }
 
-  // スタンプ合計表示
+  /// スタンプ合計を表示します
+  ///
+  /// [_totalPoint],引数[context][stampCheckString][deviceWidth][deviceHeight]
+  ///
+  /// [point] int型
+  /// [deviceWidth] double型
+  /// [deviceHeight] double型
+  ///
   Widget _totalPoint(int point, double deviceWidth, double deviceHeight) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
