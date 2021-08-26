@@ -325,6 +325,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
         ]));
   }
 
+  //スタンプカードの背景
   Widget _slider(BuildContext context, String stampCheckString,
       double deviceWidth, double deviceHeight) {
     return Container(
@@ -339,6 +340,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             _stampCard(context, stampCheckString, deviceWidth, deviceHeight));
   }
 
+  //スタンプカード生成
   Widget _stampCard(BuildContext context, String stampCheckString,
       double deviceWidth, double deviceHeight) {
     return SingleChildScrollView(
@@ -432,6 +434,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     );
   }
 
+  //スタンプ合計表示
   Widget _totalPoint(int point, double deviceWidth, double deviceHeight) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
@@ -450,6 +453,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     ]);
   }
 
+  //許可要求ダイアログ
   Future<void> showRequestPermissionDialog(BuildContext context) async {
     await showDialog<void>(
       context: context,
