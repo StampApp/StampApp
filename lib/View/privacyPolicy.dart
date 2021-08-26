@@ -1,30 +1,18 @@
-/* TODO: コメント整備する
-軽い用語？集（大雑把な説明なのでイメージ程度でしか書いてないので詳しくは自分で調べてください）
-* Widgetとはコンポーネント(部品)的なものというイメージ
-* Stateとは値を変更すると動的に値が切り替わる変数というイメージ
-* StatelessWidgetとは単語のままでState lessなWidget、Stateを使わないWidgetはこれで定義する
-* StatefulWidgetとは上記の逆でStateを使うWidgetはこれで定義する
-* Propsとは親から子に値を受け渡すための値
-*/
 import 'package:flutter/material.dart';
 import 'package:stamp_app/Widget/AppBar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PrivacyPolicyPage extends StatefulWidget {
-  // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
   PrivacyPolicyPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
-  // 生成したStateをMyPageで使えるように
   @override
   _PrivacyPolicyPageState createState() => _PrivacyPolicyPageState();
 }
 
-// state（動的に変化する変数）を生成する
 class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
   @override
   Widget build(BuildContext context) {
-    // Scaffoldは画面構成の基本Widget
     //デバイスのサイズ取得
     final double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
