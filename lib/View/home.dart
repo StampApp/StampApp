@@ -29,7 +29,7 @@ class HomeSamplePage extends StatefulWidget {
   _HomeSamplePageState createState() => _HomeSamplePageState();
 }
 
-//背景の設定
+// 背景の設定
 class AppBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -71,10 +71,10 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
   static final uuid = Uuid();
   static final DateTime dateTime = DateTime.now();
 
-  //スタンプ合計
+  // スタンプ合計
   int stampListLen = 0;
 
-  //pageviewで使用する
+  // pageviewで使用する
   PageController? controller;
 
   Future<List<Stamp>>? _getStamp;
@@ -106,7 +106,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
       });
     });
 
-    //GridViewのcrossAxisCountの値
+    // GridViewのcrossAxisCountの値
     int crossAxisCount = 3;
     int listRow = stampListLen ~/ crossAxisCount;
     if (!(crossAxisCount < listRow)) {
@@ -237,7 +237,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     }
   }
 
-  //pageviewで使用
+  // pageviewで使用
   void dispose() {
     widget.routeObserver.unsubscribe(this);
     controller?.dispose();
@@ -292,7 +292,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
               backgroundColor: HexColor(Setting.APP_COLOR),
             )),
         body: Stack(children: [
-          //背景
+          // 背景
           AppBackground(),
           FutureBuilder(
               future: _getStamp,
@@ -325,7 +325,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
         ]));
   }
 
-  //スタンプカードの背景
+  // スタンプカードの背景
   Widget _slider(BuildContext context, String stampCheckString,
       double deviceWidth, double deviceHeight) {
     return Container(
@@ -340,7 +340,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
             _stampCard(context, stampCheckString, deviceWidth, deviceHeight));
   }
 
-  //スタンプカード生成
+  // スタンプカード生成
   Widget _stampCard(BuildContext context, String stampCheckString,
       double deviceWidth, double deviceHeight) {
     return SingleChildScrollView(
@@ -401,7 +401,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
                                                     stamp.stampNum.toString())
                                                 : AssetImage(Setting.NONE_IMG)),
                                       ),
-                                      //円内の数字表示
+                                      // 円内の数字表示
                                       child: Align(
                                         alignment: Alignment.center,
                                         child: stamp.data == stampCheckString
@@ -434,7 +434,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     );
   }
 
-  //スタンプ合計表示
+  // スタンプ合計表示
   Widget _totalPoint(int point, double deviceWidth, double deviceHeight) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
       Container(
@@ -453,7 +453,7 @@ class _HomeSamplePageState extends State<HomeSamplePage> with RouteAware {
     ]);
   }
 
-  //許可要求ダイアログ
+  // 許可要求ダイアログ
   Future<void> showRequestPermissionDialog(BuildContext context) async {
     await showDialog<void>(
       context: context,
