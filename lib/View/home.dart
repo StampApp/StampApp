@@ -11,7 +11,7 @@ import 'package:stamp_app/Widget/qrAlertDialog.dart';
 import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:stamp_app/dbInterface.dart';
-import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/Util/HexColor.dart';
 import 'package:uuid/uuid.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../Widget/stampDialog.dart';
