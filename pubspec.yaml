@@ -97,6 +97,8 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+
+  #オリジナルアイコン（今回はスタンプ取得アイコン）の実装
   fonts:
   - family: StampIcon
     fonts:
