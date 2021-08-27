@@ -16,7 +16,7 @@ import 'package:stamp_app/models/stampLogs.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-///QRの読み取り状態
+/// QRの読み取り状態
 @immutable
 class ResultArguments {
   const ResultArguments(
@@ -26,7 +26,7 @@ class ResultArguments {
   final String data;
 }
 
-///QRのスキャン結果
+/// QRのスキャン結果
 class ScanResult {
   String type;
   BarcodeFormat? format;
