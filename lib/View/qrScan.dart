@@ -149,6 +149,9 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
   }
 
   /// QRをスキャン
+  /// [_buildQRView] 引数 [context]
+  ///
+  /// [context]
   Widget _buildQRView(BuildContext context) {
     return QRView(
       key: _qrKey,
@@ -165,6 +168,11 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   /// スキャンしたQRのチェックとQRの追加
   ///
+  /// [_onQRViewCreated] 引数 [qrController]
+  ///
+  /// [qrController]
+  ///
+  /// 補足
   /// [scanValidation]でチェック
   /// [_transitionToNextScreen]でQRを追加
   void _onQRViewCreated(QRViewController qrController) {
@@ -189,6 +197,13 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   /// 読み取ったQRを次の画面に表示するための準備
   ///
+  /// [_transitionToNextScreen] 引数 [type] [format] [data]
+  ///
+  /// [type]
+  /// [format] コードのフォーマット
+  /// [data] 読み取ったデータ
+  ///
+  /// 補足
   /// [newStamp] 読み取ったQRを追加
   /// [newLogs] 読み取ったQRのログを保存
   Future<void> _transitionToNextScreen(
@@ -250,6 +265,11 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   /// QRが不正なデータではないことを確認する
   ///
+  /// [scanValidation] 引数 [scanData]
+  ///
+  /// [scanData] QRのスキャンデータ
+  ///
+  /// 補足
   /// [result]にQRの情報を保持
 
   Future<ScanResult> scanValidation(Barcode scanData) async {
