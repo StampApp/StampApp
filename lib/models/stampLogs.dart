@@ -12,8 +12,11 @@ class StampLogs {
   final bool useFlg; // 使用済みフラグ
   final DateTime? createdAt; // スタンプが押された時間
 
+  /// 引数をstampクラスのインスタンスを指す
+  ///
   /// required thisは引数を必須引数にするかつstampクラスのインスタンスということを指す
   /// thisはstampクラスのインスタンスということを指す
+  ///
   StampLogs({
     required this.id,
     required this.stampId,
@@ -23,8 +26,10 @@ class StampLogs {
     this.createdAt
   });
 
-  /// StampからMap型に変換
-  /// カラム名に対応する必要あり
+  /// StampからMap型に変換(カラム名に対応する必要あり)
+  ///
+  /// [toMap],スタンプのデータ、スタンプ取得の日付と時刻をmapに変更
+  ///　
   Map<String, dynamic> toMap() {
     String toDate = formatDateTimeToString(getDate, EnumDateType.date);
     String toTime = formatDateTimeToString(getTime, EnumDateType.time);
