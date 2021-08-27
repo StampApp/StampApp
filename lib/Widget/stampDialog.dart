@@ -3,7 +3,11 @@ import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/models/stamp.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// 読み込み結果を表示するダイアログ
+/// 読み込んだスタンプ結果を表示するダイアログ
+///
+/// [stampDialog], 引数[context] [stamp]スタンプ情報
+///                戻り値 [AlertDialog]ダイアログ（スタンプ画像.押された時間.OKボタン）
+///
 void stampDialog(BuildContext context, Stamp stamp) {
   showDialog(
     context: context,
