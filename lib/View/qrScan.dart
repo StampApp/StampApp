@@ -25,6 +25,7 @@ class ConfirmArguments {
   final String data;
 }
 
+///QRの読み取り状態
 @immutable
 class ResultArguments {
   const ResultArguments(
@@ -34,6 +35,7 @@ class ResultArguments {
   final String data;
 }
 
+///QRのスキャン結果
 class ScanResult {
   String type;
   BarcodeFormat? format;
@@ -62,6 +64,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   // ホットリロードを機能させるには、プラットフォームがAndroidの場合はカメラを一時停止するか、
   // プラットフォームがiOSの場合はカメラを再開する必要がある
+  /// カメラとバーコードスキャンを一時停止
   @override
   void reassemble() {
     super.reassemble();
@@ -71,6 +74,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     _qrController?.resumeCamera();
   }
 
+  /// カメラを停止し、バーコードストリームを破棄
   @override
   void dispose() {
     _qrController?.dispose();
@@ -153,6 +157,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         ));
   }
 
+  /// QRをスキャン
   Widget _buildQRView(BuildContext context) {
     return QRView(
       key: _qrKey,
@@ -167,6 +172,10 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     );
   }
 
+  /// スキャンしたQRのチェックとQRの追加
+  ///
+  /// [scanValidation]でチェック
+  /// [_transitionToNextScreen]でQRを追加
   void _onQRViewCreated(QRViewController qrController) {
     setState(() {
       _qrController = qrController;
@@ -187,7 +196,10 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     });
   }
 
-  // 元の画面へ遷移
+  /// 読み取ったQRを次の画面に表示するための準備
+  ///
+  /// [newStamp] 読み取ったQRを追加
+  /// [newLogs] 読み取ったQRのログを保存
   Future<void> _transitionToNextScreen(
       String type, String format, String data) async {
     if (!_isQRScanned) {
@@ -245,7 +257,10 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     }
   }
 
-  // 読み込み結果を表示するダイアログ
+  /// qRが不正なデータではないことを確認する
+  ///
+  /// [result]にQRの情報を保持
+
   Future<ScanResult> scanValidation(Barcode scanData) async {
     try {
       var result = new ScanResult(format: BarcodeFormat.qrcode, rawContent: '');
