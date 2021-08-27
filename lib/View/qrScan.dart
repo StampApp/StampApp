@@ -16,15 +16,6 @@ import 'package:stamp_app/models/stampLogs.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-@immutable
-class ConfirmArguments {
-  const ConfirmArguments(
-      {required this.type, required this.format, required this.data});
-  final String type;
-  final String format;
-  final String data;
-}
-
 ///QRの読み取り状態
 @immutable
 class ResultArguments {
@@ -257,7 +248,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     }
   }
 
-  /// qRが不正なデータではないことを確認する
+  /// QRが不正なデータではないことを確認する
   ///
   /// [result]にQRの情報を保持
 
