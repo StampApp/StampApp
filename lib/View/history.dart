@@ -28,6 +28,7 @@ class _HistoryPageState extends State<HistoryPage> {
   String? _getStamp;
   String? _useStamp;
 
+  // スタンプ利用履歴をDBから取得する
   getStampList() async {
     List maps = await DbInterface.selectDateDescLogs(
         'StampLogs', DBHelper.databese(), DateTime.now(), pastMonth);
@@ -46,7 +47,7 @@ class _HistoryPageState extends State<HistoryPage> {
     });
   }
 
-  // 重複しないDateをsatmpListから取得する
+  // 重複しない日付をsatmpListから取得する
   getDateList() async {
     List dateList = [];
     stampList = await getStampList();
@@ -69,7 +70,7 @@ class _HistoryPageState extends State<HistoryPage> {
     pastMonth = pastMonthArr[dropDownValue];
   }
 
-  //利用履歴の削除を行い画面を再表示する
+  // 利用履歴の削除を行い画面を再表示する
   deleteLogs() {
     setState(() {});
     DbInterface.allDelete('StampLogs', DBHelper.databese());
@@ -84,7 +85,7 @@ class _HistoryPageState extends State<HistoryPage> {
     _useStamp = AppLocalizations.of(context)!.useStamp;
   }
 
-  //ドロップダウンの中身のアイテム
+  // ドロップダウンの中身のアイテム
   void setItem() {
     List<Map> dropdownItem = [
       {'text': AppLocalizations.of(context)!.last3Months, 'value': 0},
@@ -145,7 +146,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           padding: EdgeInsets.only(left: 15),
                           margin: EdgeInsets.only(top: 16.0, bottom: 10.0),
                           decoration: BoxDecoration(
-                            //枠線を丸くするかどうか
+                            // 枠線を丸くするかどうか
                             //borderRadius: BorderRadius.circular(10.0),
                             border: Border.all(
                                 color: HexColor(Setting.APP_COLOR), width: 1),
@@ -159,8 +160,8 @@ class _HistoryPageState extends State<HistoryPage> {
                             },
                           ),
                         )),
-                    //ドロップダウンメニュー
                   ]),
+              // 使用履歴が存在する場合、使用履歴のある日付ごとに出力する
               if (snapshot.data.length != 0)
                 for (int i = 0; i < snapshot.data.length; i++)
                   _line(snapshot.data[i], stampList)
@@ -172,6 +173,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   child: Text(_noHistory!, style: TextStyle(fontSize: 20.0)),
                 )
             ]);
+          // getDataListの処理が終了するまで表示
           } else {
             return Container(
               alignment: Alignment.center,
@@ -184,6 +186,11 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
+  /// スタンプの使用履歴を日付ごとにlistで表示
+  /// 
+  /// [targetDate] 表示するデータの日付
+  /// [stampList] DBから取得したスタンプの使用履歴
+  /// 
   Widget _line(String targetDate, List<StampLogs> stampList) {
     return GestureDetector(
         child: Column(
@@ -209,7 +216,10 @@ class _HistoryPageState extends State<HistoryPage> {
     ));
   }
 
-//List1行表示
+  /// Listのカラムを作成する
+  /// 
+  /// [stamplist] スタンプの使用履歴
+  /// 
   Widget _row(StampLogs stamplist) {
     return GestureDetector(
         child: Container(
@@ -228,7 +238,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 ])));
   }
 
-//スタンプ使用時
+  // スタンプ使用時の表示設定
   Widget _usestamp() {
     return GestureDetector(
         child: Row(children: <Widget>[
@@ -244,7 +254,7 @@ class _HistoryPageState extends State<HistoryPage> {
     ]));
   }
 
-//スタンプ取得
+  // スタンプ取得時の表示設定
   Widget _getstamp() {
     return GestureDetector(
         child: Row(children: <Widget>[
@@ -260,14 +270,14 @@ class _HistoryPageState extends State<HistoryPage> {
     ]));
   }
 
-//日付の一行
+  // 日付の一行
   Widget _delimiter(String date) {
-    //年月日、色コード
+    // 年月日、色コード
     return GestureDetector(
       child: Container(
         child: ListTile(
           title: Text(
-            //スタンプ取得、交換日を受け取る
+            // スタンプ取得、交換日を受け取る
             date,
             style: TextStyle(fontSize: 20),
           ),
@@ -277,7 +287,7 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  //履歴削除の確認ダイアログ
+  // 履歴削除の確認ダイアログ
   Future<dynamic> _deleteLogsCheck() {
     return showDialog(
       context: context,
