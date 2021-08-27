@@ -10,7 +10,12 @@ class AppBarPage extends StatefulWidget{
   _HeaderPageState createState() => _HeaderPageState();
 }
 
-// ヘッダー(現在はホーム画面とQRスキャン画面以外)
+/// ヘッダーの生成をします(現在はホーム画面とQRスキャン画面以外)
+///
+/// [toolbarHeight] AppBar中の幅切れ防止
+/// [HexColor(Setting.APP_COLOR)] アプリカラーの適用（現在'00C2FF'）
+/// [widget.title] 各ページのタイトルを表示
+///
 class _HeaderPageState extends State<AppBarPage>{
   
   @override
@@ -18,14 +23,11 @@ class _HeaderPageState extends State<AppBarPage>{
     final double deviceHeight = MediaQuery.of(context).size.height;
 
     return AppBar(
-      // AppBar中の幅切れ防止
       toolbarHeight: 100,
-      // アプリカラーの適用
       backgroundColor: HexColor(Setting.APP_COLOR),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          // 各ページのタイトルを表示
           Text(widget.title,
             style: TextStyle(fontSize: deviceHeight * 0.032))
       ]),
