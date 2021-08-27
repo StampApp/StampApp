@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// QRの警告を表示するアラート
+/// QRの警告を表示するアラート
+///
+/// [qrAlertDialog] 引数 [context][title][text]
+///
+/// QRコードの情報判定時用意されているQRコードでなければダイアログを表示
+/// ```
+/// if (result.result == "err") {
+///   qrAlertDialog(context, result.title, result.data);
+/// }
+/// ```
 void qrAlertDialog(BuildContext context, String title, String text) {
   showDialog(
     context: context,
