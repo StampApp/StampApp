@@ -3,7 +3,8 @@ import 'package:stamp_app/Util/toInt.dart';
 import 'package:stamp_app/Util/Enums/enumDateType.dart';
 
 class StampLogs {
-  // モデル定義
+
+  /// モデル定義
   final String id;
   final String stampId; // スタンプID
   final DateTime getDate; // 取得日
@@ -11,6 +12,8 @@ class StampLogs {
   final bool useFlg; // 使用済みフラグ
   final DateTime? createdAt; // スタンプが押された時間
 
+  /// required thisは引数を必須引数にするかつstampクラスのインスタンスということを指す
+  /// thisはstampクラスのインスタンスということを指す
   StampLogs({
     required this.id,
     required this.stampId,
@@ -20,6 +23,8 @@ class StampLogs {
     this.createdAt
   });
 
+  /// StampからMap型に変換
+  /// カラム名に対応する必要あり
   Map<String, dynamic> toMap() {
     String toDate = formatDateTimeToString(getDate, EnumDateType.date);
     String toTime = formatDateTimeToString(getTime, EnumDateType.time);
@@ -34,6 +39,7 @@ class StampLogs {
     };
   }
 
+  /// スタンプの情報を全て文字列に変換する
   @override
   String toString() {
     return 'Stamp{id: $id, stamp_id: $stampId stamp_date: $getDate, stamp_time: $getTime, useFlg: $useFlg, created_at: $createdAt}';
