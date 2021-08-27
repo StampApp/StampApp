@@ -1,3 +1,11 @@
+/* ページを作成するに当たって基礎知識
+軽い用語？集（大雑把な説明なのでイメージ程度でしか書いてないので詳しくは自分で調べてください）
+* Widgetとはコンポーネント(部品)的なものというイメージ
+* Stateとは値を変更すると動的に値が切り替わる変数というイメージ
+* StatelessWidgetとは単語のままでState lessなWidget、Stateを使わないWidgetはこれで定義する
+* StatefulWidgetとは上記の逆でStateを使うWidgetはこれで定義する
+* Propsとは親から子に値を受け渡すための値
+*/
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:stamp_app/Constants/setting.dart';
@@ -13,9 +21,11 @@ import 'package:stamp_app/models/stampLogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingPage extends StatefulWidget {
+  // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
   SettingPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
+  // Stateの定義を行う
   @override
   _SettingPageState createState() => _SettingPageState();
 }
@@ -26,6 +36,8 @@ class SettingPage extends StatefulWidget {
 /// ```
 /// Navigator.of(context).pushNamed('/terms');
 /// ```
+// stateを生成する
+// stateを更新する際はsetStateを用いてください。
 class _SettingPageState extends State<SettingPage> {
   final int exchangeSpnum = StampCount.count.stampCount!; //スタンプを交換する際に必要な数
 
@@ -156,9 +168,12 @@ class _SettingPageState extends State<SettingPage> {
   ///     _menuItem(AppLocalizations.of(context)!.usage, Icon(Icons.menu_book),_instructionsNavigate),
   /// ```
   ///
+  // ウィジェットの基本構成
+
   @override
   Widget build(BuildContext context) {
     final double deviceHeight = MediaQuery.of(context).size.height;
+    // Scaffoldは画面構成の基本Widget
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(deviceHeight * 0.08),
