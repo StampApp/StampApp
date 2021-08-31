@@ -1,3 +1,11 @@
+/* ページを作成するに当たって基礎知識
+軽い用語？集（大雑把な説明なのでイメージ程度でしか書いてないので詳しくは自分で調べてください）
+* Widgetとはコンポーネント(部品)的なものというイメージ
+* Stateとは値を変更すると動的に値が切り替わる変数というイメージ
+* StatelessWidgetとは単語のままでState lessなWidget、Stateを使わないWidgetはこれで定義する
+* StatefulWidgetとは上記の逆でStateを使うWidgetはこれで定義する
+* Propsとは親から子に値を受け渡すための値
+*/
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:stamp_app/Constants/setting.dart';
@@ -8,18 +16,28 @@ import 'package:stamp_app/Util/toDateOrTime.dart';
 import 'package:stamp_app/Widget/AppBar.dart';
 import 'package:stamp_app/Util/Enums/enumDateType.dart';
 import 'package:stamp_app/Util/Enums/enumStampCount.dart';
-import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/Util/HexColor.dart';
 import 'package:stamp_app/models/stampLogs.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingPage extends StatefulWidget {
+  // コンストラクタで値を受け取るのと同じでいわゆるpropsのような使い方をする
   SettingPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
+  // Stateの定義を行う
   @override
   _SettingPageState createState() => _SettingPageState();
 }
 
+/// 設定画面から遷移する画面のルーティングを設定
+///
+/// pushnamedは[main.dart]で設定
+/// ```
+/// Navigator.of(context).pushNamed('/terms');
+/// ```
+// stateを生成する
+// stateを更新する際はsetStateを用いてください。
 class _SettingPageState extends State<SettingPage> {
   final int exchangeSpnum = StampCount.count.stampCount!; //スタンプを交換する際に必要な数
 
@@ -39,6 +57,7 @@ class _SettingPageState extends State<SettingPage> {
     Navigator.of(context).pushNamed('/instructions');
   }
 
+  /// スタンプを使用する際にダイアログを表示
   Future<dynamic> _useStampCheck() {
     return showDialog(
       context: context,
@@ -82,7 +101,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  // スタンプを使用した結果を表示
+  /// スタンプを使用した結果を表示
   Future<dynamic> _useStampDialog() async {
     Map res = await _useStamp();
 
@@ -119,8 +138,8 @@ class _SettingPageState extends State<SettingPage> {
       builder: (_) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context)!.usedStamps),
-          content:
-              Text(AppLocalizations.of(context)!.usedStamps + "\n\n$retCreatedAt"),
+          content: Text(
+              AppLocalizations.of(context)!.usedStamps + "\n\n$retCreatedAt"),
           actions: <Widget>[
             // ボタン領域
             OutlinedButton(
@@ -140,13 +159,25 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
+  /// 設定画面のレイアウト
+  ///
+  /// listViewで設定画面から遷移できる画面を設定し、ルーティングを呼び出す
+  /// ```
+  /// child: ListView(children: [
+  ///     _menuItem(AppLocalizations.of(context)!.usageHistory,Icon(Icons.format_list_bulleted), _historyNavigate),
+  ///     _menuItem(AppLocalizations.of(context)!.usage, Icon(Icons.menu_book),_instructionsNavigate),
+  /// ```
+  ///
+  // ウィジェットの基本構成
+
   @override
   Widget build(BuildContext context) {
     final double deviceHeight = MediaQuery.of(context).size.height;
+    // Scaffoldは画面構成の基本Widget
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(deviceHeight * 0.08),
-          child: AppBarPage(widget.title),
+        child: AppBarPage(widget.title),
       ),
       body: Column(children: <Widget>[
         Expanded(
@@ -184,6 +215,18 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
+  /// 設定画面の一覧を作成するWidget
+  ///
+  /// [_menuItem] 引数 [title] [icon] [tap]
+  ///
+  /// [title] string型のタイトル
+  /// [icon] icon型のタイトルの横に表示するアイコン
+  /// [tap] ルーティングの関数
+  /// ```
+  /// _menuItem(AppLocalizations.of(context)!.usageHistory,Icon(Icons.format_list_bulleted), _historyNavigate),
+  /// ```
+  ///
+  ///
   Widget _menuItem(String title, Icon icon, [VoidCallback? tap]) {
     return GestureDetector(
       child: Container(
@@ -223,7 +266,8 @@ class _SettingPageState extends State<SettingPage> {
   }
 }
 
-//version指定のwidget
+///version指定のwidget
+///
 Widget _version() {
   return GestureDetector(
     child: Text(
@@ -236,7 +280,8 @@ Widget _version() {
   );
 }
 
-// スタンプ数を取得し規定数あった場合使用する
+/// スタンプ数を取得し規定数あった場合使用する
+///
 Future<Map> _useStamp() async {
   // useflgがfalseのスタンプ数を取得
   int count = await DbInterface.selectStampCount('Stamp', DBHelper.databese());
@@ -244,7 +289,8 @@ Future<Map> _useStamp() async {
   // uuid
   final uuid = Uuid();
 
-  if (count < stampCheckString) return {'retCreatedAt': null, 'canUseStamp': false};
+  if (count < stampCheckString)
+    return {'retCreatedAt': null, 'canUseStamp': false};
   // useflgがfalseのスタンプを取得
   List maps = await DbInterface.selectDeleteFlg('Stamp', DBHelper.databese());
 
@@ -270,13 +316,13 @@ Future<Map> _useStamp() async {
   });
 
   StampLogs log = StampLogs(
-      id: uuid.v1(),
-      stampId: retIds,
-      getDate: nowDate,
-      getTime: nowDate,
-      useFlg: true,
-      createdAt: nowDate,
-    );
+    id: uuid.v1(),
+    stampId: retIds,
+    getDate: nowDate,
+    getTime: nowDate,
+    useFlg: true,
+    createdAt: nowDate,
+  );
 
   String retCreatedAt = '';
   // スタンプ更新

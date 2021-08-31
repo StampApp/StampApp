@@ -2,7 +2,22 @@ import 'dart:async';
 import 'package:sqflite/sqflite.dart';
 import 'package:stamp_app/Util/Enums/enumStampCount.dart';
 
-// TODO: コメント等を整備する
+/// LocalのSQLiteと通信を行うクラス
+///
+/// sqfliteパッケージ使用して条件などを記述する
+/// 条件文には[db.query]と[db.rawQuery]が存在する
+/// 基本は[db.query]、条件が複雑でありSQL文を使用したい場合、[db.rawQuery]を使用するのが〇
+///
+/// 処理をする際、[model]型 [Map]型で相互変換する必要あり
+/// 例: select時 [Map]型 -> [model]型
+///
+/// テーブルとmodelでカラムの型に違いがある場合、変換する必要あり
+/// 例: [stamp_date] テーブル -> [text],  model -> [DateTime]
+///
+/// 以下、参考文献
+/// sqflite通信サンプル: https://flutter.ctrnost.com/logic/sqlite/
+/// SQLiteで利用できる型 : https://www.dbonline.jp/sqlite/type/index1.html
+
 class DbInterface {
   /*
   @param _tableName テーブル名
@@ -23,7 +38,7 @@ class DbInterface {
   @param nowDate 現在の日付
   @param pastMonths 何ヶ月かを指定
   */
-  //($_pastMonths)ヶ月前に取得したデータを日付時刻を降順で全件取得
+  // ($_pastMonths)ヶ月前に取得したデータを日付時刻を降順で全件取得
   static Future<List> selectDateDesc(
       String _tableName, var database, DateTime nowDate, int pastMonths) async {
     final Database db = await database;
@@ -35,6 +50,7 @@ class DbInterface {
     return maps;
   }
 
+  // 利用履歴を取得する
   static Future<List> selectDateDescLogs(
       String _tableName, var database, DateTime nowDate, int pastMonths) async {
     final Database db = await database;
@@ -55,7 +71,7 @@ class DbInterface {
     return count;
   }
 
-  // deleteFlgが0のスタンプを取得する
+  // deleteFlgがfalseのスタンプを取得する
   static Future<List> selectDeleteFlg(String _tableName, var database) async {
     final int stampCheckString = StampCount.count.stampCount!;
     final Database db = await database;

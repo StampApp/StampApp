@@ -46,7 +46,7 @@ dependencies:
 
   page_indicator: ^0.4.1
 
-#スプラッシュスクリーンの実装
+# スプラッシュスクリーンの実装
 flutter_native_splash:
   image: "assets/images/other/logo_transparent.png"
   color: "4DD0E1"
@@ -97,6 +97,8 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+
+  # オリジナルアイコン（今回はスタンプ取得アイコン）の実装
   fonts:
   - family: StampIcon
     fonts:

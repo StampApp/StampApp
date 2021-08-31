@@ -55,7 +55,13 @@ class _IntroductionState extends State<Introduction> {
     });
   }
 
-  // アニメーションカード生成
+  /// アニメーションカードを生成します
+  ///
+  /// [_createCardAnimate],引数[imagePath][active]
+  ///
+  /// [imagePath] string型の画像パス
+  /// [active] bool型
+  ///
   AnimatedContainer _createCardAnimate(String imagePath, bool active) {
     // アニメーション設定
     //デバイスのサイズを変数deviceHeightへ

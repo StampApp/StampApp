@@ -8,7 +8,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:stamp_app/Constants/setting.dart';
 import 'package:stamp_app/Util/Enums/enumCheckString.dart';
 import 'package:stamp_app/Util/validation.dart';
-import 'package:stamp_app/Widget/HexColor.dart';
+import 'package:stamp_app/Util/HexColor.dart';
 import 'package:stamp_app/dbHelper.dart';
 import 'package:stamp_app/dbInterface.dart';
 import 'package:stamp_app/models/stamp.dart';
@@ -16,15 +16,7 @@ import 'package:stamp_app/models/stampLogs.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-@immutable
-class ConfirmArguments {
-  const ConfirmArguments(
-      {required this.type, required this.format, required this.data});
-  final String type;
-  final String format;
-  final String data;
-}
-
+/// QRの読み取り状態
 @immutable
 class ResultArguments {
   const ResultArguments(
@@ -34,6 +26,7 @@ class ResultArguments {
   final String data;
 }
 
+/// QRのスキャン結果
 class ScanResult {
   String type;
   BarcodeFormat? format;
@@ -62,6 +55,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
 
   // ホットリロードを機能させるには、プラットフォームがAndroidの場合はカメラを一時停止するか、
   // プラットフォームがiOSの場合はカメラを再開する必要がある
+  /// カメラとバーコードスキャンを一時停止
   @override
   void reassemble() {
     super.reassemble();
@@ -71,6 +65,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     _qrController?.resumeCamera();
   }
 
+  /// カメラを停止し、バーコードストリームを破棄
   @override
   void dispose() {
     _qrController?.dispose();
@@ -153,6 +148,10 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         ));
   }
 
+  /// QRをスキャン
+  /// [_buildQRView] 引数 [context]
+  ///
+  /// [context]
   Widget _buildQRView(BuildContext context) {
     return QRView(
       key: _qrKey,
@@ -167,6 +166,15 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     );
   }
 
+  /// スキャンしたQRのチェックとQRの追加
+  ///
+  /// [_onQRViewCreated] 引数 [qrController]
+  ///
+  /// [qrController]
+  ///
+  /// 補足
+  /// [scanValidation]でチェック
+  /// [_transitionToNextScreen]でQRを追加
   void _onQRViewCreated(QRViewController qrController) {
     setState(() {
       _qrController = qrController;
@@ -187,7 +195,17 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     });
   }
 
-  // 元の画面へ遷移
+  /// 読み取ったQRを次の画面に表示するための準備
+  ///
+  /// [_transitionToNextScreen] 引数 [type] [format] [data]
+  ///
+  /// [type]
+  /// [format] コードのフォーマット
+  /// [data] 読み取ったデータ
+  ///
+  /// 補足
+  /// [newStamp] 読み取ったQRを追加
+  /// [newLogs] 読み取ったQRのログを保存
   Future<void> _transitionToNextScreen(
       String type, String format, String data) async {
     if (!_isQRScanned) {
@@ -245,7 +263,15 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     }
   }
 
-  // 読み込み結果を表示するダイアログ
+  /// QRが不正なデータではないことを確認する
+  ///
+  /// [scanValidation] 引数 [scanData]
+  ///
+  /// [scanData] QRのスキャンデータ
+  ///
+  /// 補足
+  /// [result]にQRの情報を保持
+
   Future<ScanResult> scanValidation(Barcode scanData) async {
     try {
       var result = new ScanResult(format: BarcodeFormat.qrcode, rawContent: '');
@@ -255,6 +281,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         result.rawContent = AppLocalizations.of(context)!.incorrectData;
       }
 
+      // AssetManifest.jsonはassetsの中全てのファイルのパスを持って自動生成されるファイル
       var manifestContent = await rootBundle.loadString('AssetManifest.json');
       Map<String, dynamic> manifestMap = json.decode(manifestContent);
       List<String> imagePaths = manifestMap.keys

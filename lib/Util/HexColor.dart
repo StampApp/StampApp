@@ -1,6 +1,13 @@
-//色をカラーコードで指定するためのクラス
 import 'dart:ui';
 
+/// アプリで使用したい色をカラーコードで指定できる
+///
+/// [_getColorFromHex], 引数 [hexColor]string型カラーコード 
+///                     戻り値 整数のカラーコード
+///
+/// [parse],　          引数 [hexColor]string型  [radix]string型 基数(数学的記数法の底)
+///         　          戻り値 [hexColor]を解析した整数
+///
 class HexException implements Exception {
   String cause;
   HexException(this.cause);
